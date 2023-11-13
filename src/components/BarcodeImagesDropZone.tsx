@@ -1,20 +1,14 @@
 import {
   Button,
-  ButtonProps,
   Paper,
   PaperProps,
   Typography,
+  type ButtonProps,
 } from "@mui/material";
+import { DropOptions, useDrop, type DropItem } from "@react-aria/dnd";
 import { usePress } from "@react-aria/interactions";
-import { useCallback, useState, type PropsWithChildren } from "react";
-import {
-  DropItem,
-  // Button as ReactAriaButton,
-  DropZone,
-  DropZoneProps,
-  FileTrigger,
-  FileTriggerProps,
-} from "react-aria-components";
+import { useCallback, useRef, useState, type PropsWithChildren } from "react";
+import { FileTrigger, type FileTriggerProps } from "react-aria-components";
 
 const acceptedFileTypes = ["image/png", "image/jpeg"];
 
@@ -98,18 +92,18 @@ const BarcodeImagesDropZone = ({
   const [isCollecting, setIsCollecting] = useState<boolean>(false);
 
   const handleDropEnter = useCallback<
-    Exclude<DropZoneProps["onDropEnter"], undefined>
+    Exclude<DropOptions["onDropEnter"], undefined>
   >(() => {
     setIsInsideDropZone(true);
   }, []);
 
   const handleDropExit = useCallback<
-    Exclude<DropZoneProps["onDropExit"], undefined>
+    Exclude<DropOptions["onDropExit"], undefined>
   >(() => {
     setIsInsideDropZone(false);
   }, []);
 
-  const handleDrop = useCallback<Exclude<DropZoneProps["onDrop"], undefined>>(
+  const handleDrop = useCallback<Exclude<DropOptions["onDrop"], undefined>>(
     async ({ items }) => {
       setIsCollecting(true);
       try {
@@ -132,48 +126,53 @@ const BarcodeImagesDropZone = ({
     [onBarcodeImagesDrop],
   );
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { dropProps } = useDrop({
+    ref,
+    onDrop: handleDrop,
+    onDropEnter: handleDropEnter,
+    onDropExit: handleDropExit,
+  });
+
   return (
-    <DropZone
-      onDrop={handleDrop}
-      onDropEnter={handleDropEnter}
-      onDropExit={handleDropExit}
-      style={{ flexGrow: 1 }}
+    <Paper
+      {...paperProps}
+      {...dropProps}
+      sx={{
+        p: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        flexGrow: 1,
+        ...paperProps.sx,
+      }}
+      elevation={isInsideDropZone || isCollecting ? 24 : undefined}
+      ref={ref}
     >
-      <Paper
-        {...paperProps}
-        sx={{
-          p: 2,
-          ...paperProps.sx,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-        elevation={isInsideDropZone || isCollecting ? 24 : undefined}
+      <FileTrigger
+        allowsMultiple
+        acceptedFileTypes={acceptedFileTypes}
+        onSelect={handleSelect}
       >
-        <FileTrigger
-          allowsMultiple
-          acceptedFileTypes={acceptedFileTypes}
-          onSelect={handleSelect}
+        <PressableButton
+          disabled={isInsideDropZone || isCollecting}
+          variant="contained"
+          size="large"
         >
-          <PressableButton
-            disabled={isInsideDropZone || isCollecting}
-            variant="contained"
-            size="large"
-          >
-            {buttonLabel ?? "Select barcode images"}
-          </PressableButton>
-        </FileTrigger>
-        <Typography
-          variant="button"
-          sx={{
-            marginTop: 2,
-            userSelect: "none",
-          }}
-        >
-          {dropZoneLabel ?? " Or drop barcode images here"}
-        </Typography>
-      </Paper>
-    </DropZone>
+          {buttonLabel ?? "Select barcode images"}
+        </PressableButton>
+      </FileTrigger>
+      <Typography
+        variant="button"
+        sx={{
+          marginTop: 2,
+          userSelect: "none",
+        }}
+      >
+        {dropZoneLabel ?? " Or drop barcode images here"}
+      </Typography>
+    </Paper>
   );
 };
 
