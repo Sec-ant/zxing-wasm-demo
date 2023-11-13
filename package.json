@@ -84,6 +84,6 @@
     "react-dom": "^18.2.0",
     "zod": "^3.22.4",
     "zustand": "^4.4.6",
-    "zxing-wasm": "^1.0.0-rc.5"
+    "zxing-wasm": "^1.0.0-rc.6"
   }
 }
