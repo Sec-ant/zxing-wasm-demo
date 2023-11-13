@@ -1,0 +1,86 @@
+{
+  "name": "zxing-wasm-demo",
+  "description": "zxing-wasm demo",
+  "private": false,
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "./dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sec-ant/zxing-wasm-demo.git"
+  },
+  "homepage": "https://github.com/Sec-ant/zxing-wasm-demo",
+  "bugs": {
+    "url": "https://github.com/Sec-ant/zxing-wasm-demo/issues",
+    "email": "zzwu@zju.edu.cn"
+  },
+  "keywords": [
+    "zxing-wasm",
+    "zxing-wasm-demo",
+    "react"
+  ],
+  "author": {
+    "name": "Ze-Zheng Wu"
+  },
+  "license": "MIT",
+  "config": {},
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "vite",
+    "lint": "eslint . --ext .ts,.tsx",
+    "type-check": "tsc --noEmit --emitDeclarationOnly false",
+    "format": "prettier . --write",
+    "prebuild": "npm run lint && npm run type-check && npm run format",
+    "build": "vite build",
+    "preview": "vite preview",
+    "prepublishOnly": "npm run build",
+    "ncu": "npx npm-check-updates --filterVersion \"/^[~^]/\" -u",
+    "postncu": "npm i"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^18.4.1",
+    "@commitlint/config-conventional": "^18.4.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@typescript-eslint/eslint-plugin": "^6.10.0",
+    "@typescript-eslint/parser": "^6.10.0",
+    "@vitejs/plugin-react": "^4.1.1",
+    "eslint": "^8.53.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "npm-check-updates": "^16.14.6",
+    "playwright": "^1.39.0",
+    "prettier": "^3.0.3",
+    "prettier-plugin-embed": "^0.2.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "typescript": "^5.2.2",
+    "vite": "^4.5.0",
+    "vite-plugin-static-copy": "^0.17.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.14.17",
+    "@rpldy/upload-drop-zone": "^1.6.1",
+    "@rpldy/uploady": "^1.6.1",
+    "case-anything": "^2.1.13",
+    "react": "^18.2.0",
+    "react-aria": "^3.30.0",
+    "react-aria-components": "^1.0.0-rc.0",
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4",
+    "zustand": "^4.4.6",
+    "zxing-wasm": "^1.0.0-rc.5"
+  }
+}
