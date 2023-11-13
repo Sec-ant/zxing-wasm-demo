@@ -26,7 +26,7 @@ import {
   useMemo,
   type ChangeEventHandler,
 } from "react";
-import { z } from "zod";
+import * as z from "zod";
 import { create } from "zustand";
 import {
   createJSONStorage,

@@ -1,5 +1,6 @@
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
+import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { packages } from "./package-lock.json";
@@ -22,6 +23,7 @@ export default defineConfig({
         },
       ],
     }),
+    visualizer(),
   ],
   define: {
     ZXING_WASM_VERSION: JSON.stringify(
