@@ -6,6 +6,7 @@ import {
   InputAdornment,
   InputLabel,
   Link,
+  List,
   MenuItem,
   OutlinedInput,
   Select,
@@ -24,6 +25,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useState,
   type ChangeEventHandler,
 } from "react";
 import * as z from "zod";
@@ -111,6 +113,7 @@ const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   flexGrow: 1,
   userSelect: "none",
   marginRight: 0,
+  marginLeft: 0,
 }));
 
 const App = () => {
@@ -178,6 +181,21 @@ const App = () => {
       unsubZXingWasmLocation();
     };
   }, []);
+
+  /**
+   * Local States
+   */
+  const [images, setImages] = useState<Blob[]>([]);
+  const [imageObjectUrls, setImageObjectUrls] = useState<string[]>([]);
+  useEffect(() => {
+    const imageObjectUrls = images.map((image) => URL.createObjectURL(image));
+    setImageObjectUrls(imageObjectUrls);
+    return () => {
+      imageObjectUrls.map((imageObjectUrl) =>
+        URL.revokeObjectURL(imageObjectUrl),
+      );
+    };
+  }, [images]);
 
   /**
    * WASM Location
@@ -555,31 +573,22 @@ const App = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          padding: 0,
-          minWidth: 300,
+          minWidth: 400,
         }}
       >
-        <h1>ZXing WASM Demo</h1>
-        <Typography
-          fontFamily="MonaspaceArgon"
-          variant="subtitle2"
-          gutterBottom
-        >
-          <Link
-            href={`https://github.com/Sec-ant/zxing-wasm/tree/v${ZXING_WASM_VERSION}`}
-          >
-            zxing-wasm@{ZXING_WASM_VERSION}
-          </Link>
+        <Typography variant="subtitle1" sx={{ paddingTop: 2 }}>
+          <Link href="https://github.com/Sec-ant/zxing-wasm">zxing-wasm</Link>{" "}
+          demo
         </Typography>
         <FlexGrid container spacing={2} alignItems={"center"}>
           <FlexGrid xs={12}>
             <BarcodeImagesDropZone
               onBarcodeImagesDrop={(files) => {
-                console.log(files);
+                setImages(files);
               }}
             ></BarcodeImagesDropZone>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="wasm-location-label">WASM Location</InputLabel>
               <Select
@@ -597,7 +606,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="formats-label">Formats</InputLabel>
               <Select
@@ -618,7 +627,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="binarizer-label">Binarizer</InputLabel>
               <Select
@@ -636,7 +645,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="character-set-label">Character Set</InputLabel>
               <Select
@@ -654,7 +663,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel htmlFor="max-number-of-symbols">
                 Maximum Number of Symbols
@@ -674,7 +683,7 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel htmlFor="min-line-count">
                 Minimum Line Count
@@ -693,7 +702,7 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="ean-addon-symbol-label">
                 EAN Addon Symbol
@@ -713,7 +722,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="text-mode-label">Text Mode</InputLabel>
               <Select
@@ -731,7 +740,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <StyledFormControlLabel
               label="Try Harder"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -744,7 +753,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <StyledFormControlLabel
               label="Try Rotate"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -757,7 +766,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <StyledFormControlLabel
               label="Try Invert"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -770,7 +779,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <StyledFormControlLabel
               label="Is Pure"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -783,7 +792,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <StyledFormControlLabel
               label="Return Errors"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -796,7 +805,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <StyledFormControlLabel
               label="Try Downscale"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -809,7 +818,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <FormControl
               disabled={!tryDownscale}
               sx={{ flexGrow: 1 }}
@@ -835,7 +844,7 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={3}>
+          <FlexGrid xs={6} sm={3}>
             <FormControl
               disabled={!tryDownscale}
               sx={{ flexGrow: 1 }}
@@ -859,7 +868,7 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <StyledFormControlLabel
               label="Try Code39 Extended Mode"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -879,7 +888,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <StyledFormControlLabel
               label="Validate Code39 Checksum"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -899,7 +908,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <StyledFormControlLabel
               label="Validate ITF Checksum"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -919,7 +928,7 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6}>
+          <FlexGrid xs={12} sm={6}>
             <StyledFormControlLabel
               label="Return Codabar Start End"
               sx={{ flexGrow: 1, userSelect: "none" }}
@@ -938,6 +947,32 @@ const App = () => {
                 )
               }
             ></StyledFormControlLabel>
+          </FlexGrid>
+          <FlexGrid xs={12}>
+            <div style={{ overflowX: "auto" }}>
+              <List
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  flexDirection: "row",
+                  height: 320,
+                }}
+              >
+                {imageObjectUrls.map((imageObjectUrl) => (
+                  <img
+                    key={imageObjectUrl}
+                    src={imageObjectUrl}
+                    loading="lazy"
+                    style={{
+                      maxWidth: 320,
+                      objectFit: "scale-down",
+                      marginLeft: 4,
+                      marginRight: 4,
+                    }}
+                  ></img>
+                ))}
+              </List>
+            </div>
           </FlexGrid>
         </FlexGrid>
       </Container>
