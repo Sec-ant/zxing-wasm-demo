@@ -23,7 +23,9 @@ export default defineConfig({
         },
       ],
     }),
-    visualizer(),
+    visualizer({
+      emitFile: true,
+    }),
   ],
   define: {
     ZXING_WASM_VERSION: JSON.stringify(
