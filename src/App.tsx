@@ -25,6 +25,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ChangeEventHandler,
 } from "react";
@@ -40,6 +41,7 @@ import {
   binarizers,
   characterSets,
   eanAddOnSymbols,
+  readBarcodesFromImageFile,
   setZXingModuleOverrides,
   textModes,
   type Binarizer,
@@ -50,7 +52,9 @@ import {
   type TextMode,
 } from "zxing-wasm/reader";
 
+import { useDebounce } from "usehooks-ts";
 import { resolveCDNUrl, supportedCDNs } from "./cdn";
+import BarcodeImage from "./components/BarcodeImage";
 import BarcodeImagesDropZone from "./components/BarcodeImagesDropZone";
 
 const wasmLocations = ["local", ...supportedCDNs] as const;
@@ -163,26 +167,6 @@ const App = () => {
   );
 
   /**
-   * Module Overrides
-   */
-  useEffect(() => {
-    const unsubZXingWasmLocation = useZXingWasmDemoStore.subscribe(
-      (state) => state.wasmLocation,
-      (wasmLocation) => {
-        setZXingModuleOverrides({
-          locateFile: (path, prefix) =>
-            path.endsWith(".wasm")
-              ? resolveWasmUrl(wasmLocation)
-              : prefix + path,
-        });
-      },
-    );
-    return () => {
-      unsubZXingWasmLocation();
-    };
-  }, []);
-
-  /**
    * Local States
    */
   const [images, setImages] = useState<Blob[]>([]);
@@ -215,6 +199,16 @@ const App = () => {
     },
     [wasmLocationSchema],
   );
+
+  /**
+   * Module Overrides
+   */
+  useEffect(() => {
+    setZXingModuleOverrides({
+      locateFile: (path, prefix) =>
+        path.endsWith(".wasm") ? resolveWasmUrl(wasmLocation) : prefix + path,
+    });
+  }, [wasmLocation]);
 
   /**
    * Formats
@@ -563,6 +557,106 @@ const App = () => {
     },
     [characterSetSchema],
   );
+
+  /**
+   * Handle Wheel Horizontally
+   */
+  const handleWheel = useCallback((event: WheelEvent) => {
+    const { currentTarget, deltaY } = event as typeof event & {
+      currentTarget: HTMLDivElement;
+    };
+    const toLeft = deltaY < 0 && currentTarget.scrollLeft > 0;
+    const toRight =
+      deltaY > 0 &&
+      currentTarget.scrollLeft <
+        currentTarget.scrollWidth - currentTarget.clientWidth;
+    if (toLeft || toRight) {
+      event.preventDefault();
+      currentTarget.scrollLeft += deltaY;
+    }
+  }, []);
+  const wheelTarget = useRef<HTMLDivElement | null>(null);
+  const addWheelEventListener = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (node) {
+        node.addEventListener("wheel", handleWheel, { passive: false });
+        wheelTarget.current = node;
+      } else if (wheelTarget.current) {
+        wheelTarget.current.removeEventListener("wheel", handleWheel);
+      }
+    },
+    [handleWheel],
+  );
+
+  /**
+   * Construct Detect Function
+   */
+  const debouncedWasmLocation = useDebounce(wasmLocation);
+  const debouncedFormats = useDebounce(formats);
+  const debouncedBinarizer = useDebounce(binarizer);
+  const debouncedCharacterSet = useDebounce(characterSet);
+  const debouncedMaxNumberOfSymbols = useDebounce(maxNumberOfSymbols);
+  const debouncedMinLineCount = useDebounce(minLineCount);
+  const debouncedEanAddOnSymbol = useDebounce(eanAddOnSymbol);
+  const debouncedTextMode = useDebounce(textMode);
+  const debouncedTryHarder = useDebounce(tryHarder);
+  const debouncedTryRotate = useDebounce(tryRotate);
+  const debouncedTryInvert = useDebounce(tryInvert);
+  const debouncedIsPure = useDebounce(isPure);
+  const debouncedReturnErrors = useDebounce(returnErrors);
+  const debouncedTryDownscale = useDebounce(tryDownscale);
+  const debouncedDownscaleThreshold = useDebounce(downscaleThreshold);
+  const debouncedDownscaleFactor = useDebounce(downscaleFactor);
+  const debouncedTryCode39ExtendedMode = useDebounce(tryCode39ExtendedMode);
+  const debouncedValidateCode39CheckSum = useDebounce(validateCode39CheckSum);
+  const debouncedValidateITFCheckSum = useDebounce(validateITFCheckSum);
+  const debouncedReturnCodabarStartEnd = useDebounce(returnCodabarStartEnd);
+  const detect = useMemo(() => {
+    debouncedWasmLocation;
+    return (image: Blob) =>
+      readBarcodesFromImageFile(image, {
+        formats: debouncedFormats,
+        binarizer: debouncedBinarizer,
+        characterSet: debouncedCharacterSet,
+        maxNumberOfSymbols: debouncedMaxNumberOfSymbols,
+        minLineCount: debouncedMinLineCount,
+        eanAddOnSymbol: debouncedEanAddOnSymbol,
+        textMode: debouncedTextMode,
+        tryHarder: debouncedTryHarder,
+        tryRotate: debouncedTryRotate,
+        tryInvert: debouncedTryInvert,
+        isPure: debouncedIsPure,
+        returnErrors: debouncedReturnErrors,
+        tryDownscale: debouncedTryDownscale,
+        downscaleThreshold: debouncedDownscaleThreshold,
+        downscaleFactor: debouncedDownscaleFactor,
+        tryCode39ExtendedMode: debouncedTryCode39ExtendedMode,
+        validateCode39CheckSum: debouncedValidateCode39CheckSum,
+        validateITFCheckSum: debouncedValidateITFCheckSum,
+        returnCodabarStartEnd: debouncedReturnCodabarStartEnd,
+      });
+  }, [
+    debouncedWasmLocation,
+    debouncedBinarizer,
+    debouncedCharacterSet,
+    debouncedDownscaleFactor,
+    debouncedDownscaleThreshold,
+    debouncedEanAddOnSymbol,
+    debouncedFormats,
+    debouncedIsPure,
+    debouncedMaxNumberOfSymbols,
+    debouncedMinLineCount,
+    debouncedReturnCodabarStartEnd,
+    debouncedReturnErrors,
+    debouncedTextMode,
+    debouncedTryCode39ExtendedMode,
+    debouncedTryDownscale,
+    debouncedTryHarder,
+    debouncedTryInvert,
+    debouncedTryRotate,
+    debouncedValidateCode39CheckSum,
+    debouncedValidateITFCheckSum,
+  ]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -948,8 +1042,13 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={12}>
-            <div style={{ overflowX: "auto" }}>
+          <FlexGrid
+            xs={12}
+            sx={{
+              justifyContent: "center",
+            }}
+          >
+            <div style={{ overflowX: "auto" }} ref={addWheelEventListener}>
               <List
                 sx={{
                   flexGrow: 1,
@@ -959,17 +1058,11 @@ const App = () => {
                 }}
               >
                 {imageObjectUrls.map((imageObjectUrl) => (
-                  <img
+                  <BarcodeImage
                     key={imageObjectUrl}
                     src={imageObjectUrl}
-                    loading="lazy"
-                    style={{
-                      maxWidth: 320,
-                      objectFit: "scale-down",
-                      marginLeft: 4,
-                      marginRight: 4,
-                    }}
-                  ></img>
+                    detect={detect}
+                  ></BarcodeImage>
                 ))}
               </List>
             </div>
