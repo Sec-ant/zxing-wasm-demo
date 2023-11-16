@@ -29,7 +29,6 @@ import {
   useState,
   type ChangeEventHandler,
 } from "react";
-import * as z from "zod";
 import { create } from "zustand";
 import {
   createJSONStorage,
@@ -53,6 +52,18 @@ import {
 } from "zxing-wasm/reader";
 
 import { useDebounce } from "usehooks-ts";
+import {
+  array,
+  fallback,
+  finite,
+  integer,
+  maxValue,
+  minValue,
+  parse,
+  picklist,
+  string,
+  transform,
+} from "valibot";
 import { resolveCDNUrl, supportedCDNs } from "./cdn";
 import BarcodeImage from "./components/BarcodeImage";
 import BarcodeImagesDropZone from "./components/BarcodeImagesDropZone";
@@ -62,7 +73,7 @@ type WasmLocation = (typeof wasmLocations)[number];
 
 function resolveWasmUrl(wasmLocation: WasmLocation) {
   if (wasmLocation === "local") {
-    return "/zxing_reader.wasm";
+    return `/zxing_reader.wasm?v=${encodeURIComponent(ZXING_WASM_VERSION)}`;
   }
   return resolveCDNUrl(
     wasmLocation,
@@ -185,7 +196,7 @@ const App = () => {
    * WASM Location
    */
   const wasmLocationSchema = useCallback(
-    (d: WasmLocation) => z.enum(wasmLocations).catch(d),
+    (d: WasmLocation) => fallback(picklist(wasmLocations), d),
     [],
   );
   const { wasmLocation } = useZXingWasmDemoStore();
@@ -194,7 +205,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ wasmLocation }) => ({
-        wasmLocation: wasmLocationSchema(wasmLocation).parse(value),
+        wasmLocation: parse(wasmLocationSchema(wasmLocation), value),
       }));
     },
     [wasmLocationSchema],
@@ -215,14 +226,16 @@ const App = () => {
    */
   const formatsSchema = useCallback(
     (d: ReadInputBarcodeFormat[]) =>
-      z
-        .array(z.enum(barcodeFormats))
-        .transform((formats) => {
-          return [...new Set(formats)].filter(
-            (f) => f !== "None",
-          ) as ReadInputBarcodeFormat[];
-        })
-        .catch(d),
+      fallback(
+        transform(
+          array(picklist(barcodeFormats)),
+          (formats) =>
+            [...new Set(formats)].filter(
+              (f) => f !== "None",
+            ) as ReadInputBarcodeFormat[],
+        ),
+        d,
+      ),
     [],
   );
   const { formats } = useZXingWasmDemoStore();
@@ -234,7 +247,7 @@ const App = () => {
         value = value.split(/,\s*/) as ReadInputBarcodeFormat[];
       }
       useZXingWasmDemoStore.setState(({ formats: [...formats] }) => ({
-        formats: [...formatsSchema(formats).parse(value)],
+        formats: [...parse(formatsSchema(formats), value)],
       }));
     },
     [formatsSchema],
@@ -244,7 +257,7 @@ const App = () => {
    * Binarizer
    */
   const binarizerSchema = useCallback(
-    (d: Binarizer) => z.enum(binarizers).catch(d),
+    (d: Binarizer) => fallback(picklist(binarizers), d),
     [],
   );
   const { binarizer } = useZXingWasmDemoStore();
@@ -253,7 +266,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ binarizer }) => ({
-        binarizer: binarizerSchema(binarizer).parse(value),
+        binarizer: parse(binarizerSchema(binarizer), value),
       }));
     },
     [binarizerSchema],
@@ -325,18 +338,14 @@ const App = () => {
   const minDownscaleThreshold = 0;
   const downscaleThresholdSchema = useCallback(
     (d: number) =>
-      z
-        .string()
-        .transform((v) => parseInt(v, 10))
-        .pipe(
-          z
-            .number()
-            .int()
-            .finite()
-            .positive()
-            .min(minDownscaleThreshold)
-            .catch(d),
-        ),
+      fallback(
+        transform(string(), (input) => parseInt(input, 10), [
+          integer(),
+          finite(),
+          minValue(minDownscaleThreshold),
+        ]),
+        d,
+      ),
     [],
   );
   const { downscaleThreshold } = useZXingWasmDemoStore();
@@ -345,8 +354,10 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ downscaleThreshold }) => ({
-        downscaleThreshold:
-          downscaleThresholdSchema(downscaleThreshold).parse(value),
+        downscaleThreshold: parse(
+          downscaleThresholdSchema(downscaleThreshold),
+          value,
+        ),
       }));
     },
     [downscaleThresholdSchema],
@@ -359,17 +370,15 @@ const App = () => {
   const maxDownscaleFactor = 4;
   const downscaleFactorSchema = useCallback(
     (d: number) =>
-      z
-        .string()
-        .transform((v) => parseInt(v, 10))
-        .pipe(
-          z
-            .number()
-            .int()
-            .min(minDownscaleFactor)
-            .max(maxDownscaleFactor)
-            .catch(d),
-        ),
+      fallback(
+        transform(string(), (input) => parseInt(input, 10), [
+          integer(),
+          finite(),
+          minValue(minDownscaleFactor),
+          maxValue(maxDownscaleFactor),
+        ]),
+        d,
+      ),
     [],
   );
   const { downscaleFactor } = useZXingWasmDemoStore();
@@ -378,7 +387,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ downscaleFactor }) => ({
-        downscaleFactor: downscaleFactorSchema(downscaleFactor).parse(value),
+        downscaleFactor: parse(downscaleFactorSchema(downscaleFactor), value),
       }));
     },
     [downscaleFactorSchema],
@@ -390,10 +399,13 @@ const App = () => {
   const minMinLineCount = 1;
   const minLineCountSchema = useCallback(
     (d: number) =>
-      z
-        .string()
-        .transform((v) => parseInt(v, 10))
-        .pipe(z.number().int().min(minMinLineCount).catch(d)),
+      fallback(
+        transform(string(), (input) => parseInt(input, 10), [
+          integer(),
+          minValue(minMinLineCount),
+        ]),
+        d,
+      ),
     [],
   );
   const { minLineCount } = useZXingWasmDemoStore();
@@ -402,7 +414,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ minLineCount }) => ({
-        minLineCount: minLineCountSchema(minLineCount).parse(value),
+        minLineCount: parse(minLineCountSchema(minLineCount), value),
       }));
     },
     [minLineCountSchema],
@@ -415,17 +427,14 @@ const App = () => {
   const maxMaxNumberOfSymbols = 255;
   const maxNumberOfSymbolsSchema = useCallback(
     (d: number) =>
-      z
-        .string()
-        .transform((v) => parseInt(v, 10))
-        .pipe(
-          z
-            .number()
-            .int()
-            .min(minMaxNumberOfSymbols)
-            .max(maxMaxNumberOfSymbols)
-            .catch(d),
-        ),
+      fallback(
+        transform(string(), (input) => parseInt(input, 10), [
+          integer(),
+          minValue(minMaxNumberOfSymbols),
+          maxValue(maxMaxNumberOfSymbols),
+        ]),
+        d,
+      ),
     [],
   );
   const { maxNumberOfSymbols } = useZXingWasmDemoStore();
@@ -434,8 +443,10 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ maxNumberOfSymbols }) => ({
-        maxNumberOfSymbols:
-          maxNumberOfSymbolsSchema(maxNumberOfSymbols).parse(value),
+        maxNumberOfSymbols: parse(
+          maxNumberOfSymbolsSchema(maxNumberOfSymbols),
+          value,
+        ),
       }));
     },
     [maxNumberOfSymbolsSchema],
@@ -505,7 +516,7 @@ const App = () => {
    * EAN Addon Symbol
    */
   const eanAddOnSymbolSchema = useCallback(
-    (d: EanAddOnSymbol) => z.enum(eanAddOnSymbols).catch(d),
+    (d: EanAddOnSymbol) => fallback(picklist(eanAddOnSymbols), d),
     [],
   );
   const { eanAddOnSymbol } = useZXingWasmDemoStore();
@@ -514,7 +525,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ eanAddOnSymbol }) => ({
-        eanAddOnSymbol: eanAddOnSymbolSchema(eanAddOnSymbol).parse(value),
+        eanAddOnSymbol: parse(eanAddOnSymbolSchema(eanAddOnSymbol), value),
       }));
     },
     [eanAddOnSymbolSchema],
@@ -524,7 +535,7 @@ const App = () => {
    * Text Mode
    */
   const textModeSchema = useCallback(
-    (d: TextMode) => z.enum(textModes).catch(d),
+    (d: TextMode) => fallback(picklist(textModes), d),
     [],
   );
   const { textMode } = useZXingWasmDemoStore();
@@ -533,7 +544,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ textMode }) => ({
-        textMode: textModeSchema(textMode).parse(value),
+        textMode: parse(textModeSchema(textMode), value),
       }));
     },
     [textModeSchema],
@@ -543,7 +554,7 @@ const App = () => {
    * Character Set
    */
   const characterSetSchema = useCallback(
-    (d: CharacterSet) => z.enum(characterSets).catch(d),
+    (d: CharacterSet) => fallback(picklist(characterSets), d),
     [],
   );
   const { characterSet } = useZXingWasmDemoStore();
@@ -552,7 +563,7 @@ const App = () => {
   >(
     ({ target: { value } }) => {
       useZXingWasmDemoStore.setState(({ characterSet }) => ({
-        characterSet: characterSetSchema(characterSet).parse(value),
+        characterSet: parse(characterSetSchema(characterSet), value),
       }));
     },
     [characterSetSchema],
