@@ -1,18 +1,21 @@
+import { Article, GitHub, QrCodeScanner } from "@mui/icons-material";
 import {
+  AppBar,
+  Checkbox,
+  CheckboxProps,
   Container,
   CssBaseline,
   FormControl,
   FormControlLabel,
+  IconButton,
   InputAdornment,
   InputLabel,
-  Link,
   List,
   MenuItem,
   OutlinedInput,
   Select,
-  Switch,
-  SwitchProps,
   ThemeProvider,
+  Toolbar,
   Typography,
   createTheme,
   styled,
@@ -131,6 +134,12 @@ const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   marginLeft: 0,
 }));
 
+declare module "@mui/material/styles" {
+  interface BreakpointOverrides {
+    mobile: true;
+  }
+}
+
 const App = () => {
   /**
    * Theme
@@ -141,6 +150,16 @@ const App = () => {
       createTheme({
         palette: {
           mode: prefersDarkMode ? "dark" : "light",
+        },
+        breakpoints: {
+          values: {
+            xs: 0,
+            mobile: 300,
+            sm: 600,
+            md: 900,
+            lg: 1200,
+            xl: 1536,
+          },
         },
         components: {
           MuiCssBaseline: {
@@ -277,7 +296,7 @@ const App = () => {
    */
   const { tryHarder } = useZXingWasmDemoStore();
   const handleTryHarderChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       tryHarder: checked,
@@ -289,7 +308,7 @@ const App = () => {
    */
   const { tryRotate } = useZXingWasmDemoStore();
   const handleTryRotateChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       tryRotate: checked,
@@ -301,7 +320,7 @@ const App = () => {
    */
   const { tryInvert } = useZXingWasmDemoStore();
   const handleTryInvertChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       tryInvert: checked,
@@ -313,7 +332,7 @@ const App = () => {
    */
   const { tryDownscale } = useZXingWasmDemoStore();
   const handleTryDownscaleChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       tryDownscale: checked,
@@ -325,7 +344,7 @@ const App = () => {
    */
   const { isPure } = useZXingWasmDemoStore();
   const handleIsPureChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       isPure: checked,
@@ -457,7 +476,7 @@ const App = () => {
    */
   const { tryCode39ExtendedMode } = useZXingWasmDemoStore();
   const handleTryCode39ExtendedModeChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       tryCode39ExtendedMode: checked,
@@ -469,7 +488,7 @@ const App = () => {
    */
   const { validateCode39CheckSum } = useZXingWasmDemoStore();
   const handleValidateCode39CheckSumChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       validateCode39CheckSum: checked,
@@ -481,7 +500,7 @@ const App = () => {
    */
   const { validateITFCheckSum } = useZXingWasmDemoStore();
   const handleValidateITFCheckSumChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       validateITFCheckSum: checked,
@@ -493,7 +512,7 @@ const App = () => {
    */
   const { returnCodabarStartEnd } = useZXingWasmDemoStore();
   const handleReturnCodabarStartEndChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       returnCodabarStartEnd: checked,
@@ -505,7 +524,7 @@ const App = () => {
    */
   const { returnErrors } = useZXingWasmDemoStore();
   const handleReturnErrorsChange = useCallback<
-    Exclude<SwitchProps["onChange"], undefined>
+    Exclude<CheckboxProps["onChange"], undefined>
   >((_, checked) => {
     useZXingWasmDemoStore.setState({
       returnErrors: checked,
@@ -672,19 +691,49 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <AppBar position="static" color="primary" enableColorOnDark>
+        <Toolbar variant="dense">
+          <QrCodeScanner sx={{ marginRight: 1 }} />
+          <Typography
+            fontWeight={700}
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1 }}
+          >
+            zxing-wasm demo
+          </Typography>
+          <IconButton
+            size="small"
+            aria-label="github repository"
+            color="inherit"
+            onClick={() =>
+              window.open("https://github.com/Sec-ant/zxing-wasm", "_blank")
+            }
+          >
+            <GitHub />
+          </IconButton>
+          <IconButton
+            size="small"
+            aria-label="documents"
+            color="inherit"
+            onClick={() =>
+              window.open("https://zxing-wasm.netlify.app", "_blank")
+            }
+          >
+            <Article />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       <Container
         maxWidth="md"
         sx={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          minWidth: 400,
+          minWidth: 300,
+          marginTop: 2,
         }}
       >
-        <Typography variant="subtitle1" sx={{ paddingTop: 2 }}>
-          <Link href="https://github.com/Sec-ant/zxing-wasm">zxing-wasm</Link>{" "}
-          demo
-        </Typography>
         <FlexGrid container spacing={2} alignItems={"center"}>
           <FlexGrid xs={12}>
             <BarcodeImagesDropZone
@@ -693,7 +742,7 @@ const App = () => {
               }}
             ></BarcodeImagesDropZone>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="wasm-location-label">WASM Location</InputLabel>
               <Select
@@ -711,7 +760,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="formats-label">Formats</InputLabel>
               <Select
@@ -732,7 +781,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="binarizer-label">Binarizer</InputLabel>
               <Select
@@ -750,7 +799,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="character-set-label">Character Set</InputLabel>
               <Select
@@ -768,7 +817,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel htmlFor="max-number-of-symbols">
                 Maximum Number of Symbols
@@ -788,7 +837,7 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel htmlFor="min-line-count">
                 Minimum Line Count
@@ -807,7 +856,7 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="ean-addon-symbol-label">
                 EAN Addon Symbol
@@ -827,7 +876,7 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6} sm={3}>
             <FormControl sx={{ flexGrow: 1 }} size="small">
               <InputLabel id="text-mode-label">Text Mode</InputLabel>
               <Select
@@ -845,81 +894,75 @@ const App = () => {
               </Select>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={6} sm={3}>
+          <FlexGrid xs={6} mobile={4} sm={3}>
             <StyledFormControlLabel
               label="Try Harder"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={tryHarder}
                   onChange={handleTryHarderChange}
-                ></Switch>
+                ></Checkbox>
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6} sm={3}>
+          <FlexGrid xs={6} mobile={4} sm={3}>
             <StyledFormControlLabel
               label="Try Rotate"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={tryRotate}
                   onChange={handleTryRotateChange}
-                ></Switch>
+                ></Checkbox>
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6} sm={3}>
+          <FlexGrid xs={6} mobile={4} sm={3}>
             <StyledFormControlLabel
               label="Try Invert"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={tryInvert}
                   onChange={handleTryInvertChange}
-                ></Switch>
+                ></Checkbox>
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6} sm={3}>
+          <FlexGrid xs={6} mobile={4} sm={3}>
             <StyledFormControlLabel
               label="Is Pure"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={isPure}
                   onChange={handleIsPureChange}
-                ></Switch>
+                ></Checkbox>
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6} sm={3}>
+          <FlexGrid xs={6} mobile={4} sm={3}>
             <StyledFormControlLabel
               label="Return Errors"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={returnErrors}
                   onChange={handleReturnErrorsChange}
-                ></Switch>
+                ></Checkbox>
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={6} sm={3}>
+          <FlexGrid xs={6} mobile={4} sm={3}>
             <StyledFormControlLabel
               label="Try Downscale"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={tryDownscale}
                   onChange={handleTryDownscaleChange}
-                ></Switch>
+                ></Checkbox>
               }
             ></StyledFormControlLabel>
           </FlexGrid>
@@ -973,16 +1016,15 @@ const App = () => {
               ></OutlinedInput>
             </FormControl>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6}>
             <StyledFormControlLabel
               label="Try Code39 Extended Mode"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={tryCode39ExtendedMode}
                   onChange={handleTryCode39ExtendedModeChange}
-                ></Switch>
+                ></Checkbox>
               }
               disabled={
                 !(
@@ -993,16 +1035,15 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6}>
             <StyledFormControlLabel
               label="Validate Code39 Checksum"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={validateCode39CheckSum}
                   onChange={handleValidateCode39CheckSumChange}
-                ></Switch>
+                ></Checkbox>
               }
               disabled={
                 !(
@@ -1013,16 +1054,15 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6}>
             <StyledFormControlLabel
               label="Validate ITF Checksum"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={validateITFCheckSum}
                   onChange={handleValidateITFCheckSumChange}
-                ></Switch>
+                ></Checkbox>
               }
               disabled={
                 !(
@@ -1033,16 +1073,15 @@ const App = () => {
               }
             ></StyledFormControlLabel>
           </FlexGrid>
-          <FlexGrid xs={12} sm={6}>
+          <FlexGrid xs={12} mobile={6}>
             <StyledFormControlLabel
               label="Return Codabar Start End"
-              sx={{ flexGrow: 1, userSelect: "none" }}
               control={
-                <Switch
+                <Checkbox
                   size="small"
                   checked={returnCodabarStartEnd}
                   onChange={handleReturnCodabarStartEndChange}
-                ></Switch>
+                ></Checkbox>
               }
               disabled={
                 !(
@@ -1066,6 +1105,8 @@ const App = () => {
                   display: "flex",
                   flexDirection: "row",
                   height: 320,
+                  paddingLeft: 1,
+                  paddingRight: 1,
                 }}
               >
                 {imageObjectUrls.map((imageObjectUrl) => (

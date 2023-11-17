@@ -27,6 +27,7 @@ async function recursivelyGetFilePromises(
     for await (const item of items) {
       switch (item.kind) {
         case "text":
+          console.log(await item.getText([...item.types][2]));
           continue;
         case "file":
           acceptedFileTypes.includes(item.type) &&
@@ -170,7 +171,7 @@ const BarcodeImagesDropZone = ({
           userSelect: "none",
         }}
       >
-        {dropZoneLabel ?? " Or drop barcode images here"}
+        {dropZoneLabel ?? " Or drop them here"}
       </Typography>
     </Paper>
   );
