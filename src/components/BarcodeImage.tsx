@@ -243,7 +243,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
         open={dialogOpen}
         onClose={handleCloseDialog}
         aria-labelledby="read-results-dialog-title"
-        maxWidth="md"
+        maxWidth="sm"
         fullWidth
       >
         <DialogTitle id="read-results-dialog-title">Read Results</DialogTitle>
