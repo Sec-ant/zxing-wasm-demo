@@ -132,7 +132,7 @@ const BarcodeImagesDropZone = ({
       <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
         <IconButton
           disabled
-          size="large"
+          size="small"
           sx={{ visibility: "hidden", height: "fit-content" }}
         >
           <Clear></Clear>
@@ -141,7 +141,7 @@ const BarcodeImagesDropZone = ({
         <Button
           disabled={isInsideDropZone || isCollecting}
           variant="contained"
-          size="large"
+          size="small"
           startIcon={<FileOpen />}
           sx={{ m: 1 }}
           onClick={handleFilesButtonClick}
@@ -151,7 +151,7 @@ const BarcodeImagesDropZone = ({
         <Button
           disabled={isInsideDropZone || isCollecting}
           variant="contained"
-          size="large"
+          size="small"
           startIcon={<FolderOpen />}
           onClick={handleDirectoryButtonClick}
           sx={{ m: 1 }}
@@ -161,7 +161,7 @@ const BarcodeImagesDropZone = ({
         <Box sx={{ flexGrow: 1 }}></Box>
         <IconButton
           disabled={isInsideDropZone || isCollecting}
-          size="large"
+          size="small"
           color="primary"
           onClick={handleClearButtonClick}
           sx={{
