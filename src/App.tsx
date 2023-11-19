@@ -139,6 +139,7 @@ const StyledCheckbox = styled(Checkbox)(() => ({
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
     mobile: true;
+    buttonCollapse: true;
   }
 }
 
@@ -157,6 +158,7 @@ const App = () => {
           values: {
             xs: 0,
             mobile: 300,
+            buttonCollapse: 400,
             sm: 600,
             md: 900,
             lg: 1200,
@@ -704,7 +706,12 @@ const App = () => {
               fontWeight={700}
               variant="h6"
               component="div"
-              sx={{ flexGrow: 1 }}
+              sx={{
+                flexGrow: 1,
+                overflow: "hidden",
+                textWrap: "nowrap",
+                textOverflow: "ellipsis",
+              }}
             >
               zxing-wasm demo
             </Typography>
@@ -755,7 +762,7 @@ const App = () => {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            minWidth: 300,
+            minWidth: 250,
             marginTop: 2,
             marginBottom: 2,
           }}

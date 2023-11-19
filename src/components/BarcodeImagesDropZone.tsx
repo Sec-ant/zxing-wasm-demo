@@ -7,6 +7,8 @@ import {
   Paper,
   PaperProps,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import mobile from "is-mobile";
 import { useCallback, useEffect, useState } from "react";
@@ -32,6 +34,10 @@ const BarcodeImagesDropZone = ({
   const [isInsideDropZone, setIsInsideDropZone] = useState<boolean>(false);
   const [isCollecting, setIsCollecting] = useState<boolean>(false);
   const [files, setFiles] = useState<File[]>([]);
+  const theme = useTheme();
+  const buttonCollapse = useMediaQuery(
+    theme.breakpoints.down("buttonCollapse"),
+  );
 
   useEffect(() => {
     onBarcodeImagesDrop?.(files);
@@ -180,26 +186,52 @@ const BarcodeImagesDropZone = ({
               <Clear></Clear>
             </IconButton>
             <Box sx={{ flexGrow: 1 }}></Box>
-            <Button
-              disabled={isInsideDropZone || isCollecting}
-              variant="contained"
-              size="small"
-              startIcon={<FileOpen />}
-              sx={{ m: 1 }}
-              onClick={handleFilesButtonClick}
-            >
-              Files
-            </Button>
-            <Button
-              disabled={isInsideDropZone || isCollecting}
-              variant="contained"
-              size="small"
-              startIcon={<FolderOpen />}
-              onClick={handleDirectoryButtonClick}
-              sx={{ m: 1 }}
-            >
-              Directory
-            </Button>
+            {buttonCollapse && (
+              <>
+                <IconButton
+                  disabled={isInsideDropZone || isCollecting}
+                  size="small"
+                  color="primary"
+                  sx={{ m: 1 }}
+                  onClick={handleFilesButtonClick}
+                >
+                  <FileOpen />
+                </IconButton>
+                <IconButton
+                  disabled={isInsideDropZone || isCollecting}
+                  size="small"
+                  color="primary"
+                  sx={{ m: 1 }}
+                  onClick={handleDirectoryButtonClick}
+                >
+                  <FolderOpen />
+                </IconButton>
+              </>
+            )}
+            {!buttonCollapse && (
+              <>
+                <Button
+                  disabled={isInsideDropZone || isCollecting}
+                  variant="contained"
+                  size="small"
+                  startIcon={<FileOpen />}
+                  sx={{ m: 1 }}
+                  onClick={handleFilesButtonClick}
+                >
+                  Files
+                </Button>
+                <Button
+                  disabled={isInsideDropZone || isCollecting}
+                  variant="contained"
+                  size="small"
+                  startIcon={<FolderOpen />}
+                  onClick={handleDirectoryButtonClick}
+                  sx={{ m: 1 }}
+                >
+                  {buttonCollapse ? "" : "Directory"}
+                </Button>
+              </>
+            )}
             <Box sx={{ flexGrow: 1 }}></Box>
             <IconButton
               disabled={isInsideDropZone || isCollecting}
@@ -324,7 +356,7 @@ async function* itemListFileGenerator(
     if (item.kind === "file") {
       if (isFileSysmtemAccessSupported()) {
         const handle = await item.getAsFileSystemHandle();
-        if (handle === null) {
+        if (!handle) {
           continue;
         }
         if (isFileSystemFileHandle(handle)) {
@@ -334,7 +366,7 @@ async function* itemListFileGenerator(
         }
       } else {
         const entry = item.webkitGetAsEntry();
-        if (entry === null) {
+        if (!entry) {
           continue;
         }
         if (isFileSystemFileEntry(entry)) {
