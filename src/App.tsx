@@ -1,4 +1,4 @@
-import { Article, GitHub, QrCodeScanner } from "@mui/icons-material";
+import { Article, Code, GitHub, QrCodeScanner } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -17,6 +17,7 @@ import {
   Select,
   ThemeProvider,
   Toolbar,
+  Tooltip,
   Typography,
   createTheme,
   styled,
@@ -694,26 +695,45 @@ const App = () => {
             >
               zxing-wasm demo
             </Typography>
-            <IconButton
-              size="small"
-              aria-label="github repository"
-              color="inherit"
-              onClick={() =>
-                window.open("https://github.com/Sec-ant/zxing-wasm", "_blank")
-              }
-            >
-              <GitHub />
-            </IconButton>
-            <IconButton
-              size="small"
-              aria-label="documents"
-              color="inherit"
-              onClick={() =>
-                window.open("https://zxing-wasm.netlify.app", "_blank")
-              }
-            >
-              <Article />
-            </IconButton>
+            <Tooltip title="GitHub Repository">
+              <IconButton
+                size="small"
+                aria-label="github repository"
+                color="inherit"
+                onClick={() =>
+                  window.open("https://github.com/Sec-ant/zxing-wasm", "_blank")
+                }
+              >
+                <GitHub />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Document">
+              <IconButton
+                size="small"
+                aria-label="document"
+                color="inherit"
+                onClick={() =>
+                  window.open("https://zxing-wasm.netlify.app", "_blank")
+                }
+              >
+                <Article />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Demo Source Code">
+              <IconButton
+                size="small"
+                aria-label="demo source code"
+                color="inherit"
+                onClick={() =>
+                  window.open(
+                    "https://github.com/Sec-ant/zxing-wasm-demo",
+                    "_blank",
+                  )
+                }
+              >
+                <Code />
+              </IconButton>
+            </Tooltip>
           </Toolbar>
         </AppBar>
         <Container

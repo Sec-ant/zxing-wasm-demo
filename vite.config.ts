@@ -1,7 +1,8 @@
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "node:url";
 import { visualizer } from "rollup-plugin-visualizer";
-import { defineConfig } from "vite";
+import { defineConfig, type PluginOption } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { packages } from "./package-lock.json";
 
@@ -25,6 +26,19 @@ export default defineConfig({
     }),
     visualizer({
       emitFile: true,
+    }) as PluginOption,
+    VitePWA({
+      registerType: "autoUpdate",
+      workbox: {
+        globDirectory: resolvePath("./dist"),
+        globPatterns: ["**/*"],
+        globIgnores: [
+          "**/node_modules/**/*",
+          "sw.js",
+          "workbox-*.js",
+          "stats.html",
+        ],
+      },
     }),
   ],
   define: {
