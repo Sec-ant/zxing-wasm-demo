@@ -2,11 +2,13 @@ import { Clear, FileOpen, FolderOpen } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Fab,
   IconButton,
   Paper,
   PaperProps,
   Typography,
 } from "@mui/material";
+import mobile from "is-mobile";
 import { useCallback, useEffect, useState } from "react";
 
 const allowedImageExtensions = new Set([
@@ -26,9 +28,9 @@ const BarcodeImagesDropZone = ({
   onBarcodeImagesDrop,
   ...paperProps
 }: BarcodeImagesDropZoneProps) => {
+  const isMobile = useIsMobile();
   const [isInsideDropZone, setIsInsideDropZone] = useState<boolean>(false);
   const [isCollecting, setIsCollecting] = useState<boolean>(false);
-
   const [files, setFiles] = useState<File[]>([]);
 
   useEffect(() => {
@@ -115,7 +117,42 @@ const BarcodeImagesDropZone = ({
     setFiles([]);
   }, []);
 
-  return (
+  return isMobile ? (
+    <Box
+      sx={{
+        position: "fixed",
+        right: 0,
+        bottom: 0,
+        margin: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        zIndex: 10,
+      }}
+    >
+      {files.length > 0 && (
+        <Fab
+          disabled={isCollecting}
+          color="error"
+          size="small"
+          onClick={handleClearButtonClick}
+        >
+          <Clear />
+        </Fab>
+      )}
+      <Fab
+        disabled={isCollecting}
+        color="primary"
+        size="small"
+        onClick={handleFilesButtonClick}
+        sx={{
+          marginTop: 1,
+        }}
+      >
+        <FileOpen />
+      </Fab>
+    </Box>
+  ) : (
     <Paper
       {...paperProps}
       sx={{
@@ -169,7 +206,7 @@ const BarcodeImagesDropZone = ({
             height: "fit-content",
           }}
         >
-          <Clear></Clear>
+          <Clear />
         </IconButton>
       </Box>
       <Typography
@@ -184,6 +221,11 @@ const BarcodeImagesDropZone = ({
     </Paper>
   );
 };
+
+function useIsMobile() {
+  const [isMobile] = useState(mobile());
+  return isMobile;
+}
 
 async function* filesPickerFileGenerator() {
   if (isFileSysmtemAccessSupported()) {
