@@ -89,6 +89,19 @@ function resolveWasmUrl(wasmLocation: WasmLocation) {
   );
 }
 
+function inFormats(
+  formats: ReadInputBarcodeFormat[],
+  checks: ReadInputBarcodeFormat[],
+) {
+  const formatsSet = new Set(formats);
+  for (const check of checks) {
+    if (formatsSet.has(check)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 interface ZXingWasmDemoState extends Required<DecodeHints> {
   wasmLocation: WasmLocation;
 }
@@ -851,7 +864,29 @@ const App = () => {
               </FormControl>
             </FlexGrid>
             <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
+              <FormControl
+                sx={{ flexGrow: 1 }}
+                size="small"
+                disabled={
+                  !(
+                    formats.length === 0 ||
+                    inFormats(formats, [
+                      "Codabar",
+                      "Code39",
+                      "Code93",
+                      "Code128",
+                      "EAN-8",
+                      "EAN-13",
+                      "ITF",
+                      "DataBar",
+                      "DataBarExpanded",
+                      "UPC-A",
+                      "UPC-E",
+                      "Linear-Codes",
+                    ])
+                  )
+                }
+              >
                 <InputLabel htmlFor="min-line-count">
                   Minimum Line Count
                 </InputLabel>
@@ -870,7 +905,22 @@ const App = () => {
               </FormControl>
             </FlexGrid>
             <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
+              <FormControl
+                sx={{ flexGrow: 1 }}
+                size="small"
+                disabled={
+                  !(
+                    formats.length === 0 ||
+                    inFormats(formats, [
+                      "EAN-8",
+                      "EAN-13",
+                      "UPC-A",
+                      "UPC-E",
+                      "Linear-Codes",
+                    ])
+                  )
+                }
+              >
                 <InputLabel id="ean-addon-symbol-label">
                   EAN Addon Symbol
                 </InputLabel>
@@ -1042,8 +1092,7 @@ const App = () => {
                 disabled={
                   !(
                     formats.length === 0 ||
-                    formats.includes("Code39") ||
-                    formats.includes("Linear-Codes")
+                    inFormats(formats, ["Code39", "Linear-Codes"])
                   )
                 }
               ></StyledFormControlLabel>
@@ -1061,8 +1110,7 @@ const App = () => {
                 disabled={
                   !(
                     formats.length === 0 ||
-                    formats.includes("Code39") ||
-                    formats.includes("Linear-Codes")
+                    inFormats(formats, ["Code39", "Linear-Codes"])
                   )
                 }
               ></StyledFormControlLabel>
@@ -1080,8 +1128,7 @@ const App = () => {
                 disabled={
                   !(
                     formats.length === 0 ||
-                    formats.includes("ITF") ||
-                    formats.includes("Linear-Codes")
+                    inFormats(formats, ["ITF", "Linear-Codes"])
                   )
                 }
               ></StyledFormControlLabel>
@@ -1099,8 +1146,7 @@ const App = () => {
                 disabled={
                   !(
                     formats.length === 0 ||
-                    formats.includes("Codabar") ||
-                    formats.includes("Linear-Codes")
+                    inFormats(formats, ["Codabar", "Linear-Codes"])
                   )
                 }
               ></StyledFormControlLabel>

@@ -117,108 +117,115 @@ const BarcodeImagesDropZone = ({
     setFiles([]);
   }, []);
 
-  return isMobile ? (
-    <Box
-      sx={{
-        position: "fixed",
-        right: 0,
-        bottom: 0,
-        margin: 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        zIndex: 10,
-      }}
-    >
-      {files.length > 0 && (
-        <Fab
-          disabled={isCollecting}
-          color="error"
-          size="small"
-          onClick={handleClearButtonClick}
-        >
-          <Clear />
-        </Fab>
-      )}
-      <Fab
-        disabled={isCollecting}
-        color="primary"
-        size="small"
-        onClick={handleFilesButtonClick}
-        sx={{
-          marginTop: 1,
-        }}
-      >
-        <FileOpen />
-      </Fab>
-    </Box>
-  ) : (
-    <Paper
-      {...paperProps}
-      sx={{
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        flexGrow: 1,
-        ...paperProps.sx,
-      }}
-      elevation={isInsideDropZone ? 24 : undefined}
-      ref={handlePaperMounted}
-    >
-      <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-        <IconButton
-          disabled
-          size="small"
-          sx={{ visibility: "hidden", height: "fit-content" }}
-        >
-          <Clear></Clear>
-        </IconButton>
-        <Box sx={{ flexGrow: 1 }}></Box>
-        <Button
-          disabled={isInsideDropZone || isCollecting}
-          variant="contained"
-          size="small"
-          startIcon={<FileOpen />}
-          sx={{ m: 1 }}
-          onClick={handleFilesButtonClick}
-        >
-          Files
-        </Button>
-        <Button
-          disabled={isInsideDropZone || isCollecting}
-          variant="contained"
-          size="small"
-          startIcon={<FolderOpen />}
-          onClick={handleDirectoryButtonClick}
-          sx={{ m: 1 }}
-        >
-          Directory
-        </Button>
-        <Box sx={{ flexGrow: 1 }}></Box>
-        <IconButton
-          disabled={isInsideDropZone || isCollecting}
-          size="small"
-          color="primary"
-          onClick={handleClearButtonClick}
+  return (
+    <>
+      {isMobile && (
+        <Box
           sx={{
-            visibility: files.length > 0 ? "inherit" : "hidden",
-            height: "fit-content",
+            position: "fixed",
+            right: 0,
+            bottom: 0,
+            margin: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            zIndex: 10,
           }}
         >
-          <Clear />
-        </IconButton>
-      </Box>
-      <Typography
-        variant="button"
-        sx={{
-          marginTop: 2,
-          userSelect: "none",
-        }}
-      >
-        Or drop them here
-      </Typography>
-    </Paper>
+          {files.length > 0 && (
+            <Fab
+              disabled={isCollecting}
+              color="error"
+              size="small"
+              onClick={handleClearButtonClick}
+            >
+              <Clear />
+            </Fab>
+          )}
+          <Fab
+            disabled={isCollecting}
+            color="primary"
+            size="small"
+            onClick={handleFilesButtonClick}
+            sx={{
+              marginTop: 1,
+            }}
+          >
+            <FileOpen />
+          </Fab>
+        </Box>
+      )}
+      {!isMobile && (
+        <Paper
+          {...paperProps}
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            flexGrow: 1,
+            ...paperProps.sx,
+          }}
+          elevation={isInsideDropZone ? 24 : undefined}
+          ref={handlePaperMounted}
+        >
+          <Box
+            sx={{ display: "flex", justifyContent: "center", width: "100%" }}
+          >
+            <IconButton
+              disabled
+              size="small"
+              sx={{ visibility: "hidden", height: "fit-content" }}
+            >
+              <Clear></Clear>
+            </IconButton>
+            <Box sx={{ flexGrow: 1 }}></Box>
+            <Button
+              disabled={isInsideDropZone || isCollecting}
+              variant="contained"
+              size="small"
+              startIcon={<FileOpen />}
+              sx={{ m: 1 }}
+              onClick={handleFilesButtonClick}
+            >
+              Files
+            </Button>
+            <Button
+              disabled={isInsideDropZone || isCollecting}
+              variant="contained"
+              size="small"
+              startIcon={<FolderOpen />}
+              onClick={handleDirectoryButtonClick}
+              sx={{ m: 1 }}
+            >
+              Directory
+            </Button>
+            <Box sx={{ flexGrow: 1 }}></Box>
+            <IconButton
+              disabled={isInsideDropZone || isCollecting}
+              size="small"
+              color="primary"
+              onClick={handleClearButtonClick}
+              sx={{
+                visibility: files.length > 0 ? "inherit" : "hidden",
+                height: "fit-content",
+              }}
+            >
+              <Clear />
+            </IconButton>
+          </Box>
+          <Typography
+            variant="button"
+            sx={{
+              marginTop: 2,
+              userSelect: "none",
+            }}
+          >
+            Or drop them here
+          </Typography>
+        </Paper>
+      )}
+    </>
   );
 };
 
