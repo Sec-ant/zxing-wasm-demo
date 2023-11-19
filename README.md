@@ -2,8 +2,8 @@
 
 ## TODO
 
-- [ ] Fix directory DnD in FireFox
-- [ ] Add clear files button
+- [x] Fix directory DnD in FireFox
+- [x] Add clear files button
 - [ ] Add text file / url string DnD support
 - [ ] Add light / dark / auto theme switch
 - [ ] Load `.wasm` file eagerly and add visual feedback
@@ -12,4 +12,8 @@
 - [ ] Auto deployment on `zxing-wasm` build
 - [ ] Display `zxing-wasm` version / commit somewhere
 - [ ] Add sample files / history in the side bar?
-- [ ] Reduce bundle size / split chunks
+- [x] Reduce bundle size / split chunks
+- [ ] Prevent page scrolling when changing numeric values
+- [ ] Prevent page scrolling when browsing images
+- [ ] Numeric fields value fallback on losing focus instead of typing
+- [ ] Validate file types by magic number instead of extension

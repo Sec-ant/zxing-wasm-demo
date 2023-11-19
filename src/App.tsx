@@ -135,6 +135,10 @@ const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   marginLeft: 0,
 }));
 
+const StyledCheckbox = styled(Checkbox)(() => ({
+  padding: 2,
+}));
+
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
     mobile: true;
@@ -904,11 +908,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Try Harder"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={tryHarder}
                     onChange={handleTryHarderChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
               ></StyledFormControlLabel>
             </FlexGrid>
@@ -916,11 +920,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Try Rotate"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={tryRotate}
                     onChange={handleTryRotateChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
               ></StyledFormControlLabel>
             </FlexGrid>
@@ -928,11 +932,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Try Invert"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={tryInvert}
                     onChange={handleTryInvertChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
               ></StyledFormControlLabel>
             </FlexGrid>
@@ -940,11 +944,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Is Pure"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={isPure}
                     onChange={handleIsPureChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
               ></StyledFormControlLabel>
             </FlexGrid>
@@ -952,11 +956,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Return Errors"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={returnErrors}
                     onChange={handleReturnErrorsChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
               ></StyledFormControlLabel>
             </FlexGrid>
@@ -964,11 +968,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Try Downscale"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={tryDownscale}
                     onChange={handleTryDownscaleChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
               ></StyledFormControlLabel>
             </FlexGrid>
@@ -1026,11 +1030,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Try Code39 Extended Mode"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={tryCode39ExtendedMode}
                     onChange={handleTryCode39ExtendedModeChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
                 disabled={
                   !(
@@ -1045,11 +1049,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Validate Code39 Checksum"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={validateCode39CheckSum}
                     onChange={handleValidateCode39CheckSumChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
                 disabled={
                   !(
@@ -1064,11 +1068,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Validate ITF Checksum"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={validateITFCheckSum}
                     onChange={handleValidateITFCheckSumChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
                 disabled={
                   !(
@@ -1083,11 +1087,11 @@ const App = () => {
               <StyledFormControlLabel
                 label="Return Codabar Start End"
                 control={
-                  <Checkbox
+                  <StyledCheckbox
                     size="small"
                     checked={returnCodabarStartEnd}
                     onChange={handleReturnCodabarStartEndChange}
-                  ></Checkbox>
+                  ></StyledCheckbox>
                 }
                 disabled={
                   !(

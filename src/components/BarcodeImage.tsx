@@ -295,6 +295,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
             src={src}
             loading="lazy"
             style={{
+              userSelect: "none",
               maxHeight: "100%",
               maxWidth: 320,
               objectFit: "contain",

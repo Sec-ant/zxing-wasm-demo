@@ -1,145 +1,123 @@
+import { Clear, FileOpen, FolderOpen } from "@mui/icons-material";
 import {
+  Box,
   Button,
+  IconButton,
   Paper,
   PaperProps,
   Typography,
-  type ButtonProps,
 } from "@mui/material";
-import { DropOptions, useDrop, type DropItem } from "@react-aria/dnd";
-import { usePress } from "@react-aria/interactions";
-import { useCallback, useRef, useState, type PropsWithChildren } from "react";
-import { FileTrigger, type FileTriggerProps } from "react-aria-components";
+import { useCallback, useEffect, useState } from "react";
 
-const acceptedFileTypes = ["image/png", "image/jpeg"];
+const allowedImageExtensions = new Set([
+  "png",
+  "jpg",
+  "jpeg",
+  "bmp",
+  "psd",
+  "gif",
+]);
 
 export interface BarcodeImagesDropZoneProps extends PaperProps {
   onBarcodeImagesDrop?: (files: File[]) => unknown;
-  recursive?: boolean;
-  buttonLabel?: string;
-  dropZoneLabel?: string;
 }
-
-async function recursivelyGetFilePromises(
-  items: Iterable<DropItem> | AsyncIterable<DropItem>,
-) {
-  const filePromises: Promise<File>[] = [];
-  try {
-    for await (const item of items) {
-      switch (item.kind) {
-        case "text":
-          console.log(await item.getText([...item.types][2]));
-          continue;
-        case "file":
-          acceptedFileTypes.includes(item.type) &&
-            filePromises.push(item.getFile());
-          break;
-        case "directory":
-          filePromises.push(
-            ...(await recursivelyGetFilePromises(item.getEntries())),
-          );
-          break;
-      }
-    }
-  } catch {
-    /* void */
-  }
-  return filePromises;
-}
-
-async function collectItems(
-  items: Iterable<DropItem> | AsyncIterable<DropItem>,
-  recursive = true,
-): Promise<File[]> {
-  const filePromises: Promise<File>[] = [];
-  let filePromiseSettledResults: PromiseSettledResult<File>[];
-  if (recursive === false) {
-    for await (const item of items) {
-      if (item.kind === "file" && acceptedFileTypes.includes(item.type)) {
-        filePromises.push(item.getFile());
-      }
-    }
-    filePromiseSettledResults = await Promise.allSettled(filePromises);
-  }
-  filePromiseSettledResults = await Promise.allSettled(
-    await recursivelyGetFilePromises(items),
-  );
-  const files: File[] = [];
-  for (const result of filePromiseSettledResults) {
-    result.status === "fulfilled" && files.push(result.value);
-  }
-  return files;
-}
-
-const PressableButton = ({
-  children,
-  ...props
-}: PropsWithChildren<ButtonProps>) => {
-  const { pressProps } = usePress({});
-  return (
-    <Button {...props} {...pressProps}>
-      {children}
-    </Button>
-  );
-};
 
 const BarcodeImagesDropZone = ({
   onBarcodeImagesDrop,
-  recursive,
-  buttonLabel,
-  dropZoneLabel,
   ...paperProps
 }: BarcodeImagesDropZoneProps) => {
   const [isInsideDropZone, setIsInsideDropZone] = useState<boolean>(false);
   const [isCollecting, setIsCollecting] = useState<boolean>(false);
 
-  const handleDropEnter = useCallback<
-    Exclude<DropOptions["onDropEnter"], undefined>
-  >(() => {
-    setIsInsideDropZone(true);
-  }, []);
+  const [files, setFiles] = useState<File[]>([]);
 
-  const handleDropExit = useCallback<
-    Exclude<DropOptions["onDropExit"], undefined>
-  >(() => {
-    setIsInsideDropZone(false);
-  }, []);
+  useEffect(() => {
+    onBarcodeImagesDrop?.(files);
+  }, [files, onBarcodeImagesDrop]);
 
-  const handleDrop = useCallback<Exclude<DropOptions["onDrop"], undefined>>(
-    async ({ items }) => {
+  const handlePaperMounted = useCallback((node: HTMLDivElement | null) => {
+    if (node === null) {
+      return;
+    }
+
+    node.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = "move";
+      }
+      setIsInsideDropZone(true);
+    });
+
+    node.addEventListener("dragleave", (e) => {
+      if (node.contains(e.relatedTarget as Node | null)) {
+        return;
+      }
+      e.preventDefault();
+      if (e.dataTransfer) {
+        e.dataTransfer.dropEffect = "none";
+      }
+      setIsInsideDropZone(false);
+    });
+
+    node.addEventListener("drop", async (e) => {
+      e.preventDefault();
+      setIsInsideDropZone(false);
       setIsCollecting(true);
-      try {
-        const collectedImageFiles = await collectItems(items, recursive);
-        onBarcodeImagesDrop?.(collectedImageFiles);
-      } catch {
-        onBarcodeImagesDrop;
+      if (e.dataTransfer) {
+        const files: File[] = [];
+        const items = takeDataTransferItemsSnapshot(e.dataTransfer.items);
+        for await (const file of filterFiles(itemListFileGenerator(items))) {
+          files.push(file);
+        }
+        setFiles(files);
       }
       setIsCollecting(false);
-    },
-    [onBarcodeImagesDrop, recursive],
-  );
+    });
+  }, []);
 
-  const handleSelect = useCallback<
-    Exclude<FileTriggerProps["onSelect"], undefined>
-  >(
-    (fileList) => {
-      onBarcodeImagesDrop?.([...(fileList ?? [])]);
-    },
-    [onBarcodeImagesDrop],
-  );
+  const handleFilesButtonClick = useCallback(async () => {
+    setIsCollecting(true);
+    const files: File[] = [];
+    try {
+      for await (const file of filterFiles(filesPickerFileGenerator())) {
+        files.push(file);
+      }
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        /* user aborted selection */
+        setIsCollecting(false);
+        return;
+      }
+    }
+    setFiles(files);
+    setIsCollecting(false);
+  }, []);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const handleDirectoryButtonClick = useCallback(async () => {
+    setIsCollecting(true);
+    const files: File[] = [];
+    try {
+      for await (const file of filterFiles(directoryPickerFileGenerator())) {
+        files.push(file);
+      }
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") {
+        /* user aborted selection */
+        setIsCollecting(false);
+        return;
+      }
+    }
+    setFiles(files);
+    setIsCollecting(false);
+  }, []);
 
-  const { dropProps } = useDrop({
-    ref,
-    onDrop: handleDrop,
-    onDropEnter: handleDropEnter,
-    onDropExit: handleDropExit,
-  });
+  const handleClearButtonClick = useCallback(async () => {
+    setFiles([]);
+  }, []);
 
   return (
     <Paper
       {...paperProps}
-      {...dropProps}
       sx={{
         p: 2,
         display: "flex",
@@ -148,22 +126,52 @@ const BarcodeImagesDropZone = ({
         flexGrow: 1,
         ...paperProps.sx,
       }}
-      elevation={isInsideDropZone || isCollecting ? 24 : undefined}
-      ref={ref}
+      elevation={isInsideDropZone ? 24 : undefined}
+      ref={handlePaperMounted}
     >
-      <FileTrigger
-        allowsMultiple
-        acceptedFileTypes={acceptedFileTypes}
-        onSelect={handleSelect}
-      >
-        <PressableButton
+      <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <IconButton
+          disabled
+          size="large"
+          sx={{ visibility: "hidden", height: "fit-content" }}
+        >
+          <Clear></Clear>
+        </IconButton>
+        <Box sx={{ flexGrow: 1 }}></Box>
+        <Button
           disabled={isInsideDropZone || isCollecting}
           variant="contained"
           size="large"
+          startIcon={<FileOpen />}
+          sx={{ m: 1 }}
+          onClick={handleFilesButtonClick}
         >
-          {buttonLabel ?? "Select barcode images"}
-        </PressableButton>
-      </FileTrigger>
+          Files
+        </Button>
+        <Button
+          disabled={isInsideDropZone || isCollecting}
+          variant="contained"
+          size="large"
+          startIcon={<FolderOpen />}
+          onClick={handleDirectoryButtonClick}
+          sx={{ m: 1 }}
+        >
+          Directory
+        </Button>
+        <Box sx={{ flexGrow: 1 }}></Box>
+        <IconButton
+          disabled={isInsideDropZone || isCollecting}
+          size="large"
+          color="primary"
+          onClick={handleClearButtonClick}
+          sx={{
+            visibility: files.length > 0 ? "inherit" : "hidden",
+            height: "fit-content",
+          }}
+        >
+          <Clear></Clear>
+        </IconButton>
+      </Box>
       <Typography
         variant="button"
         sx={{
@@ -171,10 +179,286 @@ const BarcodeImagesDropZone = ({
           userSelect: "none",
         }}
       >
-        {dropZoneLabel ?? " Or drop them here"}
+        Or drop them here
       </Typography>
     </Paper>
   );
 };
+
+async function* filesPickerFileGenerator() {
+  if (isFileSysmtemAccessSupported()) {
+    const fileHandles = await window.showOpenFilePicker({
+      multiple: true,
+      types: [
+        {
+          description: "images",
+          accept: {
+            "image/*": [...allowedImageExtensions].map<`.${string}`>(
+              (e) => `.${e}`,
+            ),
+          },
+        },
+      ],
+      excludeAcceptAllOption: true,
+    });
+    for (const fileHandle of fileHandles) {
+      yield await fileHandle.getFile();
+    }
+  } else {
+    const fileList = await new Promise<FileList | null>((resolve, reject) => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.multiple = true;
+      input.accept = `image/*, ${[...allowedImageExtensions]
+        .map<`.${string}`>((e) => `.${e}`)
+        .join(", ")}`;
+      input.style.display = "none";
+      document.body.append(input);
+      const cancelDetector = () => {
+        window.removeEventListener("focus", cancelDetector);
+        input.remove();
+      };
+      input.addEventListener("click", () => {
+        window.addEventListener("focus", cancelDetector);
+      });
+      input.addEventListener("cancel", () => {
+        reject(new DOMException("The user aborted a request.", "AbortError"));
+      });
+      input.addEventListener("change", () => {
+        window.removeEventListener("focus", cancelDetector);
+        input.remove();
+        resolve(input.files);
+      });
+      if ("showPicker" in HTMLInputElement.prototype) {
+        input.showPicker();
+      } else {
+        input.click();
+      }
+    });
+    for (const file of fileList ?? []) {
+      yield file;
+    }
+  }
+}
+
+async function* directoryPickerFileGenerator() {
+  if (isFileSysmtemAccessSupported()) {
+    const directoryHandle = await window.showDirectoryPicker();
+    yield* collectFilesFromDirectoryHandle(directoryHandle);
+  } else {
+    const fileList = await new Promise<FileList | null>((resolve, reject) => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.webkitdirectory = true;
+      input.addEventListener("cancel", () => {
+        reject(new DOMException("The user aborted a request.", "AbortError"));
+      });
+      input.addEventListener("change", () => {
+        resolve(input.files);
+      });
+      if ("showPicker" in HTMLInputElement.prototype) {
+        input.showPicker();
+      } else {
+        input.click();
+      }
+    });
+    for (const file of fileList ?? []) {
+      yield file;
+    }
+  }
+}
+
+async function* itemListFileGenerator(
+  DataTransferItemList: Iterable<DataTransferItem>,
+) {
+  for (const item of DataTransferItemList) {
+    if (item.kind === "file") {
+      if (isFileSysmtemAccessSupported()) {
+        const handle = await item.getAsFileSystemHandle();
+        if (handle === null) {
+          continue;
+        }
+        if (isFileSystemFileHandle(handle)) {
+          yield await handle.getFile();
+        } else if (isFileSystemDirectoryHandle(handle)) {
+          yield* collectFilesFromDirectoryHandle(handle);
+        }
+      } else {
+        const entry = item.webkitGetAsEntry();
+        if (entry === null) {
+          continue;
+        }
+        if (isFileSystemFileEntry(entry)) {
+          yield await new Promise<File>((resolve, reject) =>
+            entry.file(resolve, reject),
+          );
+        } else if (isFileSystemDirectoryEntry(entry)) {
+          yield* collectFilesFromDirectoryEntry(entry);
+        }
+      }
+    }
+  }
+}
+
+async function* collectFilesFromDirectoryHandle(
+  directoryHandle: FileSystemDirectoryHandle,
+): AsyncGenerator<File, void, unknown> {
+  for await (const handle of directoryHandle.values()) {
+    if (isFileSystemFileHandle(handle)) {
+      yield await handle.getFile();
+      continue;
+    }
+    if (isFileSystemDirectoryHandle(handle)) {
+      yield* collectFilesFromDirectoryHandle(handle);
+    }
+  }
+}
+
+async function* collectFilesFromDirectoryEntry(
+  directoryEntry: FileSystemDirectoryEntry,
+): AsyncGenerator<File, void, unknown> {
+  const directoryReader = directoryEntry.createReader();
+  let batchOfEntries: FileSystemEntry[] = [];
+  do {
+    batchOfEntries = await new Promise((resolve, reject) =>
+      directoryReader.readEntries(resolve, reject),
+    );
+    for (const entry of batchOfEntries) {
+      if (isFileSystemFileEntry(entry)) {
+        yield new Promise<File>((resolve, reject) =>
+          entry.file(resolve, reject),
+        );
+        continue;
+      }
+      if (isFileSystemDirectoryEntry(entry)) {
+        yield* collectFilesFromDirectoryEntry(entry);
+      }
+    }
+  } while (batchOfEntries.length > 0);
+}
+
+async function* filterFiles(files: AsyncIterable<File>) {
+  // TODO: use package file-type when this is implemented: https://github.com/sindresorhus/file-type/issues/578
+  // for await (const file of files) {
+  //   const buffer = new Uint8Array(await file.arrayBuffer(), 0, 4100);
+  //   const result = await fileTypeFromBuffer(buffer);
+  //   if (result && allowedImageExtensions.has(result.ext)) {
+  //     yield file;
+  //   }
+  // }
+  for await (const file of files) {
+    const extension = file.name.match(/\.(.+?)$/)?.[1];
+    if (extension && allowedImageExtensions.has(extension)) {
+      yield file;
+    }
+  }
+}
+
+const isFileSysmtemAccessSupported = (() => {
+  const isSupported = (() => {
+    // When running in an SSR environment return `false`.
+    if (typeof self === "undefined") {
+      return false;
+    }
+    // TODO: Remove this check once Permissions Policy integration
+    // has happened, tracked in
+    // https://github.com/WICG/file-system-access/issues/245.
+    if ("top" in self && self !== top) {
+      try {
+        // This will succeed on same-origin iframes,
+        // but fail on cross-origin iframes.
+        // This is longer than necessary, as else the minifier removes it.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        top!.window.document._ = 0;
+      } catch {
+        return false;
+      }
+    }
+    if ("showOpenFilePicker" in self) {
+      return true;
+    }
+    return false;
+  })();
+  return () => isSupported;
+})();
+
+function takeDataTransferItemsSnapshot(
+  dataTransferItemList: DataTransferItemList,
+) {
+  const items: DataTransferItem[] = [];
+  for (const item of dataTransferItemList) {
+    items.push({
+      kind: item.kind,
+      type: item.type,
+      getAsFile: (() => {
+        try {
+          const file = item.getAsFile();
+          return () => file;
+        } catch (e) {
+          return () => {
+            throw e;
+          };
+        }
+      })(),
+      getAsFileSystemHandle: (() => {
+        try {
+          const handlePromise = item.getAsFileSystemHandle();
+          return () => handlePromise;
+        } catch (e) {
+          return () => {
+            throw e;
+          };
+        }
+      })(),
+      getAsString: (() => {
+        try {
+          const getAsStringFun = item.getAsString;
+          return (callback) => getAsStringFun(callback);
+        } catch (e) {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          return (_) => {
+            throw e;
+          };
+        }
+      })(),
+      webkitGetAsEntry: (() => {
+        try {
+          const entry = item.webkitGetAsEntry();
+          return () => entry;
+        } catch (e) {
+          return () => {
+            throw e;
+          };
+        }
+      })(),
+    });
+  }
+  return items;
+}
+
+function isFileSystemFileHandle(
+  handle: FileSystemHandle,
+): handle is FileSystemFileHandle {
+  return handle.kind === "file";
+}
+
+function isFileSystemDirectoryHandle(
+  handle: FileSystemHandle,
+): handle is FileSystemDirectoryHandle {
+  return handle.kind === "directory";
+}
+
+function isFileSystemFileEntry(
+  entry: FileSystemEntry,
+): entry is FileSystemFileEntry {
+  return entry.isFile;
+}
+
+function isFileSystemDirectoryEntry(
+  entry: FileSystemEntry,
+): entry is FileSystemDirectoryEntry {
+  return entry.isDirectory;
+}
 
 export default BarcodeImagesDropZone;
