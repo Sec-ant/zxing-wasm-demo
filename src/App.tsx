@@ -43,6 +43,7 @@ import {
   barcodeFormats,
   binarizers,
   characterSets,
+  defaultDecodeHints,
   eanAddOnSymbols,
   readBarcodesFromImageFile,
   setZXingModuleOverrides,
@@ -93,25 +94,7 @@ interface ZXingWasmDemoState extends Required<DecodeHints> {
 
 const defaultZXingWasmDemoState: ZXingWasmDemoState = {
   wasmLocation: "local",
-  binarizer: "LocalAverage",
-  characterSet: "UTF8",
-  downscaleFactor: 3,
-  downscaleThreshold: 500,
-  eanAddOnSymbol: "Read",
-  formats: [],
-  isPure: false,
-  maxNumberOfSymbols: 255,
-  minLineCount: 2,
-  returnCodabarStartEnd: false,
-  returnErrors: false,
-  textMode: "Plain",
-  tryCode39ExtendedMode: false,
-  tryDownscale: true,
-  tryHarder: true,
-  tryInvert: true,
-  tryRotate: true,
-  validateCode39CheckSum: false,
-  validateITFCheckSum: false,
+  ...defaultDecodeHints,
 };
 
 const useZXingWasmDemoStore = create<ZXingWasmDemoState>()(
