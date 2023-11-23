@@ -10,6 +10,8 @@ function resolvePath(path: string) {
   return fileURLToPath(new URL(path, import.meta.url));
 }
 
+const zxingWasmVersion = packages["node_modules/zxing-wasm"].version;
+
 export default defineConfig({
   build: {
     outDir: resolvePath("./dist"),
@@ -20,7 +22,7 @@ export default defineConfig({
       targets: [
         {
           src: resolvePath("./node_modules/zxing-wasm/dist/reader/*.wasm"),
-          dest: ".",
+          dest: `./wasm/reader/${zxingWasmVersion}`,
         },
       ],
     }),
@@ -30,20 +32,70 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       workbox: {
-        globDirectory: resolvePath("./dist"),
-        globPatterns: ["**/*"],
-        globIgnores: [
-          "**/node_modules/**/*",
-          "sw.js",
-          "workbox-*.js",
-          "stats.html",
+        globIgnores: ["stats.html"],
+        globPatterns: ["**/*.{js,css,html,woff,woff2,wasm}"],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "jsdelivr-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/fastly\.jsdelivr\.net\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "fastly-jsdelivr-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/registry\.npmmirror\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "npmmirror-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          {
+            urlPattern: /^https:\/\/unpkg\.com\/.*/i,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "unpkg-cache",
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
         ],
       },
     }),
   ],
   define: {
-    ZXING_WASM_VERSION: JSON.stringify(
-      packages["node_modules/zxing-wasm"].version,
-    ),
+    ZXING_WASM_VERSION: JSON.stringify(zxingWasmVersion),
   },
 });

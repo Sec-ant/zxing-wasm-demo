@@ -65,6 +65,7 @@ import {
   integer,
   maxValue,
   minValue,
+  number,
   parse,
   picklist,
   string,
@@ -80,7 +81,7 @@ type WasmLocation = (typeof wasmLocations)[number];
 
 function resolveWasmUrl(wasmLocation: WasmLocation) {
   if (wasmLocation === "site") {
-    return `/zxing_reader.wasm?v=${encodeURIComponent(ZXING_WASM_VERSION)}`;
+    return `/wasm/reader/${ZXING_WASM_VERSION}/zxing_reader.wasm`;
   }
   return resolveCDNUrl(
     wasmLocation,
@@ -336,11 +337,15 @@ const App = () => {
   const maxNumberOfSymbolsSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(string(), (input) => parseInt(input, 10), [
-          integer(),
-          minValue<number, number>(minMaxNumberOfSymbols),
-          maxValue<number, number>(maxMaxNumberOfSymbols),
-        ]),
+        transform(
+          string(),
+          (input) => parseInt(input, 10),
+          number([
+            integer(),
+            minValue(minMaxNumberOfSymbols),
+            maxValue(maxMaxNumberOfSymbols),
+          ]),
+        ),
         d,
       ),
     [],
@@ -376,10 +381,11 @@ const App = () => {
   const minLineCountSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(string(), (input) => parseInt(input, 10), [
-          integer(),
-          minValue<number, number>(minMinLineCount),
-        ]),
+        transform(
+          string(),
+          (input) => parseInt(input, 10),
+          number([integer(), minValue(minMinLineCount)]),
+        ),
         d,
       ),
     [],
@@ -522,11 +528,11 @@ const App = () => {
   const downscaleThresholdSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(string(), (input) => parseInt(input, 10), [
-          integer(),
-          finite(),
-          minValue<number, number>(minDownscaleThreshold),
-        ]),
+        transform(
+          string(),
+          (input) => parseInt(input, 10),
+          number([integer(), finite(), minValue(minDownscaleThreshold)]),
+        ),
         d,
       ),
     [],
@@ -563,12 +569,16 @@ const App = () => {
   const downscaleFactorSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(string(), (input) => parseInt(input, 10), [
-          integer(),
-          finite(),
-          minValue<number, number>(minDownscaleFactor),
-          maxValue<number, number>(maxDownscaleFactor),
-        ]),
+        transform(
+          string(),
+          (input) => parseInt(input, 10),
+          number([
+            integer(),
+            finite(),
+            minValue(minDownscaleFactor),
+            maxValue(maxDownscaleFactor),
+          ]),
+        ),
         d,
       ),
     [],
