@@ -13,7 +13,7 @@
 - [ ] Display `zxing-wasm` version / commit somewhere
 - [ ] Add sample files / history in the side bar?
 - [x] Reduce bundle size / split chunks
-- [ ] Prevent page scrolling when changing numeric values
+- [x] Prevent page scrolling when changing numeric values
 - [ ] Prevent page scrolling when browsing images
 - [ ] Numeric fields value fallback on losing focus instead of typing
 - [ ] Validate file types by magic number instead of extension

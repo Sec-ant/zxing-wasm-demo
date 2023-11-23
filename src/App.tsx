@@ -13,7 +13,6 @@ import {
   InputLabel,
   List,
   MenuItem,
-  OutlinedInput,
   Select,
   ThemeProvider,
   Toolbar,
@@ -73,6 +72,7 @@ import {
 import { resolveCDNUrl, supportedCDNs } from "./cdn";
 import BarcodeImage from "./components/BarcodeImage";
 import BarcodeImagesDropZone from "./components/BarcodeImagesDropZone";
+import ScopedOutlinedInput from "./components/ScopedOutlinedInput";
 
 const wasmLocations = ["local", ...supportedCDNs] as const;
 type WasmLocation = (typeof wasmLocations)[number];
@@ -855,7 +855,7 @@ const App = () => {
                 <InputLabel htmlFor="max-number-of-symbols">
                   Maximum Number of Symbols
                 </InputLabel>
-                <OutlinedInput
+                <ScopedOutlinedInput
                   label="Maximum Number of Symbols"
                   id="max-number-of-symbols"
                   type="number"
@@ -867,7 +867,7 @@ const App = () => {
                   }}
                   value={maxNumberOfSymbols}
                   onChange={handleMaxNumberOfSymbolsChange}
-                ></OutlinedInput>
+                ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
             <FlexGrid xs={12} mobile={6} sm={3}>
@@ -897,7 +897,7 @@ const App = () => {
                 <InputLabel htmlFor="min-line-count">
                   Minimum Line Count
                 </InputLabel>
-                <OutlinedInput
+                <ScopedOutlinedInput
                   label="Minimum Line Count"
                   id="min-line-count"
                   type="number"
@@ -908,7 +908,7 @@ const App = () => {
                   }}
                   value={minLineCount}
                   onChange={handleMinLineCountChange}
-                ></OutlinedInput>
+                ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
             <FlexGrid xs={12} mobile={6} sm={3}>
@@ -1045,7 +1045,7 @@ const App = () => {
                 <InputLabel htmlFor="downscale-threshold">
                   Downscale Threshold
                 </InputLabel>
-                <OutlinedInput
+                <ScopedOutlinedInput
                   label="Downscale Threshold"
                   id="downscale-threshold"
                   type="number"
@@ -1059,7 +1059,7 @@ const App = () => {
                   endAdornment={
                     <InputAdornment position="end">px</InputAdornment>
                   }
-                ></OutlinedInput>
+                ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
             <FlexGrid xs={6} sm={3}>
@@ -1071,7 +1071,7 @@ const App = () => {
                 <InputLabel htmlFor="downscale-factor">
                   Downscale Factor
                 </InputLabel>
-                <OutlinedInput
+                <ScopedOutlinedInput
                   label="Downscale Factor"
                   id="downscale-factor"
                   type="number"
@@ -1083,7 +1083,7 @@ const App = () => {
                   }}
                   value={downscaleFactor}
                   onChange={handleDownscaleFactorChange}
-                ></OutlinedInput>
+                ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
             <FlexGrid xs={12} mobile={6}>
