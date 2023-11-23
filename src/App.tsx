@@ -32,6 +32,7 @@ import {
   useRef,
   useState,
   type ChangeEventHandler,
+  type FocusEventHandler,
 } from "react";
 import { create } from "zustand";
 import {
@@ -45,8 +46,8 @@ import {
   characterSets,
   defaultDecodeHints,
   eanAddOnSymbols,
+  getZXingModule,
   readBarcodesFromImageFile,
-  setZXingModuleOverrides,
   textModes,
   type Binarizer,
   type CharacterSet,
@@ -74,11 +75,11 @@ import BarcodeImage from "./components/BarcodeImage";
 import BarcodeImagesDropZone from "./components/BarcodeImagesDropZone";
 import ScopedOutlinedInput from "./components/ScopedOutlinedInput";
 
-const wasmLocations = ["local", ...supportedCDNs] as const;
+const wasmLocations = ["site", ...supportedCDNs] as const;
 type WasmLocation = (typeof wasmLocations)[number];
 
 function resolveWasmUrl(wasmLocation: WasmLocation) {
-  if (wasmLocation === "local") {
+  if (wasmLocation === "site") {
     return `/zxing_reader.wasm?v=${encodeURIComponent(ZXING_WASM_VERSION)}`;
   }
   return resolveCDNUrl(
@@ -107,7 +108,7 @@ interface ZXingWasmDemoState extends Required<DecodeHints> {
 }
 
 const defaultZXingWasmDemoState: ZXingWasmDemoState = {
-  wasmLocation: "local",
+  wasmLocation: "site",
   ...defaultDecodeHints,
 };
 
@@ -115,8 +116,21 @@ const useZXingWasmDemoStore = create<ZXingWasmDemoState>()(
   subscribeWithSelector(
     persist(() => ({ ...defaultZXingWasmDemoState }), {
       name: "zxing-wasm-demo",
-      version: 0,
+      version: 1,
       storage: createJSONStorage(() => localStorage),
+      migrate: (persistedState: unknown, version) => {
+        interface ZXingWasmDemoStateV0
+          extends Omit<ZXingWasmDemoState, "wasmLocation"> {
+          wasmLocation: Exclude<WasmLocation, "site"> | "local";
+        }
+        if (((_): _ is ZXingWasmDemoStateV0 => version === 0)(persistedState)) {
+          if (persistedState.wasmLocation === "local") {
+            (persistedState as ZXingWasmDemoState).wasmLocation = "site";
+          }
+          return persistedState as ZXingWasmDemoState;
+        }
+        return persistedState as ZXingWasmDemoState;
+      },
     }),
   ),
 );
@@ -233,11 +247,15 @@ const App = () => {
     },
     [wasmLocationSchema],
   );
+
+  const [isFetchingZXingModule, setIsFetchingZXingModule] = useState(true);
+
   useEffect(() => {
-    setZXingModuleOverrides({
+    setIsFetchingZXingModule(true);
+    getZXingModule({
       locateFile: (path, prefix) =>
         path.endsWith(".wasm") ? resolveWasmUrl(wasmLocation) : prefix + path,
-    });
+    }).then(() => setIsFetchingZXingModule(false));
   }, [wasmLocation]);
 
   /**
@@ -328,10 +346,14 @@ const App = () => {
     [],
   );
   const { maxNumberOfSymbols } = useZXingWasmDemoStore();
+  const [maxNumberOfSymbolsDisplay, setMaxNumberOfSymbolsDisplay] = useState(
+    `${maxNumberOfSymbols}`,
+  );
   const handleMaxNumberOfSymbolsChange = useCallback<
     ChangeEventHandler<HTMLInputElement>
   >(
     ({ target: { value } }) => {
+      setMaxNumberOfSymbolsDisplay(value);
       useZXingWasmDemoStore.setState(({ maxNumberOfSymbols }) => ({
         maxNumberOfSymbols: parse(
           maxNumberOfSymbolsSchema(maxNumberOfSymbols),
@@ -341,6 +363,11 @@ const App = () => {
     },
     [maxNumberOfSymbolsSchema],
   );
+  const handleMaxNumberOfSymbolsBlur = useCallback<
+    FocusEventHandler<HTMLInputElement>
+  >(() => {
+    setMaxNumberOfSymbolsDisplay(`${maxNumberOfSymbols}`);
+  }, [maxNumberOfSymbols]);
 
   /**
    * Minimum Line Count
@@ -358,16 +385,25 @@ const App = () => {
     [],
   );
   const { minLineCount } = useZXingWasmDemoStore();
+  const [minLineCountDisplay, setMinLineCountDisplay] = useState(
+    `${minLineCount}`,
+  );
   const handleMinLineCountChange = useCallback<
     ChangeEventHandler<HTMLInputElement>
   >(
     ({ target: { value } }) => {
+      setMinLineCountDisplay(value);
       useZXingWasmDemoStore.setState(({ minLineCount }) => ({
         minLineCount: parse(minLineCountSchema(minLineCount), value),
       }));
     },
     [minLineCountSchema],
   );
+  const handleMinLineCountBlur = useCallback<
+    FocusEventHandler<HTMLInputElement>
+  >(() => {
+    setMinLineCountDisplay(`${minLineCount}`);
+  }, [minLineCount]);
 
   /**
    * EAN Addon Symbol
@@ -496,10 +532,14 @@ const App = () => {
     [],
   );
   const { downscaleThreshold } = useZXingWasmDemoStore();
+  const [downscaleThresholdDisplay, setDownscaleThresholdDisplay] = useState(
+    `${downscaleThreshold}`,
+  );
   const handleDownscaleThresholdChange = useCallback<
     ChangeEventHandler<HTMLInputElement>
   >(
     ({ target: { value } }) => {
+      setDownscaleThresholdDisplay(value);
       useZXingWasmDemoStore.setState(({ downscaleThreshold }) => ({
         downscaleThreshold: parse(
           downscaleThresholdSchema(downscaleThreshold),
@@ -509,6 +549,11 @@ const App = () => {
     },
     [downscaleThresholdSchema],
   );
+  const handleDownscaleThresholdBlur = useCallback<
+    FocusEventHandler<HTMLInputElement>
+  >(() => {
+    setDownscaleThresholdDisplay(`${downscaleThreshold}`);
+  }, [downscaleThreshold]);
 
   /**
    * Downscale Factor
@@ -529,16 +574,25 @@ const App = () => {
     [],
   );
   const { downscaleFactor } = useZXingWasmDemoStore();
+  const [downscaleFactorDisplay, setDownscaleFactorDisplay] = useState(
+    `${downscaleFactor}`,
+  );
   const handleDownscaleFactorChange = useCallback<
     ChangeEventHandler<HTMLInputElement>
   >(
     ({ target: { value } }) => {
+      setDownscaleFactorDisplay(value);
       useZXingWasmDemoStore.setState(({ downscaleFactor }) => ({
         downscaleFactor: parse(downscaleFactorSchema(downscaleFactor), value),
       }));
     },
     [downscaleFactorSchema],
   );
+  const handleDownscaleFactorBlur = useCallback<
+    FocusEventHandler<HTMLInputElement>
+  >(() => {
+    setDownscaleFactorDisplay(`${downscaleFactor}`);
+  }, [downscaleFactor]);
 
   /**
    * Try Code39 Extended Mode
@@ -777,10 +831,14 @@ const App = () => {
             </FlexGrid>
             <FlexGrid xs={12} mobile={6} sm={3}>
               <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel id="wasm-location-label">WASM Location</InputLabel>
+                <InputLabel id="wasm-location-label">{`WASM Location${
+                  isFetchingZXingModule ? " (loading)" : ""
+                }`}</InputLabel>
                 <Select
                   labelId="wasm-location-label"
-                  label="WASM Location"
+                  label={`WASM Location${
+                    isFetchingZXingModule ? " (loading)" : ""
+                  }`}
                   id="wasm-location"
                   value={wasmLocation}
                   onChange={handleWasmLocationTypeChange}
@@ -865,8 +923,9 @@ const App = () => {
                     max: 255,
                     step: 1,
                   }}
-                  value={maxNumberOfSymbols}
+                  value={maxNumberOfSymbolsDisplay}
                   onChange={handleMaxNumberOfSymbolsChange}
+                  onBlur={handleMaxNumberOfSymbolsBlur}
                 ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
@@ -906,8 +965,9 @@ const App = () => {
                     min: minMinLineCount,
                     step: 1,
                   }}
-                  value={minLineCount}
+                  value={minLineCountDisplay}
                   onChange={handleMinLineCountChange}
+                  onBlur={handleMinLineCountBlur}
                 ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
@@ -1054,8 +1114,9 @@ const App = () => {
                     min: minDownscaleThreshold,
                     step: 10,
                   }}
-                  value={downscaleThreshold}
+                  value={downscaleThresholdDisplay}
                   onChange={handleDownscaleThresholdChange}
+                  onBlur={handleDownscaleThresholdBlur}
                   endAdornment={
                     <InputAdornment position="end">px</InputAdornment>
                   }
@@ -1081,8 +1142,9 @@ const App = () => {
                     max: maxDownscaleFactor,
                     step: 1,
                   }}
-                  value={downscaleFactor}
+                  value={downscaleFactorDisplay}
                   onChange={handleDownscaleFactorChange}
+                  onBlur={handleDownscaleFactorBlur}
                 ></ScopedOutlinedInput>
               </FormControl>
             </FlexGrid>
