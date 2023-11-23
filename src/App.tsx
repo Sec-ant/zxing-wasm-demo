@@ -338,8 +338,8 @@ const App = () => {
       fallback(
         transform(string(), (input) => parseInt(input, 10), [
           integer(),
-          minValue(minMaxNumberOfSymbols),
-          maxValue(maxMaxNumberOfSymbols),
+          minValue<number, number>(minMaxNumberOfSymbols),
+          maxValue<number, number>(maxMaxNumberOfSymbols),
         ]),
         d,
       ),
@@ -378,7 +378,7 @@ const App = () => {
       fallback(
         transform(string(), (input) => parseInt(input, 10), [
           integer(),
-          minValue(minMinLineCount),
+          minValue<number, number>(minMinLineCount),
         ]),
         d,
       ),
@@ -525,7 +525,7 @@ const App = () => {
         transform(string(), (input) => parseInt(input, 10), [
           integer(),
           finite(),
-          minValue(minDownscaleThreshold),
+          minValue<number, number>(minDownscaleThreshold),
         ]),
         d,
       ),
@@ -566,8 +566,8 @@ const App = () => {
         transform(string(), (input) => parseInt(input, 10), [
           integer(),
           finite(),
-          minValue(minDownscaleFactor),
-          maxValue(maxDownscaleFactor),
+          minValue<number, number>(minDownscaleFactor),
+          maxValue<number, number>(maxDownscaleFactor),
         ]),
         d,
       ),
