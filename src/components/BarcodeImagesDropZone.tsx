@@ -69,6 +69,7 @@ const BarcodeImagesDropZone = ({
 
     node.addEventListener("drop", async (e) => {
       e.preventDefault();
+      e.stopPropagation();
       setIsInsideDropZone(false);
       setIsCollecting(true);
       if (e.dataTransfer) {
@@ -350,13 +351,17 @@ async function* directoryPickerFileGenerator() {
 }
 
 async function* itemListFileGenerator(
-  DataTransferItemList: Iterable<DataTransferItem>,
+  DataTransferItemList: Iterable<Partial<DataTransferItem>>,
 ) {
   for (const item of DataTransferItemList) {
     if (item.kind === "file") {
       if (isFileSysmtemAccessSupported()) {
-        const handle = await item.getAsFileSystemHandle();
+        const handle = await item.getAsFileSystemHandle?.();
         if (!handle) {
+          const file = item.getAsFile?.();
+          if (file) {
+            yield file;
+          }
           continue;
         }
         if (isFileSystemFileHandle(handle)) {
@@ -365,7 +370,7 @@ async function* itemListFileGenerator(
           yield* collectFilesFromDirectoryHandle(handle);
         }
       } else {
-        const entry = item.webkitGetAsEntry();
+        const entry = item.webkitGetAsEntry?.();
         if (!entry) {
           continue;
         }
@@ -377,6 +382,8 @@ async function* itemListFileGenerator(
           yield* collectFilesFromDirectoryEntry(entry);
         }
       }
+    } else {
+      /* void */
     }
   }
 }
@@ -467,52 +474,68 @@ const isFileSysmtemAccessSupported = (() => {
 function takeDataTransferItemsSnapshot(
   dataTransferItemList: DataTransferItemList,
 ) {
-  const items: DataTransferItem[] = [];
+  const items: Partial<DataTransferItem>[] = [];
   for (const item of dataTransferItemList) {
     items.push({
       kind: item.kind,
       type: item.type,
-      getAsFile: (() => {
-        try {
-          const file = item.getAsFile();
-          return () => file;
-        } catch (e) {
-          return () => {
-            throw e;
-          };
-        }
-      })(),
-      getAsFileSystemHandle: (() => {
-        try {
-          const handlePromise = item.getAsFileSystemHandle();
-          return () => handlePromise;
-        } catch (e) {
-          return () => {
-            throw e;
-          };
-        }
-      })(),
-      getAsString: (() => {
-        try {
-          const getAsStringFun = item.getAsString;
-          return (callback) => getAsStringFun(callback);
-        } catch (e) {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          return (_) => {
-            throw e;
-          };
-        }
-      })(),
-      webkitGetAsEntry: (() => {
-        try {
-          const entry = item.webkitGetAsEntry();
-          return () => entry;
-        } catch (e) {
-          return () => {
-            throw e;
-          };
-        }
-      })(),
+      ...(item.getAsFile
+        ? {
+            getAsFile: (() => {
+              try {
+                const file = item.getAsFile();
+                return () => file;
+              } catch (e) {
+                return () => {
+                  throw e;
+                };
+              }
+            })(),
+          }
+        : {}),
+      ...(item.getAsFileSystemHandle
+        ? {
+            getAsFileSystemHandle: (() => {
+              try {
+                const handlePromise = item.getAsFileSystemHandle();
+                return () => handlePromise;
+              } catch (e) {
+                return () => {
+                  throw e;
+                };
+              }
+            })(),
+          }
+        : {}),
+      ...(item.getAsString
+        ? {
+            getAsString: (() => {
+              try {
+                const getAsStringFun = item.getAsString.bind(item);
+                return (callback) => getAsStringFun(callback);
+              } catch (e) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                return (_) => {
+                  throw e;
+                };
+              }
+            })(),
+          }
+        : {}),
+      ...(item.webkitGetAsEntry
+        ? {
+            webkitGetAsEntry: (() => {
+              try {
+                const entry = item.webkitGetAsEntry();
+                return () => entry;
+              } catch (e) {
+                return () => {
+                  throw e;
+                };
+              }
+            })(),
+          }
+        : {}),
     });
   }
   return items;
