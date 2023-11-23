@@ -1250,7 +1250,7 @@ const App = () => {
               xs={12}
               justifyContent="center"
               flexGrow={1}
-              maxHeight={360}
+              maxHeight={385}
             >
               <div style={{ overflowX: "auto" }} ref={addWheelEventListener}>
                 <List
