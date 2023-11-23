@@ -1,7 +1,7 @@
 import { OutlinedInput, type OutlinedInputProps } from "@mui/material";
 import { useCallback } from "react";
 
-const ScopedOutlinedInput = ({ ...props }: OutlinedInputProps) => {
+const WheelTrappedOutlinedInput = ({ ...props }: OutlinedInputProps) => {
   const handleWheel = useCallback((e: WheelEvent) => {
     e.stopPropagation();
   }, []);
@@ -16,4 +16,4 @@ const ScopedOutlinedInput = ({ ...props }: OutlinedInputProps) => {
   return <OutlinedInput {...props} ref={callbackRef}></OutlinedInput>;
 };
 
-export default ScopedOutlinedInput;
+export default WheelTrappedOutlinedInput;

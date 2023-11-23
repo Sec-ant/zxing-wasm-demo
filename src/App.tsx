@@ -1,7 +1,6 @@
 import { Article, Code, GitHub, QrCodeScanner } from "@mui/icons-material";
 import {
   AppBar,
-  Box,
   Checkbox,
   CheckboxProps,
   Container,
@@ -11,6 +10,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   List,
   MenuItem,
   Select,
@@ -74,7 +74,7 @@ import {
 import { resolveCDNUrl, supportedCDNs } from "./cdn";
 import BarcodeImage from "./components/BarcodeImage";
 import BarcodeImagesDropZone from "./components/BarcodeImagesDropZone";
-import ScopedOutlinedInput from "./components/ScopedOutlinedInput";
+import WheelTrappedOutlinedInput from "./components/WheelTrappedOutlinedInput";
 
 const wasmLocations = ["site", ...supportedCDNs] as const;
 type WasmLocation = (typeof wasmLocations)[number];
@@ -755,13 +755,11 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          minHeight: "100vh",
-        }}
+      <FlexGrid
+        container
+        flexDirection="column"
+        justifyContent="space-between"
+        minHeight="100vh"
       >
         <AppBar position="sticky" color="primary" enableColorOnDark>
           <Toolbar variant="dense">
@@ -829,413 +827,430 @@ const App = () => {
             minWidth: 250,
             marginTop: 2,
             marginBottom: 2,
+            flexGrow: 1,
           }}
         >
-          <FlexGrid container spacing={2} alignItems={"center"}>
-            <FlexGrid xs={12}>
-              <BarcodeImagesDropZone
-                onBarcodeImagesDrop={(files) => {
-                  setImages(files);
-                }}
-              ></BarcodeImagesDropZone>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel id="wasm-location-label">{`WASM Location${
-                  isFetchingZXingModule ? " (loading)" : ""
-                }`}</InputLabel>
-                <Select
-                  labelId="wasm-location-label"
-                  label={`WASM Location${
+          <FlexGrid
+            container
+            flexDirection="column"
+            justifyContent="center"
+            flexGrow={1}
+          >
+            <FlexGrid container spacing={2}>
+              <FlexGrid xs={12}>
+                <BarcodeImagesDropZone
+                  onBarcodeImagesDrop={(files) => {
+                    setImages(files);
+                  }}
+                ></BarcodeImagesDropZone>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <InputLabel id="wasm-location-label">{`WASM Location${
                     isFetchingZXingModule ? " (loading)" : ""
-                  }`}
-                  id="wasm-location"
-                  value={wasmLocation}
-                  onChange={handleWasmLocationTypeChange}
-                >
-                  {wasmLocations.map((wasmLocation) => (
-                    <MenuItem dense key={wasmLocation} value={wasmLocation}>
-                      {wasmLocation}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel id="formats-label">Formats</InputLabel>
-                <Select
-                  labelId="formats-label"
-                  label="Formats"
-                  id="formats"
-                  multiple
-                  value={formats}
-                  onChange={handleFormatsChange}
-                >
-                  {barcodeFormats
-                    .filter((f) => f !== "None")
-                    .map((barcodeFormat) => (
-                      <MenuItem dense key={barcodeFormat} value={barcodeFormat}>
-                        {barcodeFormat}
+                  }`}</InputLabel>
+                  <Select
+                    labelId="wasm-location-label"
+                    label={`WASM Location${
+                      isFetchingZXingModule ? " (loading)" : ""
+                    }`}
+                    id="wasm-location"
+                    value={wasmLocation}
+                    onChange={handleWasmLocationTypeChange}
+                  >
+                    {wasmLocations.map((wasmLocation) => (
+                      <MenuItem dense key={wasmLocation} value={wasmLocation}>
+                        {wasmLocation}
                       </MenuItem>
                     ))}
-                </Select>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel id="binarizer-label">Binarizer</InputLabel>
-                <Select
-                  labelId="binarizer-label"
-                  label="Binarizer"
-                  id="binarizer"
-                  value={binarizer}
-                  onChange={handleBinarizerChange}
-                >
-                  {binarizers.map((binarizer) => (
-                    <MenuItem dense key={binarizer} value={binarizer}>
-                      {spaceCase(binarizer)}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel id="character-set-label">Character Set</InputLabel>
-                <Select
-                  labelId="character-set-label"
-                  label="Character Set"
-                  id="character-set"
-                  value={characterSet}
-                  onChange={handleCharacterSetChange}
-                >
-                  {characterSets.map((characterSet) => (
-                    <MenuItem dense key={characterSet} value={characterSet}>
-                      {characterSet}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel htmlFor="max-number-of-symbols">
-                  Maximum Number of Symbols
-                </InputLabel>
-                <ScopedOutlinedInput
-                  label="Maximum Number of Symbols"
-                  id="max-number-of-symbols"
-                  type="number"
-                  inputMode="numeric"
-                  inputProps={{
-                    min: 1,
-                    max: 255,
-                    step: 1,
-                  }}
-                  value={maxNumberOfSymbolsDisplay}
-                  onChange={handleMaxNumberOfSymbolsChange}
-                  onBlur={handleMaxNumberOfSymbolsBlur}
-                ></ScopedOutlinedInput>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl
-                sx={{ flexGrow: 1 }}
-                size="small"
-                disabled={
-                  !(
-                    formats.length === 0 ||
-                    inFormats(formats, [
-                      "Codabar",
-                      "Code39",
-                      "Code93",
-                      "Code128",
-                      "EAN-8",
-                      "EAN-13",
-                      "ITF",
-                      "DataBar",
-                      "DataBarExpanded",
-                      "UPC-A",
-                      "UPC-E",
-                      "Linear-Codes",
-                    ])
-                  )
-                }
-              >
-                <InputLabel htmlFor="min-line-count">
-                  Minimum Line Count
-                </InputLabel>
-                <ScopedOutlinedInput
-                  label="Minimum Line Count"
-                  id="min-line-count"
-                  type="number"
-                  inputMode="numeric"
-                  inputProps={{
-                    min: minMinLineCount,
-                    step: 1,
-                  }}
-                  value={minLineCountDisplay}
-                  onChange={handleMinLineCountChange}
-                  onBlur={handleMinLineCountBlur}
-                ></ScopedOutlinedInput>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl
-                sx={{ flexGrow: 1 }}
-                size="small"
-                disabled={
-                  !(
-                    formats.length === 0 ||
-                    inFormats(formats, [
-                      "EAN-8",
-                      "EAN-13",
-                      "UPC-A",
-                      "UPC-E",
-                      "Linear-Codes",
-                    ])
-                  )
-                }
-              >
-                <InputLabel id="ean-addon-symbol-label">
-                  EAN Addon Symbol
-                </InputLabel>
-                <Select
-                  labelId="ean-addon-symbol-label"
-                  label="EAN Addon Symbol"
-                  id="ean-addon-symbol"
-                  value={eanAddOnSymbol}
-                  onChange={handleEanAddonSymbolChange}
-                >
-                  {eanAddOnSymbols.map((eanAddonSymbol) => (
-                    <MenuItem dense key={eanAddonSymbol} value={eanAddonSymbol}>
-                      {eanAddonSymbol}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6} sm={3}>
-              <FormControl sx={{ flexGrow: 1 }} size="small">
-                <InputLabel id="text-mode-label">Text Mode</InputLabel>
-                <Select
-                  labelId="text-mode-label"
-                  label="Text Mode"
-                  id="text-mode"
-                  value={textMode}
-                  onChange={handleTextModeChange}
-                >
-                  {textModes.map((textMode) => (
-                    <MenuItem dense key={textMode} value={textMode}>
-                      {textMode}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={6} mobile={4} sm={3}>
-              <StyledFormControlLabel
-                label="Try Harder"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={tryHarder}
-                    onChange={handleTryHarderChange}
-                  ></StyledCheckbox>
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={6} mobile={4} sm={3}>
-              <StyledFormControlLabel
-                label="Try Rotate"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={tryRotate}
-                    onChange={handleTryRotateChange}
-                  ></StyledCheckbox>
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={6} mobile={4} sm={3}>
-              <StyledFormControlLabel
-                label="Try Invert"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={tryInvert}
-                    onChange={handleTryInvertChange}
-                  ></StyledCheckbox>
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={6} mobile={4} sm={3}>
-              <StyledFormControlLabel
-                label="Is Pure"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={isPure}
-                    onChange={handleIsPureChange}
-                  ></StyledCheckbox>
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={6} mobile={4} sm={3}>
-              <StyledFormControlLabel
-                label="Return Errors"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={returnErrors}
-                    onChange={handleReturnErrorsChange}
-                  ></StyledCheckbox>
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={6} mobile={4} sm={3}>
-              <StyledFormControlLabel
-                label="Try Downscale"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={tryDownscale}
-                    onChange={handleTryDownscaleChange}
-                  ></StyledCheckbox>
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={6} sm={3}>
-              <FormControl
-                disabled={!tryDownscale}
-                sx={{ flexGrow: 1 }}
-                size="small"
-              >
-                <InputLabel htmlFor="downscale-threshold">
-                  Downscale Threshold
-                </InputLabel>
-                <ScopedOutlinedInput
-                  label="Downscale Threshold"
-                  id="downscale-threshold"
-                  type="number"
-                  inputMode="numeric"
-                  inputProps={{
-                    min: minDownscaleThreshold,
-                    step: 10,
-                  }}
-                  value={downscaleThresholdDisplay}
-                  onChange={handleDownscaleThresholdChange}
-                  onBlur={handleDownscaleThresholdBlur}
-                  endAdornment={
-                    <InputAdornment position="end">px</InputAdornment>
+                  </Select>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <InputLabel id="formats-label">Formats</InputLabel>
+                  <Select
+                    labelId="formats-label"
+                    label="Formats"
+                    id="formats"
+                    multiple
+                    value={formats}
+                    onChange={handleFormatsChange}
+                  >
+                    {barcodeFormats
+                      .filter((f) => f !== "None")
+                      .map((barcodeFormat) => (
+                        <MenuItem
+                          dense
+                          key={barcodeFormat}
+                          value={barcodeFormat}
+                        >
+                          {barcodeFormat}
+                        </MenuItem>
+                      ))}
+                  </Select>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <InputLabel id="binarizer-label">Binarizer</InputLabel>
+                  <Select
+                    labelId="binarizer-label"
+                    label="Binarizer"
+                    id="binarizer"
+                    value={binarizer}
+                    onChange={handleBinarizerChange}
+                  >
+                    {binarizers.map((binarizer) => (
+                      <MenuItem dense key={binarizer} value={binarizer}>
+                        {spaceCase(binarizer)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <InputLabel id="character-set-label">
+                    Character Set
+                  </InputLabel>
+                  <Select
+                    labelId="character-set-label"
+                    label="Character Set"
+                    id="character-set"
+                    value={characterSet}
+                    onChange={handleCharacterSetChange}
+                  >
+                    {characterSets.map((characterSet) => (
+                      <MenuItem dense key={characterSet} value={characterSet}>
+                        {characterSet}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <InputLabel htmlFor="max-number-of-symbols">
+                    Maximum Number of Symbols
+                  </InputLabel>
+                  <WheelTrappedOutlinedInput
+                    label="Maximum Number of Symbols"
+                    id="max-number-of-symbols"
+                    type="number"
+                    inputMode="numeric"
+                    inputProps={{
+                      min: 1,
+                      max: 255,
+                      step: 1,
+                    }}
+                    value={maxNumberOfSymbolsDisplay}
+                    onChange={handleMaxNumberOfSymbolsChange}
+                    onBlur={handleMaxNumberOfSymbolsBlur}
+                  ></WheelTrappedOutlinedInput>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl
+                  sx={{ flexGrow: 1 }}
+                  size="small"
+                  disabled={
+                    !(
+                      formats.length === 0 ||
+                      inFormats(formats, [
+                        "Codabar",
+                        "Code39",
+                        "Code93",
+                        "Code128",
+                        "EAN-8",
+                        "EAN-13",
+                        "ITF",
+                        "DataBar",
+                        "DataBarExpanded",
+                        "UPC-A",
+                        "UPC-E",
+                        "Linear-Codes",
+                      ])
+                    )
                   }
-                ></ScopedOutlinedInput>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={6} sm={3}>
-              <FormControl
-                disabled={!tryDownscale}
-                sx={{ flexGrow: 1 }}
-                size="small"
-              >
-                <InputLabel htmlFor="downscale-factor">
-                  Downscale Factor
-                </InputLabel>
-                <ScopedOutlinedInput
-                  label="Downscale Factor"
-                  id="downscale-factor"
-                  type="number"
-                  inputMode="numeric"
-                  inputProps={{
-                    min: minDownscaleFactor,
-                    max: maxDownscaleFactor,
-                    step: 1,
-                  }}
-                  value={downscaleFactorDisplay}
-                  onChange={handleDownscaleFactorChange}
-                  onBlur={handleDownscaleFactorBlur}
-                ></ScopedOutlinedInput>
-              </FormControl>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6}>
-              <StyledFormControlLabel
-                label="Try Code39 Extended Mode"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={tryCode39ExtendedMode}
-                    onChange={handleTryCode39ExtendedModeChange}
-                  ></StyledCheckbox>
-                }
-                disabled={
-                  !(
-                    formats.length === 0 ||
-                    inFormats(formats, ["Code39", "Linear-Codes"])
-                  )
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6}>
-              <StyledFormControlLabel
-                label="Validate Code39 Checksum"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={validateCode39CheckSum}
-                    onChange={handleValidateCode39CheckSumChange}
-                  ></StyledCheckbox>
-                }
-                disabled={
-                  !(
-                    formats.length === 0 ||
-                    inFormats(formats, ["Code39", "Linear-Codes"])
-                  )
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6}>
-              <StyledFormControlLabel
-                label="Validate ITF Checksum"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={validateITFCheckSum}
-                    onChange={handleValidateITFCheckSumChange}
-                  ></StyledCheckbox>
-                }
-                disabled={
-                  !(
-                    formats.length === 0 ||
-                    inFormats(formats, ["ITF", "Linear-Codes"])
-                  )
-                }
-              ></StyledFormControlLabel>
-            </FlexGrid>
-            <FlexGrid xs={12} mobile={6}>
-              <StyledFormControlLabel
-                label="Return Codabar Start End"
-                control={
-                  <StyledCheckbox
-                    size="small"
-                    checked={returnCodabarStartEnd}
-                    onChange={handleReturnCodabarStartEndChange}
-                  ></StyledCheckbox>
-                }
-                disabled={
-                  !(
-                    formats.length === 0 ||
-                    inFormats(formats, ["Codabar", "Linear-Codes"])
-                  )
-                }
-              ></StyledFormControlLabel>
+                >
+                  <InputLabel htmlFor="min-line-count">
+                    Minimum Line Count
+                  </InputLabel>
+                  <WheelTrappedOutlinedInput
+                    label="Minimum Line Count"
+                    id="min-line-count"
+                    type="number"
+                    inputMode="numeric"
+                    inputProps={{
+                      min: minMinLineCount,
+                      step: 1,
+                    }}
+                    value={minLineCountDisplay}
+                    onChange={handleMinLineCountChange}
+                    onBlur={handleMinLineCountBlur}
+                  ></WheelTrappedOutlinedInput>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl
+                  sx={{ flexGrow: 1 }}
+                  size="small"
+                  disabled={
+                    !(
+                      formats.length === 0 ||
+                      inFormats(formats, [
+                        "EAN-8",
+                        "EAN-13",
+                        "UPC-A",
+                        "UPC-E",
+                        "Linear-Codes",
+                      ])
+                    )
+                  }
+                >
+                  <InputLabel id="ean-addon-symbol-label">
+                    EAN Addon Symbol
+                  </InputLabel>
+                  <Select
+                    labelId="ean-addon-symbol-label"
+                    label="EAN Addon Symbol"
+                    id="ean-addon-symbol"
+                    value={eanAddOnSymbol}
+                    onChange={handleEanAddonSymbolChange}
+                  >
+                    {eanAddOnSymbols.map((eanAddonSymbol) => (
+                      <MenuItem
+                        dense
+                        key={eanAddonSymbol}
+                        value={eanAddonSymbol}
+                      >
+                        {eanAddonSymbol}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6} sm={3}>
+                <FormControl sx={{ flexGrow: 1 }} size="small">
+                  <InputLabel id="text-mode-label">Text Mode</InputLabel>
+                  <Select
+                    labelId="text-mode-label"
+                    label="Text Mode"
+                    id="text-mode"
+                    value={textMode}
+                    onChange={handleTextModeChange}
+                  >
+                    {textModes.map((textMode) => (
+                      <MenuItem dense key={textMode} value={textMode}>
+                        {textMode}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={6} mobile={4} sm={3}>
+                <StyledFormControlLabel
+                  label="Try Harder"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={tryHarder}
+                      onChange={handleTryHarderChange}
+                    ></StyledCheckbox>
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={6} mobile={4} sm={3}>
+                <StyledFormControlLabel
+                  label="Try Rotate"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={tryRotate}
+                      onChange={handleTryRotateChange}
+                    ></StyledCheckbox>
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={6} mobile={4} sm={3}>
+                <StyledFormControlLabel
+                  label="Try Invert"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={tryInvert}
+                      onChange={handleTryInvertChange}
+                    ></StyledCheckbox>
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={6} mobile={4} sm={3}>
+                <StyledFormControlLabel
+                  label="Is Pure"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={isPure}
+                      onChange={handleIsPureChange}
+                    ></StyledCheckbox>
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={6} mobile={4} sm={3}>
+                <StyledFormControlLabel
+                  label="Return Errors"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={returnErrors}
+                      onChange={handleReturnErrorsChange}
+                    ></StyledCheckbox>
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={6} mobile={4} sm={3}>
+                <StyledFormControlLabel
+                  label="Try Downscale"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={tryDownscale}
+                      onChange={handleTryDownscaleChange}
+                    ></StyledCheckbox>
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={6} sm={3}>
+                <FormControl
+                  disabled={!tryDownscale}
+                  sx={{ flexGrow: 1 }}
+                  size="small"
+                >
+                  <InputLabel htmlFor="downscale-threshold">
+                    Downscale Threshold
+                  </InputLabel>
+                  <WheelTrappedOutlinedInput
+                    label="Downscale Threshold"
+                    id="downscale-threshold"
+                    type="number"
+                    inputMode="numeric"
+                    inputProps={{
+                      min: minDownscaleThreshold,
+                      step: 10,
+                    }}
+                    value={downscaleThresholdDisplay}
+                    onChange={handleDownscaleThresholdChange}
+                    onBlur={handleDownscaleThresholdBlur}
+                    endAdornment={
+                      <InputAdornment position="end">px</InputAdornment>
+                    }
+                  ></WheelTrappedOutlinedInput>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={6} sm={3}>
+                <FormControl
+                  disabled={!tryDownscale}
+                  sx={{ flexGrow: 1 }}
+                  size="small"
+                >
+                  <InputLabel htmlFor="downscale-factor">
+                    Downscale Factor
+                  </InputLabel>
+                  <WheelTrappedOutlinedInput
+                    label="Downscale Factor"
+                    id="downscale-factor"
+                    type="number"
+                    inputMode="numeric"
+                    inputProps={{
+                      min: minDownscaleFactor,
+                      max: maxDownscaleFactor,
+                      step: 1,
+                    }}
+                    value={downscaleFactorDisplay}
+                    onChange={handleDownscaleFactorChange}
+                    onBlur={handleDownscaleFactorBlur}
+                  ></WheelTrappedOutlinedInput>
+                </FormControl>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6}>
+                <StyledFormControlLabel
+                  label="Try Code39 Extended Mode"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={tryCode39ExtendedMode}
+                      onChange={handleTryCode39ExtendedModeChange}
+                    ></StyledCheckbox>
+                  }
+                  disabled={
+                    !(
+                      formats.length === 0 ||
+                      inFormats(formats, ["Code39", "Linear-Codes"])
+                    )
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6}>
+                <StyledFormControlLabel
+                  label="Validate Code39 Checksum"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={validateCode39CheckSum}
+                      onChange={handleValidateCode39CheckSumChange}
+                    ></StyledCheckbox>
+                  }
+                  disabled={
+                    !(
+                      formats.length === 0 ||
+                      inFormats(formats, ["Code39", "Linear-Codes"])
+                    )
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6}>
+                <StyledFormControlLabel
+                  label="Validate ITF Checksum"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={validateITFCheckSum}
+                      onChange={handleValidateITFCheckSumChange}
+                    ></StyledCheckbox>
+                  }
+                  disabled={
+                    !(
+                      formats.length === 0 ||
+                      inFormats(formats, ["ITF", "Linear-Codes"])
+                    )
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
+              <FlexGrid xs={12} mobile={6}>
+                <StyledFormControlLabel
+                  label="Return Codabar Start End"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={returnCodabarStartEnd}
+                      onChange={handleReturnCodabarStartEndChange}
+                    ></StyledCheckbox>
+                  }
+                  disabled={
+                    !(
+                      formats.length === 0 ||
+                      inFormats(formats, ["Codabar", "Linear-Codes"])
+                    )
+                  }
+                ></StyledFormControlLabel>
+              </FlexGrid>
             </FlexGrid>
             <FlexGrid
               xs={12}
-              sx={{
-                justifyContent: "center",
-                height: 360,
-              }}
+              justifyContent="center"
+              flexGrow={1}
+              maxHeight={360}
             >
               <div style={{ overflowX: "auto" }} ref={addWheelEventListener}>
                 <List
@@ -1260,10 +1275,34 @@ const App = () => {
             </FlexGrid>
           </FlexGrid>
         </Container>
-        <Box>
-          <Toolbar variant="dense"></Toolbar>
-        </Box>
-      </Box>
+        <FlexGrid container>
+          <Toolbar variant="dense" sx={{ width: "100%" }}>
+            <Typography variant="body2" sx={{ width: "100%" }}>
+              <FlexGrid container gap={1} justifyContent="center">
+                powered by:
+                <span>
+                  <Link
+                    underline="hover"
+                    href="https://github.com/Sec-ant/zxing-wasm"
+                    sx={{
+                      mr: 0,
+                    }}
+                  >
+                    zxing-wasm
+                  </Link>
+                  @
+                  <Link
+                    underline="hover"
+                    href={`https://www.npmjs.com/package/zxing-wasm/v/${ZXING_WASM_VERSION}`}
+                  >
+                    {ZXING_WASM_VERSION}
+                  </Link>
+                </span>
+              </FlexGrid>
+            </Typography>
+          </Toolbar>
+        </FlexGrid>
+      </FlexGrid>
     </ThemeProvider>
   );
 };

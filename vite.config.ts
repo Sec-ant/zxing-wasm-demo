@@ -53,7 +53,7 @@ export default defineConfig({
             urlPattern: /^https:\/\/fastly\.jsdelivr\.net\/.*/i,
             handler: "CacheFirst",
             options: {
-              cacheName: "fastly-jsdelivr-cache",
+              cacheName: "jsdelivr-fastly-cache",
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 60 * 60 * 24 * 365,
