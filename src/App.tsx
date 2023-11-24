@@ -142,7 +142,6 @@ const FlexGrid = styled(Grid)(() => ({
 
 const FlexGridFullPageHeightContainer = styled(FlexGrid)`
   min-height: 100vh;
-  min-height: -webkit-fill-available;
   min-height: 100dvh;
 `;
 
@@ -1288,25 +1287,27 @@ const App = () => {
         <FlexGrid container>
           <Toolbar variant="dense" sx={{ width: "100%" }}>
             <FlexGrid container gap={1} width="100%" justifyContent="center">
-              powered by:
-              <span>
-                <Link
-                  underline="hover"
-                  href="https://github.com/Sec-ant/zxing-wasm"
-                  sx={{
-                    mr: 0,
-                  }}
-                >
-                  zxing-wasm
-                </Link>
-                @
-                <Link
-                  underline="hover"
-                  href={`https://www.npmjs.com/package/zxing-wasm/v/${ZXING_WASM_VERSION}`}
-                >
-                  {ZXING_WASM_VERSION}
-                </Link>
-              </span>
+              <Typography variant="body2">
+                powered by:
+                <span>
+                  <Link
+                    underline="hover"
+                    href="https://github.com/Sec-ant/zxing-wasm"
+                    sx={{
+                      mr: 0,
+                    }}
+                  >
+                    zxing-wasm
+                  </Link>
+                  @
+                  <Link
+                    underline="hover"
+                    href={`https://www.npmjs.com/package/zxing-wasm/v/${ZXING_WASM_VERSION}`}
+                  >
+                    {ZXING_WASM_VERSION}
+                  </Link>
+                </span>
+              </Typography>
             </FlexGrid>
           </Toolbar>
         </FlexGrid>
