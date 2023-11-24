@@ -140,11 +140,6 @@ const FlexGrid = styled(Grid)(() => ({
   display: "flex",
 }));
 
-const FlexGridFullPageHeightContainer = styled(FlexGrid)`
-  min-height: 100vh;
-  min-height: 100dvh;
-`;
-
 const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   flexGrow: 1,
   userSelect: "none",
@@ -760,10 +755,11 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <FlexGridFullPageHeightContainer
+      <FlexGrid
         container
         flexDirection="column"
         justifyContent="space-between"
+        minHeight="100vh"
       >
         <AppBar position="sticky" color="primary" enableColorOnDark>
           <Toolbar variant="dense">
@@ -1311,7 +1307,7 @@ const App = () => {
             </FlexGrid>
           </Toolbar>
         </FlexGrid>
-      </FlexGridFullPageHeightContainer>
+      </FlexGrid>
     </ThemeProvider>
   );
 };
