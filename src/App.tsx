@@ -140,6 +140,11 @@ const FlexGrid = styled(Grid)(() => ({
   display: "flex",
 }));
 
+const FlexGridFullHeight = styled(FlexGrid)`
+  min-height: 100vh;
+  min-height: 100dvh;
+`;
+
 const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   flexGrow: 1,
   userSelect: "none",
@@ -755,11 +760,10 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <FlexGrid
+      <FlexGridFullHeight
         container
         flexDirection="column"
         justifyContent="space-between"
-        minHeight="100vh"
       >
         <AppBar position="sticky" color="primary" enableColorOnDark>
           <Toolbar variant="dense">
@@ -1259,7 +1263,7 @@ const App = () => {
                   flexGrow: 1,
                   display: "flex",
                   flexDirection: "row",
-                  height: "100%",
+                  maxHeight: 360,
                   paddingLeft: 1,
                   paddingRight: 1,
                   overflowX: "auto",
@@ -1307,7 +1311,7 @@ const App = () => {
             </FlexGrid>
           </Toolbar>
         </FlexGrid>
-      </FlexGrid>
+      </FlexGridFullHeight>
     </ThemeProvider>
   );
 };
