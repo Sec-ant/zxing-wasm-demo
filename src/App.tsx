@@ -140,6 +140,12 @@ const FlexGrid = styled(Grid)(() => ({
   display: "flex",
 }));
 
+const FlexGridFullPageHeightContainer = styled(FlexGrid)`
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: 100dvh;
+`;
+
 const StyledFormControlLabel = styled(FormControlLabel)(() => ({
   flexGrow: 1,
   userSelect: "none",
@@ -755,11 +761,10 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <FlexGrid
+      <FlexGridFullPageHeightContainer
         container
         flexDirection="column"
         justifyContent="space-between"
-        minHeight="100vh"
       >
         <AppBar position="sticky" color="primary" enableColorOnDark>
           <Toolbar variant="dense">
@@ -1250,59 +1255,62 @@ const App = () => {
               xs={12}
               justifyContent="center"
               flexGrow={1}
-              maxHeight={385}
+              maxHeight={360}
             >
-              <div style={{ overflowX: "auto" }} ref={addWheelEventListener}>
-                <List
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    flexDirection: "row",
-                    height: "100%",
-                    paddingLeft: 1,
-                    paddingRight: 1,
-                  }}
-                >
-                  {imageObjectUrls.map((imageObjectUrl) => (
-                    <BarcodeImage
-                      key={imageObjectUrl}
-                      src={imageObjectUrl}
-                      detect={detect}
-                    ></BarcodeImage>
-                  ))}
-                </List>
-              </div>
+              <List
+                ref={addWheelEventListener}
+                component="div"
+                sx={{
+                  flexGrow: 1,
+                  display: "flex",
+                  flexDirection: "row",
+                  height: "100%",
+                  paddingLeft: 1,
+                  paddingRight: 1,
+                  overflowX: "auto",
+                  "&::before, &::after": {
+                    content: `""`,
+                    margin: "auto",
+                  },
+                }}
+              >
+                {imageObjectUrls.map((imageObjectUrl) => (
+                  <BarcodeImage
+                    key={imageObjectUrl}
+                    src={imageObjectUrl}
+                    detect={detect}
+                  ></BarcodeImage>
+                ))}
+              </List>
             </FlexGrid>
           </FlexGrid>
         </Container>
         <FlexGrid container>
           <Toolbar variant="dense" sx={{ width: "100%" }}>
-            <Typography variant="body2" sx={{ width: "100%" }}>
-              <FlexGrid container gap={1} justifyContent="center">
-                powered by:
-                <span>
-                  <Link
-                    underline="hover"
-                    href="https://github.com/Sec-ant/zxing-wasm"
-                    sx={{
-                      mr: 0,
-                    }}
-                  >
-                    zxing-wasm
-                  </Link>
-                  @
-                  <Link
-                    underline="hover"
-                    href={`https://www.npmjs.com/package/zxing-wasm/v/${ZXING_WASM_VERSION}`}
-                  >
-                    {ZXING_WASM_VERSION}
-                  </Link>
-                </span>
-              </FlexGrid>
-            </Typography>
+            <FlexGrid container gap={1} width="100%" justifyContent="center">
+              powered by:
+              <span>
+                <Link
+                  underline="hover"
+                  href="https://github.com/Sec-ant/zxing-wasm"
+                  sx={{
+                    mr: 0,
+                  }}
+                >
+                  zxing-wasm
+                </Link>
+                @
+                <Link
+                  underline="hover"
+                  href={`https://www.npmjs.com/package/zxing-wasm/v/${ZXING_WASM_VERSION}`}
+                >
+                  {ZXING_WASM_VERSION}
+                </Link>
+              </span>
+            </FlexGrid>
           </Toolbar>
         </FlexGrid>
-      </FlexGrid>
+      </FlexGridFullPageHeightContainer>
     </ThemeProvider>
   );
 };
