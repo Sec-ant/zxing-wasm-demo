@@ -8,12 +8,12 @@
 - [ ] Add light / dark / auto theme switch
 - [x] Load `.wasm` file eagerly and add visual feedback
 - [ ] Add detection time in the result
-- [ ] Add acknowledgement in footer
+- [ ] ~~dd acknowledgement in footer~~
 - [ ] Auto deployment on `zxing-wasm` build
-- [ ] Display `zxing-wasm` version / commit somewhere
-- [ ] Add sample files / history in the side bar?
+- [x] Display `zxing-wasm` version / commit somewhere
+- [ ] ~~Add sample files / history in the side bar?~~
 - [x] Reduce bundle size / split chunks
 - [x] Prevent page scrolling when changing numeric values
-- [ ] Prevent page scrolling when browsing images
+- [x] Prevent page scrolling when browsing images
 - [x] Numeric fields value fallback on losing focus instead of typing
 - [ ] Validate file types by magic number instead of extension

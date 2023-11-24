@@ -661,15 +661,10 @@ const App = () => {
    * Handle Wheel Horizontally
    */
   const handleWheel = useCallback((event: WheelEvent) => {
-    const { currentTarget, deltaY } = event as typeof event & {
+    const { currentTarget, deltaY, ctrlKey } = event as typeof event & {
       currentTarget: HTMLDivElement;
     };
-    const toLeft = deltaY < 0 && currentTarget.scrollLeft > 0;
-    const toRight =
-      deltaY > 0 &&
-      currentTarget.scrollLeft <
-        currentTarget.scrollWidth - currentTarget.clientWidth;
-    if (toLeft || toRight) {
+    if (!ctrlKey) {
       event.preventDefault();
       currentTarget.scrollLeft += deltaY;
     }
@@ -1288,7 +1283,7 @@ const App = () => {
           <Toolbar variant="dense" sx={{ width: "100%" }}>
             <FlexGrid container gap={1} width="100%" justifyContent="center">
               <Typography variant="body2">
-                powered by:
+                powered by:{" "}
                 <span>
                   <Link
                     underline="hover"
