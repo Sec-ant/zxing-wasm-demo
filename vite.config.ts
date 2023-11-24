@@ -32,6 +32,7 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       workbox: {
+        navigateFallbackDenylist: [/stats\.html(\?|$)/],
         globIgnores: ["stats.html"],
         globPatterns: ["**/*.{js,css,html,woff,woff2,wasm}"],
         runtimeCaching: [
