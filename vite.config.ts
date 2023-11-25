@@ -94,6 +94,50 @@ export default defineConfig({
           },
         ],
       },
+      manifest: {
+        name: "ZXing WASM Demo",
+        short_name: "ZXing WASM Demo",
+        description: "A ZXing WASM demo to show its basic functions",
+        theme_color: "#1976d2",
+        icons: [
+          {
+            src: "/icons/pwa-64x64.png",
+            sizes: "64x64",
+            type: "image/png",
+          },
+          {
+            src: "/icons/pwa-192x192.png",
+            sizes: "192x192",
+            type: "image/png",
+          },
+          {
+            src: "/icons/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+          },
+          {
+            src: "/icons/pwa-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "any",
+          },
+          {
+            src: "/icons/maskable-icon-512x512.png",
+            sizes: "512x512",
+            type: "image/png",
+            purpose: "maskable",
+          },
+        ],
+        screenshots: [
+          {
+            src: "/screenshots/wide.png",
+            sizes: "2560x1600",
+            type: "image/png",
+            form_factor: "wide",
+            label: "Homescreen",
+          },
+        ],
+      },
     }),
   ],
   define: {
