@@ -774,7 +774,7 @@ const App = () => {
                 textOverflow: "ellipsis",
               }}
             >
-              zxing-wasm demo
+              ZXing WASM Demo
             </Typography>
             <Tooltip title="GitHub Repository">
               <IconButton
