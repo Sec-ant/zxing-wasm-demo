@@ -64,7 +64,7 @@
     "prettier": "^3.1.0",
     "prettier-plugin-embed": "^0.2.5",
     "prettier-plugin-organize-imports": "^3.2.4",
-    "rollup-plugin-visualizer": "^5.9.2",
+    "rollup-plugin-visualizer": "^5.9.3",
     "typescript": "^5.3.2",
     "vite": "^5.0.2",
     "vite-plugin-pwa": "^0.17.0",
@@ -85,6 +85,6 @@
     "usehooks-ts": "^2.9.1",
     "valibot": "^0.21.0",
     "zustand": "^4.4.6",
-    "zxing-wasm": "^1.0.0-rc.6"
+    "zxing-wasm": "^1.0.0-rc.7"
   }
 }
