@@ -10,6 +10,10 @@ function resolvePath(path: string) {
   return fileURLToPath(new URL(path, import.meta.url));
 }
 
+function escapeRegExp(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 const zxingWasmVersion = packages["node_modules/zxing-wasm"].version;
 
 export default defineConfig({
@@ -37,52 +41,26 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,woff,woff2,wasm}"],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i,
+            urlPattern: new RegExp(
+              [
+                `^${escapeRegExp(
+                  `https://cdn.jsdelivr.net/npm/zxing-wasm@${zxingWasmVersion}`,
+                )}`,
+                `^${escapeRegExp(
+                  `https://fastly.jsdelivr.net/npm/zxing-wasm@${zxingWasmVersion}`,
+                )}`,
+                `^${escapeRegExp(
+                  `https://registry.npmmirror.com/zxing-wasm/${zxingWasmVersion}`,
+                )}`,
+                `^${escapeRegExp(
+                  `https://unpkg.com/zxing-wasm@${zxingWasmVersion}`,
+                )}`,
+              ].join("|"),
+              "i",
+            ),
             handler: "CacheFirst",
             options: {
-              cacheName: "jsdelivr-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/fastly\.jsdelivr\.net\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "jsdelivr-fastly-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/registry\.npmmirror\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "npmmirror-cache",
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365,
-              },
-              cacheableResponse: {
-                statuses: [0, 200],
-              },
-            },
-          },
-          {
-            urlPattern: /^https:\/\/unpkg\.com\/.*/i,
-            handler: "CacheFirst",
-            options: {
-              cacheName: "unpkg-cache",
+              cacheName: "cdn-cache",
               expiration: {
                 maxEntries: 10,
                 maxAgeSeconds: 60 * 60 * 24 * 365,
