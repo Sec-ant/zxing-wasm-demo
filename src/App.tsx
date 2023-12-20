@@ -44,16 +44,16 @@ import {
   barcodeFormats,
   binarizers,
   characterSets,
-  defaultDecodeHints,
+  defaultReaderOptions,
   eanAddOnSymbols,
   getZXingModule,
   readBarcodesFromImageFile,
   textModes,
   type Binarizer,
   type CharacterSet,
-  type DecodeHints,
   type EanAddOnSymbol,
   type ReadInputBarcodeFormat,
+  type ReaderOptions,
   type TextMode,
 } from "zxing-wasm/reader";
 
@@ -104,13 +104,13 @@ function inFormats(
   return false;
 }
 
-interface ZXingWasmDemoState extends Required<DecodeHints> {
+interface ZXingWasmDemoState extends Required<ReaderOptions> {
   wasmLocation: WasmLocation;
 }
 
 const defaultZXingWasmDemoState: ZXingWasmDemoState = {
   wasmLocation: "site",
-  ...defaultDecodeHints,
+  ...defaultReaderOptions,
 };
 
 const useZXingWasmDemoStore = create<ZXingWasmDemoState>()(
