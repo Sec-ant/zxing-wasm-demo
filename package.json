@@ -78,7 +78,7 @@
     "@textea/json-viewer": "^3.3.0",
     "case-anything": "^2.1.13",
     "is-mobile": "^4.0.0",
-    "main-thread-scheduling": "^10.0.0",
+    "main-thread-scheduling": "^13.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.5.3",
