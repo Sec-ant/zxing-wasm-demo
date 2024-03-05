@@ -4,9 +4,7 @@
   "private": false,
   "version": "0.1.0",
   "type": "module",
-  "files": [
-    "./dist"
-  ],
+  "files": ["./dist"],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -22,11 +20,7 @@
     "url": "https://github.com/Sec-ant/zxing-wasm-demo/issues",
     "email": "zzwu@zju.edu.cn"
   },
-  "keywords": [
-    "zxing-wasm",
-    "zxing-wasm-demo",
-    "react"
-  ],
+  "keywords": ["zxing-wasm", "zxing-wasm-demo", "react"],
   "author": {
     "name": "Ze-Zheng Wu"
   },
@@ -37,36 +31,43 @@
     "access": "public"
   },
   "scripts": {
+    "update-hooks": "simple-git-hooks",
     "dev": "vite",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "biome lint .",
     "type-check": "tsc --noEmit --emitDeclarationOnly false",
-    "format": "prettier . --write",
-    "prebuild": "npm run lint && npm run type-check && npm run format",
+    "format:prettier": "prettier . --write",
+    "format:biome": "biome format . --write",
+    "format": "conc \"npm:format:prettier\" \"npm:format:biome\"",
+    "check:biome": "biome check --apply .",
+    "check": "conc \"npm:format:prettier\" \"npm:check:biome\"",
+    "prebuild": "npm run check && npm run type-check",
     "build": "vite build",
     "preview": "vite preview",
     "prepublishOnly": "npm run build",
-    "ncu": "npx npm-check-updates --filterVersion \"/^[~^]/\" -u",
-    "postncu": "npm i"
+    "ncu": "ncu",
+    "postncu": "npm i",
+    "bump-zxing-wasm": "npm i -E zxing-wasm@latest",
+    "bump-biome:latest": "npm i -DE @biomejs/biome@latest",
+    "bump-biome:nightly": "npm i -DE @biomejs/biome@nightly"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.6.1",
-    "@commitlint/config-conventional": "^18.6.2",
-    "@types/react": "^18.2.62",
+    "@biomejs/biome": "1.5.3-nightly.69f9031",
+    "@commitlint/cli": "^19.0.3",
+    "@commitlint/config-conventional": "^19.0.3",
+    "@types/react": "^18.2.63",
     "@types/react-dom": "^18.2.19",
     "@types/wicg-file-system-access": "^2023.10.4",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
     "@vitejs/plugin-react": "^4.2.1",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
+    "concurrently": "^8.2.2",
+    "lint-staged": "^15.2.2",
     "npm-check-updates": "^16.14.15",
     "prettier": "^3.2.5",
     "prettier-plugin-embed": "^0.4.15",
     "prettier-plugin-organize-imports": "^3.2.4",
     "rollup-plugin-visualizer": "^5.12.0",
+    "simple-git-hooks": "^2.10.0",
     "typescript": "^5.3.3",
-    "vite": "^5.1.4",
+    "vite": "^5.1.5",
     "vite-plugin-pwa": "^0.19.2",
     "vite-plugin-static-copy": "^1.0.1"
   },
@@ -78,13 +79,13 @@
     "@textea/json-viewer": "^3.4.0",
     "case-anything": "^2.1.13",
     "is-mobile": "^4.0.0",
-    "main-thread-scheduling": "^13.0.0",
+    "main-thread-scheduling": "^14.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.8.1",
-    "usehooks-ts": "^2.15.1",
+    "usehooks-ts": "^2.16.0",
     "valibot": "^0.29.0",
     "zustand": "^4.5.2",
-    "zxing-wasm": "^1.2.5"
+    "zxing-wasm": "1.2.5"
   }
 }

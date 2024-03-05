@@ -5,7 +5,7 @@ import {
   Fab,
   IconButton,
   Paper,
-  PaperProps,
+  type PaperProps,
   Typography,
   useMediaQuery,
   useTheme,
@@ -184,9 +184,9 @@ const BarcodeImagesDropZone = ({
               size="small"
               sx={{ visibility: "hidden", height: "fit-content" }}
             >
-              <Clear></Clear>
+              <Clear />
             </IconButton>
-            <Box sx={{ flexGrow: 1 }}></Box>
+            <Box sx={{ flexGrow: 1 }} />
             {buttonCollapse && (
               <>
                 <IconButton
@@ -233,7 +233,7 @@ const BarcodeImagesDropZone = ({
                 </Button>
               </>
             )}
-            <Box sx={{ flexGrow: 1 }}></Box>
+            <Box sx={{ flexGrow: 1 }} />
             <IconButton
               disabled={isInsideDropZone || isCollecting}
               size="small"

@@ -13,7 +13,7 @@ const WheelTrappedOutlinedInput = ({ ...props }: OutlinedInputProps) => {
     [handleWheel],
   );
 
-  return <OutlinedInput {...props} ref={callbackRef}></OutlinedInput>;
+  return <OutlinedInput {...props} ref={callbackRef} />;
 };
 
 export default WheelTrappedOutlinedInput;

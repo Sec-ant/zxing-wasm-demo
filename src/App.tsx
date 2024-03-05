@@ -2,7 +2,7 @@ import { Article, Code, GitHub, QrCodeScanner } from "@mui/icons-material";
 import {
   AppBar,
   Checkbox,
-  CheckboxProps,
+  type CheckboxProps,
   Container,
   CssBaseline,
   FormControl,
@@ -14,6 +14,7 @@ import {
   List,
   MenuItem,
   Select,
+  type SelectProps,
   ThemeProvider,
   Toolbar,
   Tooltip,
@@ -21,18 +22,17 @@ import {
   createTheme,
   styled,
   useMediaQuery,
-  type SelectProps,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { spaceCase } from "case-anything";
 import {
+  type ChangeEventHandler,
+  type FocusEventHandler,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
-  type ChangeEventHandler,
-  type FocusEventHandler,
 } from "react";
 import { create } from "zustand";
 import {
@@ -41,6 +41,12 @@ import {
   subscribeWithSelector,
 } from "zustand/middleware";
 import {
+  type Binarizer,
+  type CharacterSet,
+  type EanAddOnSymbol,
+  type ReadInputBarcodeFormat,
+  type ReaderOptions,
+  type TextMode,
   barcodeFormats,
   binarizers,
   characterSets,
@@ -49,12 +55,6 @@ import {
   getZXingModule,
   readBarcodesFromImageFile,
   textModes,
-  type Binarizer,
-  type CharacterSet,
-  type EanAddOnSymbol,
-  type ReadInputBarcodeFormat,
-  type ReaderOptions,
-  type TextMode,
 } from "zxing-wasm/reader";
 
 import { useDebounce } from "usehooks-ts";
@@ -794,7 +794,7 @@ const App = () => {
                 aria-label="document"
                 color="inherit"
                 onClick={() =>
-                  window.open("https://zxing-wasm.netlify.app", "_blank")
+                  window.open("https://zxing-wasm.deno.dev", "_blank")
                 }
               >
                 <Article />
@@ -841,7 +841,7 @@ const App = () => {
                   onBarcodeImagesDrop={(files) => {
                     setImages(files);
                   }}
-                ></BarcodeImagesDropZone>
+                />
               </FlexGrid>
               <FlexGrid xs={12} mobile={6} sm={3}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
@@ -946,7 +946,7 @@ const App = () => {
                     value={maxNumberOfSymbolsDisplay}
                     onChange={handleMaxNumberOfSymbolsChange}
                     onBlur={handleMaxNumberOfSymbolsBlur}
-                  ></WheelTrappedOutlinedInput>
+                  />
                 </FormControl>
               </FlexGrid>
               <FlexGrid xs={12} mobile={6} sm={3}>
@@ -988,7 +988,7 @@ const App = () => {
                     value={minLineCountDisplay}
                     onChange={handleMinLineCountChange}
                     onBlur={handleMinLineCountBlur}
-                  ></WheelTrappedOutlinedInput>
+                  />
                 </FormControl>
               </FlexGrid>
               <FlexGrid xs={12} mobile={6} sm={3}>
@@ -1056,9 +1056,9 @@ const App = () => {
                       size="small"
                       checked={tryHarder}
                       onChange={handleTryHarderChange}
-                    ></StyledCheckbox>
+                    />
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={6} mobile={4} sm={3}>
                 <StyledFormControlLabel
@@ -1068,9 +1068,9 @@ const App = () => {
                       size="small"
                       checked={tryRotate}
                       onChange={handleTryRotateChange}
-                    ></StyledCheckbox>
+                    />
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={6} mobile={4} sm={3}>
                 <StyledFormControlLabel
@@ -1080,9 +1080,9 @@ const App = () => {
                       size="small"
                       checked={tryInvert}
                       onChange={handleTryInvertChange}
-                    ></StyledCheckbox>
+                    />
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={6} mobile={4} sm={3}>
                 <StyledFormControlLabel
@@ -1092,9 +1092,9 @@ const App = () => {
                       size="small"
                       checked={isPure}
                       onChange={handleIsPureChange}
-                    ></StyledCheckbox>
+                    />
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={6} mobile={4} sm={3}>
                 <StyledFormControlLabel
@@ -1104,9 +1104,9 @@ const App = () => {
                       size="small"
                       checked={returnErrors}
                       onChange={handleReturnErrorsChange}
-                    ></StyledCheckbox>
+                    />
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={6} mobile={4} sm={3}>
                 <StyledFormControlLabel
@@ -1116,9 +1116,9 @@ const App = () => {
                       size="small"
                       checked={tryDownscale}
                       onChange={handleTryDownscaleChange}
-                    ></StyledCheckbox>
+                    />
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={6} sm={3}>
                 <FormControl
@@ -1144,7 +1144,7 @@ const App = () => {
                     endAdornment={
                       <InputAdornment position="end">px</InputAdornment>
                     }
-                  ></WheelTrappedOutlinedInput>
+                  />
                 </FormControl>
               </FlexGrid>
               <FlexGrid xs={6} sm={3}>
@@ -1169,7 +1169,7 @@ const App = () => {
                     value={downscaleFactorDisplay}
                     onChange={handleDownscaleFactorChange}
                     onBlur={handleDownscaleFactorBlur}
-                  ></WheelTrappedOutlinedInput>
+                  />
                 </FormControl>
               </FlexGrid>
               <FlexGrid xs={12} mobile={6}>
@@ -1180,7 +1180,7 @@ const App = () => {
                       size="small"
                       checked={tryCode39ExtendedMode}
                       onChange={handleTryCode39ExtendedModeChange}
-                    ></StyledCheckbox>
+                    />
                   }
                   disabled={
                     !(
@@ -1188,7 +1188,7 @@ const App = () => {
                       inFormats(formats, ["Code39", "Linear-Codes"])
                     )
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={12} mobile={6}>
                 <StyledFormControlLabel
@@ -1198,7 +1198,7 @@ const App = () => {
                       size="small"
                       checked={validateCode39CheckSum}
                       onChange={handleValidateCode39CheckSumChange}
-                    ></StyledCheckbox>
+                    />
                   }
                   disabled={
                     !(
@@ -1206,7 +1206,7 @@ const App = () => {
                       inFormats(formats, ["Code39", "Linear-Codes"])
                     )
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={12} mobile={6}>
                 <StyledFormControlLabel
@@ -1216,7 +1216,7 @@ const App = () => {
                       size="small"
                       checked={validateITFCheckSum}
                       onChange={handleValidateITFCheckSumChange}
-                    ></StyledCheckbox>
+                    />
                   }
                   disabled={
                     !(
@@ -1224,7 +1224,7 @@ const App = () => {
                       inFormats(formats, ["ITF", "Linear-Codes"])
                     )
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
               <FlexGrid xs={12} mobile={6}>
                 <StyledFormControlLabel
@@ -1234,7 +1234,7 @@ const App = () => {
                       size="small"
                       checked={returnCodabarStartEnd}
                       onChange={handleReturnCodabarStartEndChange}
-                    ></StyledCheckbox>
+                    />
                   }
                   disabled={
                     !(
@@ -1242,7 +1242,7 @@ const App = () => {
                       inFormats(formats, ["Codabar", "Linear-Codes"])
                     )
                   }
-                ></StyledFormControlLabel>
+                />
               </FlexGrid>
             </FlexGrid>
             <FlexGrid
@@ -1273,7 +1273,7 @@ const App = () => {
                     key={imageObjectUrl}
                     src={imageObjectUrl}
                     detect={detect}
-                  ></BarcodeImage>
+                  />
                 ))}
               </List>
             </FlexGrid>
