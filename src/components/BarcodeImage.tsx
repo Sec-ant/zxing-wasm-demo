@@ -1,5 +1,6 @@
 import {
   Badge,
+  type BadgeProps,
   Box,
   Button,
   Card,
@@ -8,14 +9,17 @@ import {
   DialogContent,
   DialogTitle,
   useTheme,
-  type BadgeProps,
 } from "@mui/material";
-import { DataItemProps, JsonViewer, defineEasyType } from "@textea/json-viewer";
+import {
+  type DataItemProps,
+  JsonViewer,
+  defineEasyType,
+} from "@textea/json-viewer";
 import { yieldOrContinue } from "main-thread-scheduling";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { finite, integer, is, minValue, string, transform } from "valibot";
-import { ReadResult } from "zxing-wasm";
+import type { ReadResult } from "zxing-wasm";
 
 interface BarcodeImageProps {
   src: string;
@@ -127,6 +131,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
     color: "primary",
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setBadgeInfo({
       content: "?",
@@ -143,7 +148,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
         content: "...",
       });
       (async () => {
-        await yieldOrContinue("user-visible");
+        await yieldOrContinue("interactive");
         let resp: Response;
         try {
           resp = await fetch(src);
@@ -252,7 +257,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
             theme={theme.palette.mode}
             value={readResults}
             valueTypes={[uint8ArrayType]}
-          ></JsonViewer>
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Close</Button>
@@ -292,6 +297,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
         >
           <img
             ref={imageCallbackRef}
+            alt="sample"
             src={src}
             loading="lazy"
             style={{
@@ -300,14 +306,14 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
               maxWidth: 320,
               objectFit: "contain",
             }}
-          ></img>
+          />
           <canvas
             ref={canvasElementRef}
             style={{
               position: "absolute",
               pointerEvents: "none",
             }}
-          ></canvas>
+          />
         </Card>
       </Badge>
     </>
