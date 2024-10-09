@@ -6,10 +6,5 @@
     "resolveJsonModule": true,
     "allowJs": true
   },
-  "include": [
-    "./scripts",
-    "./vite.config.ts",
-    "./package.json",
-    "./package-lock.json"
-  ]
+  "include": ["./vite.config.ts"]
 }

@@ -31,11 +31,10 @@
   },
   "overrides": [
     {
-      "include": ["*.jsonc"],
+      "include": ["package.json"],
       "json": {
-        "parser": {
-          "allowComments": true,
-          "allowTrailingCommas": true
+        "formatter": {
+          "lineWidth": 1
         }
       }
     }

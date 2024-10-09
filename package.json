@@ -4,7 +4,9 @@
   "private": false,
   "version": "0.1.0",
   "type": "module",
-  "files": ["./dist"],
+  "files": [
+    "./dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -20,7 +22,11 @@
     "url": "https://github.com/Sec-ant/zxing-wasm-demo/issues",
     "email": "zezhengwu@proton.me"
   },
-  "keywords": ["zxing-wasm", "zxing-wasm-demo", "react"],
+  "keywords": [
+    "zxing-wasm",
+    "zxing-wasm-demo",
+    "react"
+  ],
   "author": {
     "name": "Ze-Zheng Wu"
   },
@@ -51,6 +57,7 @@
     "@biomejs/biome": "1.9.3",
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
+    "@types/node": "^22.7.5",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
     "@types/wicg-file-system-access": "^2023.10.5",
