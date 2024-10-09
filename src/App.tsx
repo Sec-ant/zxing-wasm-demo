@@ -23,7 +23,7 @@ import {
   styled,
   useMediaQuery,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import Grid from "@mui/material/Grid2";
 import { spaceCase } from "case-anything";
 import {
   type ChangeEventHandler,
@@ -57,7 +57,7 @@ import {
   textModes,
 } from "zxing-wasm/reader";
 
-import { useDebounce } from "usehooks-ts";
+import { useDebounce } from "use-debounce";
 import {
   array,
   fallback,
@@ -65,9 +65,9 @@ import {
   integer,
   maxValue,
   minValue,
-  number,
   parse,
   picklist,
+  pipe,
   string,
   transform,
 } from "valibot";
@@ -156,8 +156,9 @@ const StyledCheckbox = styled(Checkbox)(() => ({
   padding: 2,
 }));
 
-declare module "@mui/material/styles" {
+declare module "@mui/system" {
   interface BreakpointOverrides {
+    xs: true;
     mobile: true;
     buttonCollapse: true;
   }
@@ -270,12 +271,14 @@ const App = () => {
   const formatsSchema = useCallback(
     (d: ReadInputBarcodeFormat[]) =>
       fallback(
-        transform(
+        pipe(
           array(picklist(barcodeFormats)),
-          (formats) =>
-            [...new Set(formats)].filter(
-              (f) => f !== "None",
-            ) as ReadInputBarcodeFormat[],
+          transform(
+            (formats) =>
+              [...new Set(formats)].filter(
+                (f) => f !== "None",
+              ) as ReadInputBarcodeFormat[],
+          ),
         ),
         d,
       ),
@@ -342,14 +345,12 @@ const App = () => {
   const maxNumberOfSymbolsSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(
+        pipe(
           string(),
-          (input) => parseInt(input, 10),
-          number([
-            integer(),
-            minValue(minMaxNumberOfSymbols),
-            maxValue(maxMaxNumberOfSymbols),
-          ]),
+          transform((input) => Number.parseInt(input, 10)),
+          integer(),
+          minValue(minMaxNumberOfSymbols),
+          maxValue(maxMaxNumberOfSymbols),
         ),
         d,
       ),
@@ -386,10 +387,11 @@ const App = () => {
   const minLineCountSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(
+        pipe(
           string(),
-          (input) => parseInt(input, 10),
-          number([integer(), minValue(minMinLineCount)]),
+          transform((input) => Number.parseInt(input, 10)),
+          integer(),
+          minValue(minMinLineCount),
         ),
         d,
       ),
@@ -533,10 +535,12 @@ const App = () => {
   const downscaleThresholdSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(
+        pipe(
           string(),
-          (input) => parseInt(input, 10),
-          number([integer(), finite(), minValue(minDownscaleThreshold)]),
+          transform((input) => Number.parseInt(input, 10)),
+          integer(),
+          finite(),
+          minValue(minDownscaleThreshold),
         ),
         d,
       ),
@@ -574,15 +578,13 @@ const App = () => {
   const downscaleFactorSchema = useCallback(
     (d: number) =>
       fallback(
-        transform(
+        pipe(
           string(),
-          (input) => parseInt(input, 10),
-          number([
-            integer(),
-            finite(),
-            minValue(minDownscaleFactor),
-            maxValue(maxDownscaleFactor),
-          ]),
+          transform((input) => Number.parseInt(input, 10)),
+          integer(),
+          finite(),
+          minValue(minDownscaleFactor),
+          maxValue(maxDownscaleFactor),
         ),
         d,
       ),
@@ -685,26 +687,48 @@ const App = () => {
   /**
    * Construct Detect Function
    */
-  const debouncedWasmLocation = useDebounce(wasmLocation);
-  const debouncedFormats = useDebounce(formats);
-  const debouncedBinarizer = useDebounce(binarizer);
-  const debouncedCharacterSet = useDebounce(characterSet);
-  const debouncedMaxNumberOfSymbols = useDebounce(maxNumberOfSymbols);
-  const debouncedMinLineCount = useDebounce(minLineCount);
-  const debouncedEanAddOnSymbol = useDebounce(eanAddOnSymbol);
-  const debouncedTextMode = useDebounce(textMode);
-  const debouncedTryHarder = useDebounce(tryHarder);
-  const debouncedTryRotate = useDebounce(tryRotate);
-  const debouncedTryInvert = useDebounce(tryInvert);
-  const debouncedIsPure = useDebounce(isPure);
-  const debouncedReturnErrors = useDebounce(returnErrors);
-  const debouncedTryDownscale = useDebounce(tryDownscale);
-  const debouncedDownscaleThreshold = useDebounce(downscaleThreshold);
-  const debouncedDownscaleFactor = useDebounce(downscaleFactor);
-  const debouncedTryCode39ExtendedMode = useDebounce(tryCode39ExtendedMode);
-  const debouncedValidateCode39CheckSum = useDebounce(validateCode39CheckSum);
-  const debouncedValidateITFCheckSum = useDebounce(validateITFCheckSum);
-  const debouncedReturnCodabarStartEnd = useDebounce(returnCodabarStartEnd);
+  const DEBOUNCE_DELAY = 500;
+  const [debouncedWasmLocation] = useDebounce(wasmLocation, DEBOUNCE_DELAY);
+  const [debouncedFormats] = useDebounce(formats, DEBOUNCE_DELAY);
+  const [debouncedBinarizer] = useDebounce(binarizer, DEBOUNCE_DELAY);
+  const [debouncedCharacterSet] = useDebounce(characterSet, DEBOUNCE_DELAY);
+  const [debouncedMaxNumberOfSymbols] = useDebounce(
+    maxNumberOfSymbols,
+    DEBOUNCE_DELAY,
+  );
+  const [debouncedMinLineCount] = useDebounce(minLineCount, DEBOUNCE_DELAY);
+  const [debouncedEanAddOnSymbol] = useDebounce(eanAddOnSymbol, DEBOUNCE_DELAY);
+  const [debouncedTextMode] = useDebounce(textMode, DEBOUNCE_DELAY);
+  const [debouncedTryHarder] = useDebounce(tryHarder, DEBOUNCE_DELAY);
+  const [debouncedTryRotate] = useDebounce(tryRotate, DEBOUNCE_DELAY);
+  const [debouncedTryInvert] = useDebounce(tryInvert, DEBOUNCE_DELAY);
+  const [debouncedIsPure] = useDebounce(isPure, DEBOUNCE_DELAY);
+  const [debouncedReturnErrors] = useDebounce(returnErrors, DEBOUNCE_DELAY);
+  const [debouncedTryDownscale] = useDebounce(tryDownscale, DEBOUNCE_DELAY);
+  const [debouncedDownscaleThreshold] = useDebounce(
+    downscaleThreshold,
+    DEBOUNCE_DELAY,
+  );
+  const [debouncedDownscaleFactor] = useDebounce(
+    downscaleFactor,
+    DEBOUNCE_DELAY,
+  );
+  const [debouncedTryCode39ExtendedMode] = useDebounce(
+    tryCode39ExtendedMode,
+    DEBOUNCE_DELAY,
+  );
+  const [debouncedValidateCode39CheckSum] = useDebounce(
+    validateCode39CheckSum,
+    DEBOUNCE_DELAY,
+  );
+  const [debouncedValidateITFCheckSum] = useDebounce(
+    validateITFCheckSum,
+    DEBOUNCE_DELAY,
+  );
+  const [debouncedReturnCodabarStartEnd] = useDebounce(
+    returnCodabarStartEnd,
+    DEBOUNCE_DELAY,
+  );
   const detect = useMemo(() => {
     debouncedWasmLocation;
     return (image: Blob) =>
@@ -836,14 +860,14 @@ const App = () => {
             flexGrow={1}
           >
             <FlexGrid container spacing={2}>
-              <FlexGrid xs={12}>
+              <FlexGrid size={{ xs: 12 }}>
                 <BarcodeImagesDropZone
                   onBarcodeImagesDrop={(files) => {
                     setImages(files);
                   }}
                 />
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
                   <InputLabel id="wasm-location-label">{`WASM Location${
                     isFetchingZXingModule ? " (loading)" : ""
@@ -865,7 +889,7 @@ const App = () => {
                   </Select>
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
                   <InputLabel id="formats-label">Formats</InputLabel>
                   <Select
@@ -890,7 +914,7 @@ const App = () => {
                   </Select>
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
                   <InputLabel id="binarizer-label">Binarizer</InputLabel>
                   <Select
@@ -908,7 +932,7 @@ const App = () => {
                   </Select>
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
                   <InputLabel id="character-set-label">
                     Character Set
@@ -928,7 +952,7 @@ const App = () => {
                   </Select>
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
                   <InputLabel htmlFor="max-number-of-symbols">
                     Maximum Number of Symbols
@@ -949,7 +973,7 @@ const App = () => {
                   />
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl
                   sx={{ flexGrow: 1 }}
                   size="small"
@@ -991,7 +1015,7 @@ const App = () => {
                   />
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl
                   sx={{ flexGrow: 1 }}
                   size="small"
@@ -1030,7 +1054,7 @@ const App = () => {
                   </Select>
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6} sm={3}>
+              <FlexGrid size={{ xs: 12, mobile: 6, sm: 3 }}>
                 <FormControl sx={{ flexGrow: 1 }} size="small">
                   <InputLabel id="text-mode-label">Text Mode</InputLabel>
                   <Select
@@ -1048,7 +1072,7 @@ const App = () => {
                   </Select>
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={6} mobile={4} sm={3}>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
                   label="Try Harder"
                   control={
@@ -1060,7 +1084,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={6} mobile={4} sm={3}>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
                   label="Try Rotate"
                   control={
@@ -1072,7 +1096,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={6} mobile={4} sm={3}>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
                   label="Try Invert"
                   control={
@@ -1084,7 +1108,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={6} mobile={4} sm={3}>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
                   label="Is Pure"
                   control={
@@ -1096,7 +1120,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={6} mobile={4} sm={3}>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
                   label="Return Errors"
                   control={
@@ -1108,7 +1132,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={6} mobile={4} sm={3}>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
                   label="Try Downscale"
                   control={
@@ -1120,7 +1144,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={6} sm={3}>
+              <FlexGrid size={{ xs: 6, sm: 3 }}>
                 <FormControl
                   disabled={!tryDownscale}
                   sx={{ flexGrow: 1 }}
@@ -1147,7 +1171,7 @@ const App = () => {
                   />
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={6} sm={3}>
+              <FlexGrid size={{ xs: 6, sm: 3 }}>
                 <FormControl
                   disabled={!tryDownscale}
                   sx={{ flexGrow: 1 }}
@@ -1172,7 +1196,7 @@ const App = () => {
                   />
                 </FormControl>
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6}>
+              <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Try Code39 Extended Mode"
                   control={
@@ -1190,7 +1214,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6}>
+              <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Validate Code39 Checksum"
                   control={
@@ -1208,7 +1232,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6}>
+              <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Validate ITF Checksum"
                   control={
@@ -1226,7 +1250,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid xs={12} mobile={6}>
+              <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Return Codabar Start End"
                   control={
@@ -1246,7 +1270,7 @@ const App = () => {
               </FlexGrid>
             </FlexGrid>
             <FlexGrid
-              xs={12}
+              size={{ xs: 12 }}
               justifyContent="center"
               flexGrow={1}
               maxHeight={360}

@@ -18,7 +18,15 @@ import {
 import { yieldOrContinue } from "main-thread-scheduling";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { finite, integer, is, minValue, string, transform } from "valibot";
+import {
+  finite,
+  integer,
+  is,
+  minValue,
+  pipe,
+  string,
+  transform,
+} from "valibot";
 import type { ReadResult } from "zxing-wasm";
 
 interface BarcodeImageProps {
@@ -82,11 +90,13 @@ const uint8ArrayType = defineEasyType({
   },
 });
 
-const clickableSchema = transform(string(), (input) => parseInt(input, 10), [
+const clickableSchema = pipe(
+  string(),
+  transform((input) => Number.parseInt(input, 10)),
   integer(),
   finite(),
   minValue(1),
-]);
+);
 
 const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
   /**

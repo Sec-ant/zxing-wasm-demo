@@ -4,7 +4,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { type PluginOption, defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import { packages } from "./package-lock.json";
+import { version as zxingWasmVersion } from "./node_modules/zxing-wasm/package.json";
 
 function resolvePath(path: string) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -13,8 +13,6 @@ function resolvePath(path: string) {
 function escapeRegExp(str: string) {
   return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
-
-const zxingWasmVersion = packages["node_modules/zxing-wasm"].version;
 
 export default defineConfig({
   build: {

@@ -4,7 +4,7 @@
     "useDefineForClassFields": true,
     "module": "ESNext",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": ["wicg-file-system-access"],
+    "types": ["wicg-file-system-access", "emscripten"],
     "skipLibCheck": true,
     "moduleResolution": "Bundler",
     "resolveJsonModule": true,

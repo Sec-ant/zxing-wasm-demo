@@ -20,9 +20,6 @@
       },
       "style": {
         "noNonNullAssertion": "off"
-      },
-      "nursery": {
-        "useImportType": "error"
       }
     }
   },

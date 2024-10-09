@@ -16,20 +16,28 @@ jobs:
 
     steps:
       - name: Clone repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
 
       - name: Install Deno
-        uses: denoland/setup-deno@v1
+        uses: denoland/setup-deno@5e01c016a857a4dbb5afe9d0f9733cd472cba985 # v1.5.1
         with:
-          deno-version: v1.x
+          deno-version: vx.x.x
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Setup PNPM
+        uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@0a44ba7841725637a19e28fa30b79a866c81b0a6 # v4.0.4
         with:
-          node-version: latest
+          node-version-file: .node-version
+          cache: pnpm
+
+      - name: Install Dependencies
+        shell: bash
+        run: pnpm i
 
       - name: Build step
-        run: "npm ci && npm run build"
+        run: "pnpm -s build"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
