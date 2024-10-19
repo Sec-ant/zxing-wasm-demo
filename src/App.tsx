@@ -136,6 +136,10 @@ const useZXingWasmDemoStore = create<ZXingWasmDemoState>()(
   ),
 );
 
+useZXingWasmDemoStore.setState({
+  ...defaultZXingWasmDemoState,
+});
+
 const FlexGrid = styled(Grid)(() => ({
   display: "flex",
 }));
@@ -990,6 +994,7 @@ const App = () => {
                         "ITF",
                         "DataBar",
                         "DataBarExpanded",
+                        "DataBarLimited",
                         "UPC-A",
                         "UPC-E",
                         "Linear-Codes",
