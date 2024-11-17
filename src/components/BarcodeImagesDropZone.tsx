@@ -124,6 +124,18 @@ const BarcodeImagesDropZone = ({
     setFiles([]);
   }, []);
 
+  useEffect(() => {
+    function listener({ clipboardData }: ClipboardEvent) {
+      const files = clipboardData?.files;
+      if (!files) return;
+      setFiles([...files]);
+    }
+    window.addEventListener("paste", listener);
+    return () => {
+      window.removeEventListener("paste", listener);
+    };
+  }, []);
+
   return (
     <>
       {isMobile && (
