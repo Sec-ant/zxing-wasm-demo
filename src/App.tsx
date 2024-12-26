@@ -52,8 +52,8 @@ import {
   characterSets,
   defaultReaderOptions,
   eanAddOnSymbols,
-  getZXingModule,
-  readBarcodesFromImageFile,
+  prepareZXingModule,
+  readBarcodes,
   textModes,
 } from "zxing-wasm/reader";
 
@@ -263,9 +263,12 @@ const App = () => {
 
   useEffect(() => {
     setIsFetchingZXingModule(true);
-    getZXingModule({
-      locateFile: (path, prefix) =>
-        path.endsWith(".wasm") ? resolveWasmUrl(wasmLocation) : prefix + path,
+    prepareZXingModule({
+      overrides: {
+        locateFile: (path, prefix) =>
+          path.endsWith(".wasm") ? resolveWasmUrl(wasmLocation) : prefix + path,
+      },
+      fireImmediately: true,
     }).then(() => setIsFetchingZXingModule(false));
   }, [wasmLocation]);
 
@@ -278,10 +281,7 @@ const App = () => {
         pipe(
           array(picklist(barcodeFormats)),
           transform(
-            (formats) =>
-              [...new Set(formats)].filter(
-                (f) => f !== "None",
-              ) as ReadInputBarcodeFormat[],
+            (formats) => [...new Set(formats)] as ReadInputBarcodeFormat[],
           ),
         ),
         d,
@@ -497,6 +497,18 @@ const App = () => {
   }, []);
 
   /**
+   * Try Denoise
+   */
+  const { tryDenoise } = useZXingWasmDemoStore();
+  const handleTryDenoiseChange = useCallback<
+    Exclude<CheckboxProps["onChange"], undefined>
+  >((_, checked) => {
+    useZXingWasmDemoStore.setState({
+      tryDenoise: checked,
+    });
+  }, []);
+
+  /**
    * Is Pure
    */
   const { isPure } = useZXingWasmDemoStore();
@@ -628,42 +640,6 @@ const App = () => {
   }, []);
 
   /**
-   * Validate Code39 Checksum
-   */
-  const { validateCode39CheckSum } = useZXingWasmDemoStore();
-  const handleValidateCode39CheckSumChange = useCallback<
-    Exclude<CheckboxProps["onChange"], undefined>
-  >((_, checked) => {
-    useZXingWasmDemoStore.setState({
-      validateCode39CheckSum: checked,
-    });
-  }, []);
-
-  /**
-   * Validate ITF Checksum
-   */
-  const { validateITFCheckSum } = useZXingWasmDemoStore();
-  const handleValidateITFCheckSumChange = useCallback<
-    Exclude<CheckboxProps["onChange"], undefined>
-  >((_, checked) => {
-    useZXingWasmDemoStore.setState({
-      validateITFCheckSum: checked,
-    });
-  }, []);
-
-  /**
-   * Return Codabar Start End
-   */
-  const { returnCodabarStartEnd } = useZXingWasmDemoStore();
-  const handleReturnCodabarStartEndChange = useCallback<
-    Exclude<CheckboxProps["onChange"], undefined>
-  >((_, checked) => {
-    useZXingWasmDemoStore.setState({
-      returnCodabarStartEnd: checked,
-    });
-  }, []);
-
-  /**
    * Handle Wheel Horizontally
    */
   const handleWheel = useCallback((event: WheelEvent) => {
@@ -706,6 +682,7 @@ const App = () => {
   const [debouncedTryHarder] = useDebounce(tryHarder, DEBOUNCE_DELAY);
   const [debouncedTryRotate] = useDebounce(tryRotate, DEBOUNCE_DELAY);
   const [debouncedTryInvert] = useDebounce(tryInvert, DEBOUNCE_DELAY);
+  const [debouncedTryDenoise] = useDebounce(tryDenoise, DEBOUNCE_DELAY);
   const [debouncedIsPure] = useDebounce(isPure, DEBOUNCE_DELAY);
   const [debouncedReturnErrors] = useDebounce(returnErrors, DEBOUNCE_DELAY);
   const [debouncedTryDownscale] = useDebounce(tryDownscale, DEBOUNCE_DELAY);
@@ -721,22 +698,10 @@ const App = () => {
     tryCode39ExtendedMode,
     DEBOUNCE_DELAY,
   );
-  const [debouncedValidateCode39CheckSum] = useDebounce(
-    validateCode39CheckSum,
-    DEBOUNCE_DELAY,
-  );
-  const [debouncedValidateITFCheckSum] = useDebounce(
-    validateITFCheckSum,
-    DEBOUNCE_DELAY,
-  );
-  const [debouncedReturnCodabarStartEnd] = useDebounce(
-    returnCodabarStartEnd,
-    DEBOUNCE_DELAY,
-  );
   const detect = useMemo(() => {
     debouncedWasmLocation;
     return (image: Blob) =>
-      readBarcodesFromImageFile(image, {
+      readBarcodes(image, {
         formats: debouncedFormats,
         binarizer: debouncedBinarizer,
         characterSet: debouncedCharacterSet,
@@ -747,15 +712,16 @@ const App = () => {
         tryHarder: debouncedTryHarder,
         tryRotate: debouncedTryRotate,
         tryInvert: debouncedTryInvert,
+        tryDenoise: debouncedTryDenoise,
         isPure: debouncedIsPure,
         returnErrors: debouncedReturnErrors,
         tryDownscale: debouncedTryDownscale,
         downscaleThreshold: debouncedDownscaleThreshold,
         downscaleFactor: debouncedDownscaleFactor,
         tryCode39ExtendedMode: debouncedTryCode39ExtendedMode,
-        validateCode39CheckSum: debouncedValidateCode39CheckSum,
-        validateITFCheckSum: debouncedValidateITFCheckSum,
-        returnCodabarStartEnd: debouncedReturnCodabarStartEnd,
+        // validateCode39CheckSum: debouncedValidateCode39CheckSum,
+        // validateITFCheckSum: debouncedValidateITFCheckSum,
+        // returnCodabarStartEnd: debouncedReturnCodabarStartEnd,
       });
   }, [
     debouncedWasmLocation,
@@ -768,7 +734,7 @@ const App = () => {
     debouncedIsPure,
     debouncedMaxNumberOfSymbols,
     debouncedMinLineCount,
-    debouncedReturnCodabarStartEnd,
+    // debouncedReturnCodabarStartEnd,
     debouncedReturnErrors,
     debouncedTextMode,
     debouncedTryCode39ExtendedMode,
@@ -776,8 +742,9 @@ const App = () => {
     debouncedTryHarder,
     debouncedTryInvert,
     debouncedTryRotate,
-    debouncedValidateCode39CheckSum,
-    debouncedValidateITFCheckSum,
+    debouncedTryDenoise,
+    // debouncedValidateCode39CheckSum,
+    // debouncedValidateITFCheckSum,
   ]);
 
   return (
@@ -904,17 +871,11 @@ const App = () => {
                     value={formats}
                     onChange={handleFormatsChange}
                   >
-                    {barcodeFormats
-                      .filter((f) => f !== "None")
-                      .map((barcodeFormat) => (
-                        <MenuItem
-                          dense
-                          key={barcodeFormat}
-                          value={barcodeFormat}
-                        >
-                          {barcodeFormat}
-                        </MenuItem>
-                      ))}
+                    {barcodeFormats.map((barcodeFormat) => (
+                      <MenuItem dense key={barcodeFormat} value={barcodeFormat}>
+                        {barcodeFormat}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </FlexGrid>
@@ -1115,24 +1076,24 @@ const App = () => {
               </FlexGrid>
               <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
-                  label="Is Pure"
+                  label="Try Denoise"
                   control={
                     <StyledCheckbox
                       size="small"
-                      checked={isPure}
-                      onChange={handleIsPureChange}
+                      checked={tryDenoise}
+                      onChange={handleTryDenoiseChange}
                     />
                   }
                 />
               </FlexGrid>
               <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
                 <StyledFormControlLabel
-                  label="Return Errors"
+                  label="Is Pure"
                   control={
                     <StyledCheckbox
                       size="small"
-                      checked={returnErrors}
-                      onChange={handleReturnErrorsChange}
+                      checked={isPure}
+                      onChange={handleIsPureChange}
                     />
                   }
                 />
@@ -1201,6 +1162,18 @@ const App = () => {
                   />
                 </FormControl>
               </FlexGrid>
+              <FlexGrid size={{ xs: 6, mobile: 4, sm: 3 }}>
+                <StyledFormControlLabel
+                  label="Return Errors"
+                  control={
+                    <StyledCheckbox
+                      size="small"
+                      checked={returnErrors}
+                      onChange={handleReturnErrorsChange}
+                    />
+                  }
+                />
+              </FlexGrid>
               <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Try Code39 Extended Mode"
@@ -1219,7 +1192,7 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              <FlexGrid size={{ xs: 12, mobile: 6 }}>
+              {/* <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Validate Code39 Checksum"
                   control={
@@ -1236,8 +1209,8 @@ const App = () => {
                     )
                   }
                 />
-              </FlexGrid>
-              <FlexGrid size={{ xs: 12, mobile: 6 }}>
+              </FlexGrid> */}
+              {/* <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Validate ITF Checksum"
                   control={
@@ -1254,8 +1227,8 @@ const App = () => {
                     )
                   }
                 />
-              </FlexGrid>
-              <FlexGrid size={{ xs: 12, mobile: 6 }}>
+              </FlexGrid> */}
+              {/* <FlexGrid size={{ xs: 12, mobile: 6 }}>
                 <StyledFormControlLabel
                   label="Return Codabar Start End"
                   control={
@@ -1272,7 +1245,7 @@ const App = () => {
                     )
                   }
                 />
-              </FlexGrid>
+              </FlexGrid> */}
             </FlexGrid>
             <FlexGrid
               size={{ xs: 12 }}

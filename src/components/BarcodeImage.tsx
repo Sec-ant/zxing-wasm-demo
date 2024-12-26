@@ -100,7 +100,7 @@ const clickableSchema = pipe(
 
 const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
   /**
-   * Revoke Object URL on Unmount
+   * Don't ? revoke Object URL on Unmount
    */
   const [imageDimension, setImageDimension] = useState<imageDimension | null>(
     null,
@@ -120,7 +120,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
         imageElementRef.current = imageElement;
       } else if (imageElementRef.current) {
         setImageDimension(null);
-        URL.revokeObjectURL(imageElementRef.current.src);
+        // URL.revokeObjectURL(imageElementRef.current.src);
       }
     },
     [],

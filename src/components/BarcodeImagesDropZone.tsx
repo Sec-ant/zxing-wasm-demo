@@ -27,7 +27,7 @@ export interface BarcodeImagesDropZoneProps extends PaperProps {
 }
 
 const BarcodeImagesDropZone = ({
-  onBarcodeImagesDrop,
+  onBarcodeImagesDrop: handleBarcodeImagesDrop,
   ...paperProps
 }: BarcodeImagesDropZoneProps) => {
   const isMobile = useIsMobile();
@@ -40,8 +40,8 @@ const BarcodeImagesDropZone = ({
   );
 
   useEffect(() => {
-    onBarcodeImagesDrop?.(files);
-  }, [files, onBarcodeImagesDrop]);
+    handleBarcodeImagesDrop?.(files);
+  }, [files, handleBarcodeImagesDrop]);
 
   const handlePaperMounted = useCallback((node: HTMLDivElement | null) => {
     if (node === null) {
