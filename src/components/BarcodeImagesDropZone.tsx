@@ -20,6 +20,7 @@ const allowedImageExtensions = new Set([
   "bmp",
   "psd",
   "gif",
+  "webp",
 ]);
 
 export interface BarcodeImagesDropZoneProps extends PaperProps {
