@@ -719,9 +719,6 @@ const App = () => {
         downscaleThreshold: debouncedDownscaleThreshold,
         downscaleFactor: debouncedDownscaleFactor,
         tryCode39ExtendedMode: debouncedTryCode39ExtendedMode,
-        // validateCode39CheckSum: debouncedValidateCode39CheckSum,
-        // validateITFCheckSum: debouncedValidateITFCheckSum,
-        // returnCodabarStartEnd: debouncedReturnCodabarStartEnd,
       });
   }, [
     debouncedWasmLocation,
@@ -734,7 +731,6 @@ const App = () => {
     debouncedIsPure,
     debouncedMaxNumberOfSymbols,
     debouncedMinLineCount,
-    // debouncedReturnCodabarStartEnd,
     debouncedReturnErrors,
     debouncedTextMode,
     debouncedTryCode39ExtendedMode,
@@ -743,8 +739,6 @@ const App = () => {
     debouncedTryInvert,
     debouncedTryRotate,
     debouncedTryDenoise,
-    // debouncedValidateCode39CheckSum,
-    // debouncedValidateITFCheckSum,
   ]);
 
   return (
@@ -1192,60 +1186,6 @@ const App = () => {
                   }
                 />
               </FlexGrid>
-              {/* <FlexGrid size={{ xs: 12, mobile: 6 }}>
-                <StyledFormControlLabel
-                  label="Validate Code39 Checksum"
-                  control={
-                    <StyledCheckbox
-                      size="small"
-                      checked={validateCode39CheckSum}
-                      onChange={handleValidateCode39CheckSumChange}
-                    />
-                  }
-                  disabled={
-                    !(
-                      formats.length === 0 ||
-                      inFormats(formats, ["Code39", "Linear-Codes"])
-                    )
-                  }
-                />
-              </FlexGrid> */}
-              {/* <FlexGrid size={{ xs: 12, mobile: 6 }}>
-                <StyledFormControlLabel
-                  label="Validate ITF Checksum"
-                  control={
-                    <StyledCheckbox
-                      size="small"
-                      checked={validateITFCheckSum}
-                      onChange={handleValidateITFCheckSumChange}
-                    />
-                  }
-                  disabled={
-                    !(
-                      formats.length === 0 ||
-                      inFormats(formats, ["ITF", "Linear-Codes"])
-                    )
-                  }
-                />
-              </FlexGrid> */}
-              {/* <FlexGrid size={{ xs: 12, mobile: 6 }}>
-                <StyledFormControlLabel
-                  label="Return Codabar Start End"
-                  control={
-                    <StyledCheckbox
-                      size="small"
-                      checked={returnCodabarStartEnd}
-                      onChange={handleReturnCodabarStartEndChange}
-                    />
-                  }
-                  disabled={
-                    !(
-                      formats.length === 0 ||
-                      inFormats(formats, ["Codabar", "Linear-Codes"])
-                    )
-                  }
-                />
-              </FlexGrid> */}
             </FlexGrid>
             <FlexGrid
               size={{ xs: 12 }}
