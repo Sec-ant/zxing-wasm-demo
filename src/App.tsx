@@ -117,7 +117,7 @@ const useZXingWasmDemoStore = create<ZXingWasmDemoState>()(
   subscribeWithSelector(
     persist(() => ({ ...defaultZXingWasmDemoState }), {
       name: "zxing-wasm-demo",
-      version: 1,
+      version: 2,
       storage: createJSONStorage(() => localStorage),
       migrate: (persistedState: unknown, version) => {
         interface ZXingWasmDemoStateV0

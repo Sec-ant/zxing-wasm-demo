@@ -62,12 +62,12 @@
     "@types/react-dom": "^19.0.2",
     "@types/wicg-file-system-access": "^2023.10.5",
     "@vitejs/plugin-react": "^4.3.4",
-    "concurrently": "^9.1.0",
-    "lint-staged": "^15.2.11",
+    "concurrently": "^9.1.1",
+    "lint-staged": "^15.3.0",
     "npm-check-updates": "^17.1.12",
     "prettier": "^3.4.2",
     "prettier-plugin-embed": "^0.4.15",
-    "rollup-plugin-visualizer": "^5.12.0",
+    "rollup-plugin-visualizer": "^5.13.1",
     "simple-git-hooks": "^2.11.1",
     "typescript": "^5.7.2",
     "vite": "^6.0.6",
@@ -91,7 +91,7 @@
     "use-debounce": "^10.0.4",
     "valibot": "1.0.0-beta.9",
     "zustand": "^5.0.2",
-    "zxing-wasm": "2.0.0-beta.1"
+    "zxing-wasm": "2.0.0-beta.3"
   },
   "pnpm": {
     "overrides": {
@@ -99,5 +99,5 @@
       "react-dom": "$react-dom"
     }
   },
-  "packageManager": "pnpm@9.15.1+sha512.1acb565e6193efbebda772702950469150cf12bcc764262e7587e71d19dc98a423dff9536e57ea44c49bdf790ff694e83c27be5faa23d67e0c033b583be4bfcf"
+  "packageManager": "pnpm@9.15.2+sha512.93e57b0126f0df74ce6bff29680394c0ba54ec47246b9cf321f0121d8d9bb03f750a705f24edc3c1180853afd7c2c3b94196d0a3d53d3e069d9e2793ef11f321"
 }
