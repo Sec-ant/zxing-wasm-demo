@@ -4,7 +4,7 @@ import { visualizer } from "rollup-plugin-visualizer";
 import { type PluginOption, defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
-import { version as zxingWasmVersion } from "./node_modules/zxing-wasm/package.json";
+import { ZXING_WASM_VERSION } from "zxing-wasm/reader";
 
 function resolvePath(path: string) {
   return fileURLToPath(new URL(path, import.meta.url));
@@ -24,7 +24,7 @@ export default defineConfig({
       targets: [
         {
           src: resolvePath("./node_modules/zxing-wasm/dist/reader/*.wasm"),
-          dest: `./wasm/reader/${zxingWasmVersion}`,
+          dest: `./wasm/reader/${ZXING_WASM_VERSION}`,
         },
       ],
     }),
@@ -42,16 +42,16 @@ export default defineConfig({
             urlPattern: new RegExp(
               [
                 `^${escapeRegExp(
-                  `https://cdn.jsdelivr.net/npm/zxing-wasm@${zxingWasmVersion}`,
+                  `https://cdn.jsdelivr.net/npm/zxing-wasm@${ZXING_WASM_VERSION}`,
                 )}`,
                 `^${escapeRegExp(
-                  `https://fastly.jsdelivr.net/npm/zxing-wasm@${zxingWasmVersion}`,
+                  `https://fastly.jsdelivr.net/npm/zxing-wasm@${ZXING_WASM_VERSION}`,
                 )}`,
                 `^${escapeRegExp(
-                  `https://registry.npmmirror.com/zxing-wasm/${zxingWasmVersion}`,
+                  `https://registry.npmmirror.com/zxing-wasm/${ZXING_WASM_VERSION}`,
                 )}`,
                 `^${escapeRegExp(
-                  `https://unpkg.com/zxing-wasm@${zxingWasmVersion}`,
+                  `https://unpkg.com/zxing-wasm@${ZXING_WASM_VERSION}`,
                 )}`,
               ].join("|"),
               "i",
@@ -123,7 +123,4 @@ export default defineConfig({
       },
     }),
   ],
-  define: {
-    ZXING_WASM_VERSION: JSON.stringify(zxingWasmVersion),
-  },
 });

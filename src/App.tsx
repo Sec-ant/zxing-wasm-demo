@@ -47,6 +47,7 @@ import {
   type ReadInputBarcodeFormat,
   type ReaderOptions,
   type TextMode,
+  ZXING_WASM_VERSION,
   barcodeFormats,
   binarizers,
   characterSets,
