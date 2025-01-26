@@ -61,8 +61,8 @@ importers:
         specifier: ^5.0.2
         version: 5.0.2(@types/react@19.0.2)(react@19.0.0)(use-sync-external-store@1.2.2(react@19.0.0))
       zxing-wasm:
-        specifier: 2.0.0
-        version: 2.0.0(@types/emscripten@1.39.13)
+        specifier: 2.0.1
+        version: 2.0.1(@types/emscripten@1.39.13)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -2463,6 +2463,7 @@ packages:
   rollup-plugin-visualizer@5.13.1:
     resolution: {integrity: sha512-vMg8i6BprL8aFm9DKvL2c8AwS8324EgymYQo9o6E26wgVvwMhsJxS37aNL6ZsU7X9iAcMYwdME7gItLfG5fwJg==}
     engines: {node: '>=18'}
+    deprecated: Contains unintended breaking changes
     hasBin: true
     peerDependencies:
       rolldown: 1.x
@@ -2717,6 +2718,10 @@ packages:
 
   type-fest@4.31.0:
     resolution: {integrity: sha512-yCxltHW07Nkhv/1F6wWBr8kz+5BGMfP+RbRSYFnegVb0qV/UMT0G0ElBloPVerqn4M2ZV80Ir1FtCcYv1cT6vQ==}
+    engines: {node: '>=16'}
+
+  type-fest@4.33.0:
+    resolution: {integrity: sha512-s6zVrxuyKbbAsSAD5ZPTB77q4YIdRctkTbJ2/Dqlinwz+8ooH2gd+YA7VA6Pa93KML9GockVvoxjZ2vHP+mu8g==}
     engines: {node: '>=16'}
 
   typed-array-buffer@1.0.3:
@@ -3010,8 +3015,8 @@ packages:
       use-sync-external-store:
         optional: true
 
-  zxing-wasm@2.0.0:
-    resolution: {integrity: sha512-uZNz9CG7PUl93u1jlftDhTFx1OSJpNDV3vc5YiwASgI6MJZWQvKvPytw6q8MWY2G4PLy6tSg5+EmgunOBU+3Bw==}
+  zxing-wasm@2.0.1:
+    resolution: {integrity: sha512-C0xM9zqHnZ7Y2quc3aEutAl56qyLzryn72qDUyccsw/DlL8+VG2ZZWxslfy0cDEH0xDtFQwV1sOiC7H40WpGhQ==}
     peerDependencies:
       '@types/emscripten': '>=1.39.6'
 
@@ -5764,6 +5769,8 @@ snapshots:
 
   type-fest@4.31.0: {}
 
+  type-fest@4.33.0: {}
+
   typed-array-buffer@1.0.3:
     dependencies:
       call-bound: 1.0.3
@@ -6092,7 +6099,7 @@ snapshots:
       react: 19.0.0
       use-sync-external-store: 1.2.2(react@19.0.0)
 
-  zxing-wasm@2.0.0(@types/emscripten@1.39.13):
+  zxing-wasm@2.0.1(@types/emscripten@1.39.13):
     dependencies:
       '@types/emscripten': 1.39.13
-      type-fest: 4.31.0
+      type-fest: 4.33.0
