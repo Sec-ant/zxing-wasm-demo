@@ -55,8 +55,8 @@ importers:
         specifier: ^10.0.4
         version: 10.0.4(react@19.0.0)
       valibot:
-        specifier: 1.0.0-beta.10
-        version: 1.0.0-beta.10(typescript@5.7.2)
+        specifier: 1.0.0-rc.0
+        version: 1.0.0-rc.0(typescript@5.7.2)
       zustand:
         specifier: ^5.0.2
         version: 5.0.2(@types/react@19.0.2)(react@19.0.0)(use-sync-external-store@1.2.2(react@19.0.0))
@@ -2883,8 +2883,8 @@ packages:
     peerDependencies:
       react: ^19.0.0
 
-  valibot@1.0.0-beta.10:
-    resolution: {integrity: sha512-nmo3nxvXRrxwDYZznK3aTgYv7ZA/SUZJ/s+pLY4Tqsex/fgwZ9XrrQ14jjozjUaeduQ9PhXHE2Xx1uMb0HePYw==}
+  valibot@1.0.0-rc.0:
+    resolution: {integrity: sha512-9ZUrOXOejY/WaIn8p0Z469R1qBAwNJeqq8jzOIDsl1qR8gqtObHQmyHLFli0UCkcGiTco5kH6/KPLWsTWE9b2g==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -6073,7 +6073,7 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  valibot@1.0.0-beta.10(typescript@5.7.2):
+  valibot@1.0.0-rc.0(typescript@5.7.2):
     optionalDependencies:
       typescript: 5.7.2
 
