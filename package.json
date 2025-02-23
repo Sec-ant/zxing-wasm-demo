@@ -89,7 +89,7 @@
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^9.14.1",
     "use-debounce": "^10.0.4",
-    "valibot": "1.0.0-beta.10",
+    "valibot": "1.0.0-rc.1",
     "zustand": "^5.0.2",
     "zxing-wasm": "2.0.2"
   },
