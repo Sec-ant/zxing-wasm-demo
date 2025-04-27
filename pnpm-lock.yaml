@@ -95,8 +95,8 @@ importers:
         specifier: ^15.4.3
         version: 15.4.3
       npm-check-updates:
-        specifier: ^17.1.14
-        version: 17.1.14
+        specifier: ^18.0.0
+        version: 18.0.1
       prettier:
         specifier: ^3.5.2
         version: 3.5.2
@@ -2286,8 +2286,8 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  npm-check-updates@17.1.14:
-    resolution: {integrity: sha512-dr4bXIxETubLI1tFGeock5hN8yVjahvaVpx+lPO4/O2md3zJuxB7FgH3MIoTvQSCgsgkIRpe0skti01IEAA5tA==}
+  npm-check-updates@18.0.1:
+    resolution: {integrity: sha512-MO7mLp/8nm6kZNLLyPgz4gHmr9tLoU+pWPLdXuGAx+oZydBHkHWN0ibTonsrfwC2WEQNIQxuZagYwB67JQpAuw==}
     engines: {node: ^18.18.0 || >=20.0.0, npm: '>=8.12.1'}
     hasBin: true
 
@@ -5454,7 +5454,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  npm-check-updates@17.1.14: {}
+  npm-check-updates@18.0.1: {}
 
   npm-run-path@5.3.0:
     dependencies:
