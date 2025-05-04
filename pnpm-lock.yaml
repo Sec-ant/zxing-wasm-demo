@@ -61,8 +61,8 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.0.10)(react@19.0.0)(use-sync-external-store@1.2.2(react@19.0.0))
       zxing-wasm:
-        specifier: 2.1.0
-        version: 2.1.0(@types/emscripten@1.40.0)
+        specifier: 2.1.1
+        version: 2.1.1(@types/emscripten@1.40.0)
     devDependencies:
       '@biomejs/biome':
         specifier: 1.9.4
@@ -2831,6 +2831,10 @@ packages:
     resolution: {integrity: sha512-2/AwEFQDFEy30iOLjrvHDIH7e4HEWH+f1Yl1bI5XMqzuoCUqwYCdxachgsgv0og/JdVZUhbfjcJAoHj5L1753A==}
     engines: {node: '>=16'}
 
+  type-fest@4.40.1:
+    resolution: {integrity: sha512-9YvLNnORDpI+vghLU/Nf+zSv0kL47KbVJ1o3sKgoTefl6i+zebxbiDQWoe/oWWqPhIgQdRZRT1KA9sCPL810SA==}
+    engines: {node: '>=16'}
+
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
     engines: {node: '>= 0.4'}
@@ -3128,8 +3132,8 @@ packages:
       use-sync-external-store:
         optional: true
 
-  zxing-wasm@2.1.0:
-    resolution: {integrity: sha512-CvuwDZHRHwg6PeCARaCDIp3dauD4cin0mbHrQQZtMDrr5mblPzCimAjdw/XMhD/Au10q/f5+SAupvYqYvUOg1Q==}
+  zxing-wasm@2.1.1:
+    resolution: {integrity: sha512-bVginoJO28p4jRC9T1mFXF3hi0ZlZfF1Y2QHCFFxMczdlgFDBk+pwWJKwWMSNH0qpoOxLNxEDCcrt6gtLBS5PQ==}
     peerDependencies:
       '@types/emscripten': '>=1.39.6'
 
@@ -6038,6 +6042,8 @@ snapshots:
 
   type-fest@4.35.0: {}
 
+  type-fest@4.40.1: {}
+
   typed-array-buffer@1.0.3:
     dependencies:
       call-bound: 1.0.4
@@ -6373,7 +6379,7 @@ snapshots:
       react: 19.0.0
       use-sync-external-store: 1.2.2(react@19.0.0)
 
-  zxing-wasm@2.1.0(@types/emscripten@1.40.0):
+  zxing-wasm@2.1.1(@types/emscripten@1.40.0):
     dependencies:
       '@types/emscripten': 1.40.0
-      type-fest: 4.35.0
+      type-fest: 4.40.1
