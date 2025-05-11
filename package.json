@@ -63,7 +63,7 @@
     "@types/wicg-file-system-access": "^2023.10.6",
     "@vitejs/plugin-react": "^4.4.1",
     "concurrently": "^9.1.2",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^16.0.0",
     "npm-check-updates": "^18.0.1",
     "prettier": "^3.5.3",
     "prettier-plugin-embed": "^0.5.0",
