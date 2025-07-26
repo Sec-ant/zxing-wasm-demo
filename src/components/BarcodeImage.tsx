@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import {
   type DataItemProps,
-  JsonViewer,
   defineEasyType,
+  JsonViewer,
 } from "@textea/json-viewer";
 import { yieldOrContinue } from "main-thread-scheduling";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
@@ -141,7 +141,7 @@ const BarcodeImage = memo(({ src, detect }: BarcodeImageProps) => {
     color: "primary",
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intended
   useEffect(() => {
     setBadgeInfo({
       content: "?",

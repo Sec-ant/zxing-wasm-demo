@@ -5,6 +5,7 @@ import {
   type CheckboxProps,
   Container,
   CssBaseline,
+  createTheme,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -15,12 +16,11 @@ import {
   MenuItem,
   Select,
   type SelectProps,
+  styled,
   ThemeProvider,
   Toolbar,
   Tooltip,
   Typography,
-  createTheme,
-  styled,
   useMediaQuery,
 } from "@mui/material";
 import Grid from "@mui/material/Grid";
@@ -34,30 +34,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { create } from "zustand";
-import {
-  createJSONStorage,
-  persist,
-  subscribeWithSelector,
-} from "zustand/middleware";
-import {
-  type Binarizer,
-  type CharacterSet,
-  type EanAddOnSymbol,
-  type ReadInputBarcodeFormat,
-  type ReaderOptions,
-  type TextMode,
-  ZXING_WASM_VERSION,
-  barcodeFormats,
-  binarizers,
-  characterSets,
-  defaultReaderOptions,
-  eanAddOnSymbols,
-  prepareZXingModule,
-  readBarcodes,
-  textModes,
-} from "zxing-wasm/reader";
-
 import { useDebounce } from "use-debounce";
 import {
   array,
@@ -72,6 +48,29 @@ import {
   string,
   transform,
 } from "valibot";
+import { create } from "zustand";
+import {
+  createJSONStorage,
+  persist,
+  subscribeWithSelector,
+} from "zustand/middleware";
+import {
+  type Binarizer,
+  barcodeFormats,
+  binarizers,
+  type CharacterSet,
+  characterSets,
+  defaultReaderOptions,
+  type EanAddOnSymbol,
+  eanAddOnSymbols,
+  prepareZXingModule,
+  type ReaderOptions,
+  type ReadInputBarcodeFormat,
+  readBarcodes,
+  type TextMode,
+  textModes,
+  ZXING_WASM_VERSION,
+} from "zxing-wasm/reader";
 import { resolveCDNUrl, supportedCDNs } from "./cdn";
 import BarcodeImage from "./components/BarcodeImage";
 import BarcodeImagesDropZone from "./components/BarcodeImagesDropZone";

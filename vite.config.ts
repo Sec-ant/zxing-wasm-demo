@@ -1,7 +1,7 @@
 import { fileURLToPath } from "node:url";
 import react from "@vitejs/plugin-react";
 import { visualizer } from "rollup-plugin-visualizer";
-import { type PluginOption, defineConfig } from "vite";
+import { defineConfig, type PluginOption } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { ZXING_WASM_VERSION } from "zxing-wasm/reader";
