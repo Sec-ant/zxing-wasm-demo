@@ -67,7 +67,7 @@
     "npm-check-updates": "^18.0.1",
     "prettier": "^3.5.3",
     "prettier-plugin-embed": "^0.5.0",
-    "rollup-plugin-visualizer": "^5.14.0",
+    "rollup-plugin-visualizer": "^6.0.0",
     "simple-git-hooks": "^2.13.0",
     "typescript": "^5.8.3",
     "vite": "^7.0.0",
