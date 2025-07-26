@@ -70,7 +70,7 @@
     "rollup-plugin-visualizer": "^5.14.0",
     "simple-git-hooks": "^2.13.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.0.0",
     "vite-plugin-pwa": "^1.0.0",
     "vite-plugin-static-copy": "^2.3.1"
   },
