@@ -95,8 +95,8 @@ importers:
         specifier: ^16.1.2
         version: 16.1.2
       npm-check-updates:
-        specifier: ^18.0.2
-        version: 18.0.2
+        specifier: ^19.0.0
+        version: 19.1.2
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -2197,9 +2197,9 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  npm-check-updates@18.0.2:
-    resolution: {integrity: sha512-9uVFZUCg5oDOcbzdsrJ4BEvq2gikd23tXuF5mqpl4mxVl051lzB00Xmd7ZVjVWY3XNUF3BQKWlN/qmyD8/bwrA==}
-    engines: {node: ^18.18.0 || >=20.0.0, npm: '>=8.12.1'}
+  npm-check-updates@19.1.2:
+    resolution: {integrity: sha512-FNeFCVgPOj0fz89hOpGtxP2rnnRHR7hD2E8qNU8SMWfkyDZXA/xpgjsL3UMLSo3F/K13QvJDnbxPngulNDDo/g==}
+    engines: {node: '>=20.0.0', npm: '>=8.12.1'}
     hasBin: true
 
   object-assign@4.1.1:
@@ -5201,7 +5201,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  npm-check-updates@18.0.2: {}
+  npm-check-updates@19.1.2: {}
 
   object-assign@4.1.1: {}
 
