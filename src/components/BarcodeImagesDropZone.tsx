@@ -470,7 +470,7 @@ const isFileSysmtemAccessSupported = (() => {
         // but fail on cross-origin iframes.
         // This is longer than necessary, as else the minifier removes it.
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+        // @ts-expect-error
         top!.window.document._ = 0;
       } catch {
         return false;
