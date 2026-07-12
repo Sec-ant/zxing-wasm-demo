@@ -231,7 +231,7 @@ function DemoApp() {
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="/docs/"
+            href="https://sec-ant.github.io/zxing-wasm/docs/"
             className="flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-(--muted) outline-none transition hover:bg-(--paper-deep) hover:text-(--ink) focus-visible:ring-2 focus-visible:ring-(--signal)"
           >
             <IconBookOpen aria-hidden="true" className="size-3.5" />
