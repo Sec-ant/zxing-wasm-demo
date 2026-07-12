@@ -1,23 +1,37 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignoreUnknown": true
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!**/zxing-cpp",
+      "!**/__snapshots__",
+      "!**/.changeset/pre.json"
+    ]
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "formatter": {
-    "enabled": true,
     "indentStyle": "space"
   },
   "linter": {
-    "enabled": true,
     "rules": {
       "recommended": true,
       "suspicious": {
         "noAssignInExpressions": "off",
-        "noEmptyInterface": "off"
+        "noEmptyInterface": "off",
+        "noSparseArray": "off"
       },
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "noUnusedTemplateLiteral": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "error"
       }
     }
   },
@@ -27,7 +41,50 @@
     "useIgnoreFile": true,
     "defaultBranch": "main"
   },
+  "json": {
+    "parser": {
+      "allowTrailingCommas": true
+    },
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
   "overrides": [
+    {
+      "includes": [
+        "**/share.ts",
+        "**/full/index.ts",
+        "**/reader/index.ts",
+        "**/writer/index.ts"
+      ],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConfusingVoidType": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/tests/**/*.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noDelete": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/imageData.d.ts"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noBannedTypes": "off"
+          }
+        }
+      }
+    },
     {
       "includes": ["**/package.json"],
       "json": {

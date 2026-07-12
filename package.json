@@ -1,18 +1,9 @@
 {
   "name": "zxing-wasm-demo",
-  "description": "zxing-wasm demo",
-  "private": false,
+  "description": "A browser workbench for testing zxing-wasm barcode decoding.",
+  "private": true,
   "version": "0.1.0",
   "type": "module",
-  "files": [
-    "./dist"
-  ],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Sec-ant/zxing-wasm-demo.git"
@@ -25,22 +16,19 @@
   "keywords": [
     "zxing-wasm",
     "zxing-wasm-demo",
-    "react"
+    "react",
+    "barcode",
+    "qrcode"
   ],
   "author": {
     "name": "Ze-Zheng Wu"
   },
   "license": "MIT",
-  "config": {},
-  "publishConfig": {
-    "provenance": true,
-    "access": "public"
-  },
   "scripts": {
     "update-hooks": "simple-git-hooks",
     "dev": "vite",
     "lint": "biome lint .",
-    "type-check": "tsc --noEmit --emitDeclarationOnly false",
+    "type-check": "tsc --noEmit",
     "format:prettier": "prettier . --write",
     "format:biome": "biome format . --write",
     "format": "conc \"npm:format:prettier\" \"npm:format:biome\"",
@@ -49,59 +37,32 @@
     "prebuild": "pnpm -s check && pnpm -s type-check",
     "build": "vite build",
     "preview": "vite preview",
-    "prepublishOnly": "pnpm -s build",
     "bump-biome:latest": "pnpm add -DE @biomejs/biome@latest",
     "bump-biome:nightly": "pnpm add -DE @biomejs/biome@nightly"
   },
-  "devDependencies": {
-    "@biomejs/biome": "2.3.4",
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
-    "@types/node": "^24.10.0",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@types/wicg-file-system-access": "^2023.10.7",
-    "@vitejs/plugin-react": "^5.1.0",
-    "concurrently": "^9.2.1",
-    "lint-staged": "^16.2.6",
-    "npm-check-updates": "^19.1.2",
-    "prettier": "^3.6.2",
-    "prettier-plugin-embed": "^0.5.0",
-    "rollup-plugin-visualizer": "^6.0.5",
-    "simple-git-hooks": "^2.13.1",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.2",
-    "vite-plugin-pwa": "^1.1.0",
-    "vite-plugin-static-copy": "^3.1.4"
-  },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.5",
-    "@mui/material": "^7.3.5",
-    "@mui/system": "^7.3.5",
-    "@textea/json-viewer": "^4.0.1",
-    "@types/emscripten": "^1.41.5",
-    "case-anything": "^3.1.2",
-    "is-mobile": "^5.0.0",
-    "main-thread-scheduling": "^14.3.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-intersection-observer": "^10.0.0",
-    "use-debounce": "^10.0.6",
-    "valibot": "1.1.0",
-    "zustand": "^5.0.8",
-    "zxing-wasm": "2.2.3"
+    "@base-ui/react": "^1.6.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "react-json-view-lite": "^2.5.0",
+    "zxing-wasm": "^3.1.0"
   },
-  "pnpm": {
-    "overrides": {
-      "react": "$react",
-      "react-dom": "$react-dom"
-    },
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "simple-git-hooks"
-    ]
+  "devDependencies": {
+    "@biomejs/biome": "2.5.0",
+    "@iconify-json/lucide": "^1.2.116",
+    "@svgr/core": "^8.1.0",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "concurrently": "^10.0.3",
+    "lint-staged": "^17.0.7",
+    "prettier": "^3.8.3",
+    "simple-git-hooks": "^2.13.1",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^6.0.3",
+    "unplugin-icons": "^23.0.1",
+    "vite": "^8.1.4"
   },
-  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
+  "packageManager": "pnpm@11.8.0+sha512.c1f5e7c4cb241c8f174b743851d82f42b802324afc8b0f116b96adb15aa06664948dde36960a3ba1079ba5b4b29dd0140135b94b5b5f5263592249d68e555f26"
 }
