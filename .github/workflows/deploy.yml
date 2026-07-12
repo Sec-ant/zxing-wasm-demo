@@ -27,12 +27,7 @@ jobs:
         with:
           node-version-file: .node-version
           cache: pnpm
-
-      - name: Enable corepack
-        run: corepack enable
-
-      - name: Prepare pnpm
-        run: corepack prepare --activate
+          corepack: true
 
       - name: Install Dependencies
         run: pnpm i
