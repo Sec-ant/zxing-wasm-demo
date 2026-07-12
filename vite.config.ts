@@ -3,6 +3,6 @@ import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: "/demo/",
+  base: "/zxing-wasm-demo/",
   plugins: [tailwindcss(), Icons({ compiler: "jsx", jsx: "react" })],
 });
