@@ -1,0 +1,4 @@
+allowBuilds:
+  simple-git-hooks: true
+minimumReleaseAgeExclude:
+  - zxing-wasm@3.1.1
