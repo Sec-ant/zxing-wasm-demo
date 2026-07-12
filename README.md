@@ -1,19 +1,33 @@
 # zxing-wasm-demo
 
-## TODO
+[![deploy status](https://github.com/Sec-ant/zxing-wasm-demo/actions/workflows/deploy.yml/badge.svg)](https://github.com/Sec-ant/zxing-wasm-demo/actions/workflows/deploy.yml) [![zxing-wasm version](https://img.shields.io/npm/v/zxing-wasm?label=zxing-wasm)](https://www.npmjs.com/package/zxing-wasm)
 
-- [x] Fix directory DnD in FireFox
-- [x] Add clear files button
-- [ ] Add text file / url string DnD support
-- [ ] Add light / dark / auto theme switch
-- [x] Load `.wasm` file eagerly and add visual feedback
-- [ ] Add detection time in the result
-- [ ] ~~dd acknowledgement in footer~~
-- [ ] Auto deployment on `zxing-wasm` build
-- [x] Display `zxing-wasm` version / commit somewhere
-- [ ] ~~Add sample files / history in the side bar?~~
-- [x] Reduce bundle size / split chunks
-- [x] Prevent page scrolling when changing numeric values
-- [x] Prevent page scrolling when browsing images
-- [x] Numeric fields value fallback on losing focus instead of typing
-- [ ] Validate file types by magic number instead of extension
+A browser workbench for testing [zxing-wasm](https://github.com/Sec-ant/zxing-wasm) barcode decoding.
+
+**[Launch Demo →](https://sec-ant.github.io/zxing-wasm-demo/)**
+
+## Features
+
+- **Drag & drop** images, folders, or paste from clipboard
+- **Remote image URL** support
+- Full control over all [reader options](https://github.com/Sec-ant/zxing-wasm?tab=readme-ov-file#readeroptions): formats, binarizers, text modes, character sets, EAN add-ons, and more
+- **Batch scanning** with detailed results per file
+- Copy results to clipboard in one click
+- Light / dark / auto theme
+
+## Development
+
+```bash
+pnpm i
+pnpm dev
+```
+
+## Build
+
+```bash
+pnpm build
+```
+
+## License
+
+MIT
