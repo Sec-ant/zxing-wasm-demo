@@ -157,48 +157,100 @@ const formatOptions = [...BARCODE_FORMATS] as FormatValue[];
 
 function FormatValueDisplay({ selected }: { selected: FormatValue[] }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const [isOverflowing, setIsOverflowing] = useState(false);
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [visibleCount, setVisibleCount] = useState(selected.length);
   const tooltipText = selected.join(", ");
 
   useLayoutEffect(() => {
-    const element = ref.current;
-    if (!element) {
+    const container = ref.current;
+    const measure = measureRef.current;
+    if (!container || !measure) {
       return;
     }
+
     const update = () => {
-      setIsOverflowing(
-        selected.length > 2 || element.scrollWidth > element.clientWidth,
+      const formatWidths = Array.from(
+        measure.querySelectorAll<HTMLElement>("[data-format-value]"),
+        (element) => element.getBoundingClientRect().width,
       );
+      const gap = 4;
+      let nextVisibleCount = 0;
+
+      for (let count = 0; count <= selected.length; count += 1) {
+        const remaining = selected.length - count;
+        const summary = measure.querySelector<HTMLElement>(
+          `[data-overflow-count="${remaining}"]`,
+        );
+        const widths = formatWidths.slice(0, count);
+        if (remaining > 0 && summary) {
+          widths.push(summary.getBoundingClientRect().width);
+        }
+        const width = widths.reduce((total, item) => total + item, 0);
+        if (
+          width + Math.max(0, widths.length - 1) * gap <=
+          container.clientWidth
+        ) {
+          nextVisibleCount = count;
+        }
+      }
+
+      setVisibleCount(nextVisibleCount);
     };
+
     update();
     const animationFrame = requestAnimationFrame(update);
     const observer = new ResizeObserver(update);
-    observer.observe(element);
+    observer.observe(container);
     return () => {
       cancelAnimationFrame(animationFrame);
       observer.disconnect();
     };
-  });
+  }, [selected]);
+
+  const remaining = selected.length - visibleCount;
+  const overflowCounts = Array.from(
+    { length: selected.length + 1 },
+    (_, index) => selected.length - index,
+  );
+  const renderFormat = (format: FormatValue, measureOnly = false) => (
+    <span
+      className="shrink-0 rounded bg-(--paper-deep) px-1.5 py-0.5 font-(family-name:--mono) text-[10px] text-(--ink)"
+      data-format-value={measureOnly ? "" : undefined}
+      key={format}
+    >
+      {format}
+    </span>
+  );
 
   return (
-    <OptionTooltip description={tooltipText} disabled={!isOverflowing}>
-      <span
-        className="flex min-w-0 flex-1 items-center gap-1 overflow-hidden"
-        ref={ref}
-      >
-        {selected.slice(0, 2).map((format) => (
-          <span
-            className="min-w-0 truncate rounded bg-(--paper-deep) px-1.5 py-0.5 font-(family-name:--mono) text-[10px] text-(--ink)"
-            key={format}
-          >
-            {format}
-          </span>
-        ))}
-        {selected.length > 2 ? (
-          <span className="shrink-0 text-xs text-(--muted)">
-            +{selected.length - 2}
-          </span>
-        ) : null}
+    <OptionTooltip description={tooltipText} disabled={remaining === 0}>
+      <span className="relative flex min-w-0 flex-1 items-center" ref={ref}>
+        <span className="flex min-w-0 items-center gap-1 overflow-hidden">
+          {selected
+            .slice(0, visibleCount)
+            .map((format) => renderFormat(format))}
+          {remaining > 0 ? (
+            <span className="shrink-0 text-xs text-(--muted)">
+              +{remaining}
+            </span>
+          ) : null}
+        </span>
+        <span
+          aria-hidden="true"
+          className="pointer-events-none invisible absolute flex items-center gap-1 whitespace-nowrap"
+          ref={measureRef}
+        >
+          {selected.map((format) => renderFormat(format, true))}
+          {overflowCounts.map((count) => (
+            <span
+              className="shrink-0 text-xs text-(--muted)"
+              data-overflow-count={count}
+              key={count}
+            >
+              +{count}
+            </span>
+          ))}
+        </span>
       </span>
     </OptionTooltip>
   );
