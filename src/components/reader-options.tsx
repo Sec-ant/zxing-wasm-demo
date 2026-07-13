@@ -244,7 +244,7 @@ function FormatPicker({
       <Combobox.Portal>
         <Combobox.Positioner
           align="start"
-          className="w-(--anchor-width)"
+          className="z-50 w-(--anchor-width)"
           sideOffset={6}
         >
           <Combobox.Popup
