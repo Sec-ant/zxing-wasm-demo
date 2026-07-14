@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <title>ZXing WASM Reader</title>
+  <rect width="512" height="512" rx="96" fill="#24837b"/>
+  <path fill="#fffcf0" d="M96 128h64v256H96zm96 0h32v256h-32zm64 0h96v64h-96zm0 96h64v64h-64zm0 96h96v64h-96zm128-192h32v256h-32z"/>
+</svg>

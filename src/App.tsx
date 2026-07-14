@@ -95,7 +95,29 @@ function DemoApp() {
     } else {
       document.documentElement.dataset.theme = themeMode;
     }
+
+    const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
+    const updateThemeColor = () => {
+      const resolvedTheme =
+        themeMode === "system"
+          ? colorScheme.matches
+            ? "dark"
+            : "light"
+          : themeMode;
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute(
+          "content",
+          resolvedTheme === "dark" ? "#3f8c86" : "#24837b",
+        );
+    };
+
+    updateThemeColor();
     localStorage.setItem("zxing-wasm-demo-theme", themeMode);
+    if (themeMode === "system") {
+      colorScheme.addEventListener("change", updateThemeColor);
+      return () => colorScheme.removeEventListener("change", updateThemeColor);
+    }
   }, [themeMode]);
 
   const updateItem = useCallback((id: string, patch: Partial<QueueItem>) => {

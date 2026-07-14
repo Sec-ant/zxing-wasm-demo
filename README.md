@@ -14,6 +14,7 @@ A browser workbench for testing [zxing-wasm](https://github.com/Sec-ant/zxing-wa
 - **Batch scanning** with detailed results per file
 - Copy results to clipboard in one click
 - Light / dark / auto theme
+- Installable PWA with offline support after the first visit
 
 ## Development
 
