@@ -50,6 +50,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.5.3",
     "@iconify-json/lucide": "^1.2.116",
+    "@iconify-json/material-symbols": "^1.2.84",
     "@svgr/core": "^8.1.0",
     "@svgr/plugin-jsx": "^8.1.0",
     "@tailwindcss/vite": "^4.3.2",
