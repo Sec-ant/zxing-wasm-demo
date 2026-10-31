@@ -14,7 +14,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
-      includeAssets: ["favicon.svg"],
+      includeAssets: ["favicon.4bf52930.svg"],
       workbox: {
         globPatterns: ["**/*.{js,css,html,wasm,woff2,png,webp,svg,ico}"],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
@@ -31,18 +31,18 @@ export default defineConfig({
         scope: "/zxing-wasm-demo/",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "pwa-192x192.f59212e0.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "pwa-512x512.png",
+            src: "pwa-512x512.1d6de93d.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any",
           },
           {
-            src: "pwa-maskable-512x512.png",
+            src: "pwa-maskable-512x512.1f848d20.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "maskable",
