@@ -61,35 +61,45 @@ async function filesFromEntry(entry: LegacyFileEntry): Promise<File[]> {
   return [];
 }
 
-export async function filesFromTransfer(data: DataTransfer): Promise<File[]> {
-  const itemFiles = [...data.items]
-    .map((item) => item.getAsFile?.())
-    .filter((file): file is File => file !== null);
-  if (itemFiles.length > 0) {
-    return itemFiles;
-  }
+export function isImageFile(file: File): boolean {
+  return (
+    file.type.startsWith("image/") ||
+    /\.(png|jpe?g|gif|webp|bmp|pgm|svg|avif)$/i.test(file.name)
+  );
+}
 
-  const entries = [...data.items]
-    .map((item) => (item as EntryDataTransferItem).webkitGetAsEntry?.())
-    .filter(
-      (entry): entry is FileSystemEntry =>
-        entry !== null && entry !== undefined,
-    )
-    .map((entry) => entry as LegacyFileEntry);
-  return entries.length > 0
-    ? (await Promise.all(entries.map(filesFromEntry))).flat()
-    : [...data.files];
+export async function filesFromTransfer(data: DataTransfer): Promise<File[]> {
+  // Capture every item before yielding: drag data is readable only during drop/paste.
+  // Inspect entries per item so an ordinary file cannot hide a sibling directory.
+  const roots = [...data.items].flatMap((item) => {
+    if (item.kind !== "file") return [];
+    const entry = (item as EntryDataTransferItem).webkitGetAsEntry?.();
+    if (entry?.isDirectory) return [filesFromEntry(entry as LegacyFileEntry)];
+    const file = item.getAsFile?.();
+    if (file) return [Promise.resolve([file])];
+    return entry ? [filesFromEntry(entry as LegacyFileEntry)] : [];
+  });
+  const fallback = [...data.files];
+  if (!roots.length) return fallback;
+  const results = await Promise.allSettled(roots);
+  const files = results.flatMap((result) =>
+    result.status === "fulfilled" ? result.value : [],
+  );
+  if (!files.length) {
+    const failure = results.find((result) => result.status === "rejected");
+    if (failure?.status === "rejected") throw failure.reason;
+  }
+  return files;
 }
 
 function supportedImageUrl(
   value: string | null | undefined,
+  base = window.location.href,
 ): string | undefined {
-  if (!value) {
-    return undefined;
-  }
+  if (!value?.trim()) return undefined;
   try {
-    const url = new URL(value.trim(), window.location.href);
-    return ["data:", "http:", "https:"].includes(url.protocol)
+    const url = new URL(value.trim(), base);
+    return ["data:", "blob:", "http:", "https:"].includes(url.protocol)
       ? url.href
       : undefined;
   } catch {
@@ -101,47 +111,92 @@ function urlsFromUriList(value: string): string[] {
   return value
     .split(/\r?\n/)
     .map((line) => line.trim())
-    .filter((line) => line.length > 0 && !line.startsWith("#"));
+    .filter((line) => /^(https?:|blob:|data:image\/)/i.test(line));
 }
 
-function imageUrlsFromHtml(value: string): string[] {
-  const document = new DOMParser().parseFromString(value, "text/html");
-  return [...document.querySelectorAll("img")].flatMap((image) =>
-    ["src", "data-src", "data-original", "data-lazy-src"]
-      .map((attribute) => image.getAttribute(attribute))
-      .filter((url): url is string => Boolean(url)),
-  );
-}
-
-function nestedImageUrls(value: string): string[] {
-  const url = supportedImageUrl(value);
-  if (!url) {
-    return [];
+function srcsetUrls(value: string): string[] {
+  const urls: string[] = [];
+  let rest = value.trim();
+  while (rest) {
+    rest = rest.replace(/^[\s,]+/, "");
+    const match = /^\S+/.exec(rest);
+    if (!match) break;
+    const token = match[0];
+    urls.push(token.replace(/,+$/, ""));
+    rest = rest.slice(token.length);
+    if (!token.endsWith(",")) {
+      const comma = rest.indexOf(",");
+      rest = comma < 0 ? "" : rest.slice(comma + 1);
+    }
   }
-
-  const parsed = new URL(url);
-  const nestedUrls = ["imgurl", "mediaurl", "image_url", "image", "src"]
-    .map((parameter) => supportedImageUrl(parsed.searchParams.get(parameter)))
-    .filter((candidate): candidate is string => candidate !== undefined);
-
-  return [...nestedUrls, url];
+  return urls;
 }
 
-/**
- * Browsers normally expose a dragged webpage image as a URL, rather than as a
- * File. This is intentionally separate from filesFromTransfer: fetching the
- * URL must still obey the image host's CORS policy.
- */
-export function imageUrlsFromTransfer(data: DataTransfer): string[] {
-  const candidates = [
-    ...imageUrlsFromHtml(data.getData("text/html")),
-    ...urlsFromUriList(data.getData("text/x-moz-url-data")),
-    ...urlsFromUriList(data.getData("text/x-moz-url")),
-    ...urlsFromUriList(data.getData("text/uri-list")),
-    ...urlsFromUriList(data.getData("text/plain")),
-  ].flatMap(nestedImageUrls);
+function nestedImageUrls(value: string, base?: string): string[] {
+  const url = supportedImageUrl(value, base);
+  if (!url) return [];
+  const parsed = new URL(url);
+  const nested = ["imgurl", "mediaurl", "image_url", "image", "src"]
+    .map((parameter) => parsed.searchParams.get(parameter))
+    .flatMap((candidate) =>
+      candidate ? [supportedImageUrl(candidate, url)] : [],
+    )
+    .filter((candidate): candidate is string => candidate !== undefined);
+  return [...nested, url];
+}
 
-  return [...new Set(candidates)];
+/** One group per image, with alternate representations as fallbacks. Read synchronously. */
+export function imageUrlGroupsFromTransfer(data: DataTransfer): string[][] {
+  const html = new DOMParser().parseFromString(
+    data.getData("text/html"),
+    "text/html",
+  );
+  const base =
+    supportedImageUrl(html.querySelector("base[href]")?.getAttribute("href")) ??
+    window.location.href;
+  const urls = [
+    ...new Set([
+      ...urlsFromUriList(data.getData("text/x-moz-url-data")),
+      ...urlsFromUriList(data.getData("text/x-moz-url")),
+      ...urlsFromUriList(data.getData("text/uri-list")),
+      ...urlsFromUriList(data.getData("text/plain")),
+    ]),
+  ];
+  const groups = [...html.querySelectorAll("img")].map((image) =>
+    [
+      ...["data-original", "data-src", "data-lazy-src"].flatMap(
+        (attribute) => image.getAttribute(attribute) ?? [],
+      ),
+      ...srcsetUrls(
+        image.getAttribute("data-srcset") ?? image.getAttribute("srcset") ?? "",
+      ),
+      ...[
+        ...(image.closest("picture")?.querySelectorAll("source[srcset]") ?? []),
+      ].flatMap((source) => srcsetUrls(source.getAttribute("srcset") ?? "")),
+      image.getAttribute("src") ?? "",
+    ].flatMap((value) => nestedImageUrls(value, base)),
+  );
+  for (const svg of html.querySelectorAll("svg")) {
+    if (!svg.parentElement?.closest("svg"))
+      groups.push([
+        `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg.outerHTML)}`,
+      ]);
+  }
+  if (!groups.length) groups.push(...urls.map((url) => nestedImageUrls(url)));
+  else if (groups.length === 1)
+    groups[0].push(...urls.flatMap((url) => nestedImageUrls(url)));
+  const seen = new Set<string>();
+  return groups
+    .map((group) => [...new Set(group)])
+    .filter((group) => {
+      if (!group.length || seen.has(group[0])) return false;
+      seen.add(group[0]);
+      return true;
+    });
+}
+
+export function imageUrlsFromTransfer(data: DataTransfer): string[] {
+  return [...new Set(imageUrlGroupsFromTransfer(data).flat())];
 }
 
 export async function fileFromUrl(
@@ -155,22 +210,29 @@ export async function fileFromUrl(
   }
   const blob = await response.blob();
   if (!blob.type.startsWith("image/")) {
-    throw new Error("The URL did not return an image");
+    try {
+      const image = await createImageBitmap(blob);
+      image.close();
+    } catch {
+      throw new Error("The URL did not return a readable image");
+    }
   }
-  const filename =
-    url.protocol === "data:"
-      ? "dropped-image"
-      : decodeURIComponent(url.pathname.split("/").at(-1) || "remote-image");
-  return new File([blob], filename, { type: blob.type });
+  const filename = ["data:", "blob:"].includes(url.protocol)
+    ? "dropped-image"
+    : decodeURIComponent(url.pathname.split("/").at(-1) || "remote-image");
+  return new File([blob], filename, {
+    type: blob.type.startsWith("image/") ? blob.type : "image/unknown",
+  });
 }
 
 export async function firstImageFileFromUrls(values: string[]): Promise<File> {
-  const controller = new AbortController();
-  try {
-    return await Promise.any(
-      values.map((value) => fileFromUrl(value, controller.signal)),
-    );
-  } finally {
-    controller.abort();
+  let failure: unknown;
+  for (const value of values) {
+    try {
+      return await fileFromUrl(value);
+    } catch (error) {
+      failure ??= error;
+    }
   }
+  throw failure ?? new Error("No readable image was found in the drop.");
 }

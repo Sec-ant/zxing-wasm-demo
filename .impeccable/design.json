@@ -1,0 +1,739 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T13:17:10.584526+00:00",
+  "title": "Design System: ZXing WASM Studio",
+  "extensions": {
+    "colorMeta": {
+      "background": {
+        "role": "neutral",
+        "displayName": "Background",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Foreground",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "panel": {
+        "role": "neutral",
+        "displayName": "Panel",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Card",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "popover": {
+        "role": "neutral",
+        "displayName": "Popover",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "primary-foreground": {
+        "role": "neutral",
+        "displayName": "Primary Foreground",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Muted Foreground",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Border",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "glass-control": {
+        "role": "neutral",
+        "displayName": "Glass Control",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "field": {
+        "role": "neutral",
+        "displayName": "Field",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "field-edge": {
+        "role": "neutral",
+        "displayName": "Field Edge",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "focus-line": {
+        "role": "neutral",
+        "displayName": "Focus Line",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "destructive": {
+        "role": "neutral",
+        "displayName": "Destructive",
+        "tonalRamp": [
+          "#261312",
+          "#551B18",
+          "#942822",
+          "#AF3029",
+          "#D14D41",
+          "#F89A8A",
+          "#FFCABB",
+          "#FFE1D5"
+        ]
+      },
+      "success": {
+        "role": "neutral",
+        "displayName": "Success",
+        "tonalRamp": [
+          "#1A1E0C",
+          "#313D07",
+          "#536907",
+          "#66800B",
+          "#879A39",
+          "#BEC97E",
+          "#DDE2B2",
+          "#EDEECF"
+        ]
+      },
+      "glass-state": {
+        "role": "neutral",
+        "displayName": "Glass State",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Dark Background",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-foreground": {
+        "role": "neutral",
+        "displayName": "Dark Foreground",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-panel": {
+        "role": "neutral",
+        "displayName": "Dark Panel",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-card": {
+        "role": "neutral",
+        "displayName": "Dark Card",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-popover": {
+        "role": "neutral",
+        "displayName": "Dark Popover",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-primary": {
+        "role": "primary",
+        "displayName": "Dark Primary",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "dark-primary-foreground": {
+        "role": "neutral",
+        "displayName": "Dark Primary Foreground",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Dark Muted",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-muted-foreground": {
+        "role": "neutral",
+        "displayName": "Dark Muted Foreground",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-border": {
+        "role": "neutral",
+        "displayName": "Dark Border",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-glass-control": {
+        "role": "neutral",
+        "displayName": "Dark Glass Control",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-field": {
+        "role": "neutral",
+        "displayName": "Dark Field",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-field-edge": {
+        "role": "neutral",
+        "displayName": "Dark Field Edge",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "dark-focus-line": {
+        "role": "neutral",
+        "displayName": "Dark Focus Line",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "dark-destructive": {
+        "role": "neutral",
+        "displayName": "Dark Destructive",
+        "tonalRamp": [
+          "#261312",
+          "#551B18",
+          "#942822",
+          "#AF3029",
+          "#D14D41",
+          "#F89A8A",
+          "#FFCABB",
+          "#FFE1D5"
+        ]
+      },
+      "dark-success": {
+        "role": "neutral",
+        "displayName": "Dark Success",
+        "tonalRamp": [
+          "#1A1E0C",
+          "#313D07",
+          "#536907",
+          "#66800B",
+          "#879A39",
+          "#BEC97E",
+          "#DDE2B2",
+          "#EDEECF"
+        ]
+      },
+      "dark-glass-state": {
+        "role": "neutral",
+        "displayName": "Dark Glass State",
+        "tonalRamp": [
+          "#261312",
+          "#551b18",
+          "#942822",
+          "#af3029",
+          "#d14d41",
+          "#f89a8a",
+          "#ffcabb",
+          "#ffe1d5"
+        ]
+      },
+      "symbol-paper": {
+        "role": "neutral",
+        "displayName": "Symbol Paper",
+        "tonalRamp": [
+          "#100F0F",
+          "#282726",
+          "#403E3C",
+          "#6F6E69",
+          "#9F9D96",
+          "#CECDC3",
+          "#F2F0E5",
+          "#FFFCF0"
+        ]
+      },
+      "detection-edge": {
+        "role": "neutral",
+        "displayName": "Detection Edge",
+        "tonalRamp": [
+          "#101a24",
+          "#133051",
+          "#1a4f8c",
+          "#205ea6",
+          "#4385be",
+          "#92bfdb",
+          "#c6dde8",
+          "#e1eceb"
+        ]
+      },
+      "detection-line": {
+        "role": "neutral",
+        "displayName": "Detection Line",
+        "tonalRamp": [
+          "#101a24",
+          "#133051",
+          "#1a4f8c",
+          "#205ea6",
+          "#4385be",
+          "#92bfdb",
+          "#c6dde8",
+          "#e1eceb"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "brand": {
+        "displayName": "Brand",
+        "purpose": "Compact header wordmark."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Interface prose and editable payloads."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Section headings, labels and disclosures."
+      },
+      "control": {
+        "displayName": "Control",
+        "purpose": "Inherited compact button and field text."
+      },
+      "metadata": {
+        "displayName": "Metadata",
+        "purpose": "Secondary notes and data labels."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Technical data, bytes and diagnostics."
+      }
+    },
+    "shadows": [
+      {
+        "name": "pane",
+        "value": "inset 0 1px 0 var(--glass-rim),inset 0 0 0 1px var(--glass-inner),0 0 0 1px var(--glass-edge),0 1px 2px var(--glass-contact),0 12px 32px -14px var(--glass-shade)",
+        "purpose": "Thin panel and preview card edges; pair with their respective fills."
+      },
+      {
+        "name": "glass-control",
+        "value": "inset 0 1px 0 var(--glass-rim),0 0 0 1px var(--glass-edge),0 1px 2px var(--glass-contact)",
+        "purpose": "Clear secondary controls."
+      },
+      {
+        "name": "primary-action",
+        "value": "inset 0 1px 0 var(--primary-rim),inset 0 -1px 0 var(--primary-under),inset 0 0 0 1px var(--primary-inner),0 1px 2px var(--glass-contact),0 8px 18px -9px var(--glass-shade)",
+        "purpose": "Raised red primary action; active state removes lower lift."
+      },
+      {
+        "name": "popover",
+        "value": "inset 0 1px 0 var(--glass-rim),inset 0 -1px 0 var(--popover-under),0 0 0 1px var(--popover-edge),0 24px 60px -18px var(--glass-shade),0 6px 16px -6px var(--glass-lift)",
+        "purpose": "Thick floating selection, menu and dialog surfaces."
+      },
+      {
+        "name": "tab-tray",
+        "value": "inset 0 1px 2px var(--well-shade),inset 0 -1px 0 var(--well-rim)",
+        "purpose": "Inset segmented track."
+      },
+      {
+        "name": "symbol",
+        "value": "0 8px 32px oklch(0 0 0 / 12%)",
+        "purpose": "Separate white symbol paper from the artboard."
+      }
+    ],
+    "motion": [
+      {
+        "name": "disclosure-chevron",
+        "value": "transform 150ms ease-out",
+        "purpose": "Opening state rotates the chevron 180 degrees."
+      },
+      {
+        "name": "busy-spinner",
+        "value": "spin 1s linear infinite",
+        "purpose": "Indicate local reading or generation work."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "animation: none !important; transition: none !important",
+        "purpose": "Applied globally when prefers-reduced-motion is reduce."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact-shell",
+        "value": "380px"
+      },
+      {
+        "name": "stacked-workspace",
+        "value": "800px"
+      },
+      {
+        "name": "docked-encode-diagnostics",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary action",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Flexoki red primary pane for the action that asks to be pressed.",
+      "html": "<button class=\"ds-primary\">Copy image</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 10px;border-radius:var(--radius-md,0.7rem);font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;cursor:pointer;transition:background-color 150ms ease-out,box-shadow 150ms ease-out,transform 150ms ease-out;border:1px solid var(--primary-edge,oklch(0.2 0 0 / 30%));background:color-mix(in oklch,var(--primary,oklch(0.2 0 0)) var(--primary-solid,88%),transparent);color:var(--primary-foreground,oklch(0.985 0 0));backdrop-filter:var(--glass-blur-control,blur(14px));box-shadow:inset 0 1px 0 var(--primary-rim,oklch(1 0 0 / 30%)),inset 0 -1px 0 var(--primary-under,oklch(0 0 0 / 45%)),inset 0 0 0 1px var(--primary-inner,oklch(1 0 0 / 7%)),0 1px 2px var(--glass-contact,oklch(0.25 0.03 265 / 6%)),0 8px 18px -9px var(--glass-shade,oklch(0.3 0.06 265 / 28%))}.ds-primary:hover{background:color-mix(in oklch,var(--primary,oklch(0.2 0 0)) calc(var(--primary-solid,88%) - 10%),transparent)}.ds-primary:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}.ds-primary:active{transform:translateY(1px);box-shadow:inset 0 1px 0 var(--primary-rim),inset 0 -1px 0 var(--primary-under),0 1px 1px var(--glass-contact)}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Glass action",
+      "kind": "button",
+      "refersTo": "button-glass",
+      "description": "Clear glass secondary action used throughout the workbench.",
+      "html": "<button class=\"ds-glass\">Upload images</button>",
+      "css": ".ds-glass{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 10px;border-radius:var(--radius-md,0.7rem);font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;cursor:pointer;transition:background-color 150ms ease-out,box-shadow 150ms ease-out,transform 150ms ease-out;border:0;background:var(--glass-control,oklch(1 0 0 / 55%));color:var(--foreground,oklch(0.16 0 0));backdrop-filter:var(--glass-blur-control,blur(14px));box-shadow:inset 0 1px 0 var(--glass-rim,oklch(1 0 0 / 90%)),0 0 0 1px var(--glass-edge,oklch(0.38 0.03 265 / 10%)),0 1px 2px var(--glass-contact,oklch(0.25 0.03 265 / 6%))}.ds-glass:hover{background:color-mix(in oklch,var(--foreground,oklch(0.16 0 0)) 12%,transparent)}.ds-glass:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}.ds-glass:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-glass{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Ghost tool",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Quiet square icon tool for secondary header actions.",
+      "html": "<button class=\"ds-ghost\" aria-label=\"Expand preview\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7\"/></svg></button>",
+      "css": ".ds-ghost{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:32px;padding:0 10px;border-radius:var(--radius-md,0.7rem);font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;cursor:pointer;transition:background-color 150ms ease-out,box-shadow 150ms ease-out,transform 150ms ease-out;width:32px;padding:0;border:1px solid transparent;background:transparent;color:var(--foreground,oklch(0.16 0 0))}.ds-ghost:hover{background:var(--hover,oklch(0.3 0.02 265 / 10%))}.ds-ghost:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}.ds-ghost:active{transform:translateY(1px)}@media(prefers-reduced-motion:reduce){.ds-ghost{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Text input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Single-line inset editing field.",
+      "html": "<label class=\"ds-field-label\">Image URL<input class=\"ds-input\" placeholder=\"https://…/image.png\" type=\"url\"></label>",
+      "css": ".ds-field-label{display:grid;gap:6px;font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;color:var(--foreground,oklch(0.16 0 0));font-weight:500}.ds-input{display:block;width:240px;border:1px solid var(--field-edge,oklch(0.3 0.02 265 / 14%));border-radius:var(--radius-md,0.7rem);background:var(--field,oklch(1 0 0 / 60%));color:var(--foreground,oklch(0.16 0 0));box-shadow:inset 0 1px 0 var(--field-rim,oklch(1 0 0));font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;transition:border-color 150ms ease-out;height:32px;padding:4px 10px}.ds-input:hover{border-color:var(--input,oklch(0.3 0.02 265 / 15%))}.ds-input:focus-visible{outline:none;border-color:var(--focus-line,oklch(0.2 0 0 / 50%))}.ds-input::placeholder{color:var(--muted-foreground,oklch(0.47 0 0))}@media(prefers-reduced-motion:reduce){.ds-field-label,.ds-input{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Payload editor",
+      "kind": "input",
+      "refersTo": "textarea",
+      "description": "Multiline proportional content editor on a clear pane.",
+      "html": "<label class=\"ds-editor-label\">Content<textarea class=\"ds-editor\">https://github.com/Sec-ant/zxing-wasm</textarea></label>",
+      "css": ".ds-editor-label{display:grid;gap:6px;font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;font-weight:500;color:var(--foreground,oklch(0.16 0 0))}.ds-editor{display:block;width:240px;border:1px solid var(--field-edge,oklch(0.3 0.02 265 / 14%));border-radius:var(--radius-md,0.7rem);background:var(--field,oklch(1 0 0 / 60%));color:var(--foreground,oklch(0.16 0 0));box-shadow:inset 0 1px 0 var(--field-rim,oklch(1 0 0));font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;transition:border-color 150ms ease-out;min-height:100px;padding:8px 10px;resize:vertical}.ds-editor:hover{border-color:var(--input,oklch(0.3 0.02 265 / 15%))}.ds-editor:focus-visible{outline:none;border-color:var(--focus-line,oklch(0.2 0 0 / 50%))}@media(prefers-reduced-motion:reduce){.ds-editor,.ds-editor-label{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Workspace tabs",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Inset tray and a clear active pane for mutually exclusive workspaces.",
+      "html": "<nav class=\"ds-tabs\" aria-label=\"Workspace\"><button class=\"ds-tab\" aria-pressed=\"true\">Encode</button><button class=\"ds-tab\" aria-pressed=\"false\">Decode</button></nav>",
+      "css": ".ds-tabs{display:inline-flex;gap:0;height:32px;padding:3px;border-radius:var(--radius,0.875rem);background:var(--muted,oklch(0.3 0.02 265 / 7%));box-shadow:inset 0 1px 2px var(--well-shade,oklch(0.3 0.06 265 / 14%)),inset 0 -1px 0 var(--well-rim,oklch(1 0 0 / 85%))}.ds-tab{font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;border:1px solid transparent;border-radius:var(--radius-md,0.7rem);padding:2px 6px;background:transparent;color:var(--muted-foreground,oklch(0.47 0 0));cursor:pointer}.ds-tab[aria-pressed=true]{background:var(--glass-control,oklch(1 0 0 / 55%));color:var(--foreground,oklch(0.16 0 0));border-color:var(--glass-edge,oklch(0.38 0.03 265 / 10%));box-shadow:inset 0 1px 0 var(--glass-control-rim,oklch(1 0 0 / 80%)),0 1px 2px var(--glass-contact,oklch(0.25 0.03 265 / 6%))}.ds-tab:hover{color:var(--foreground,oklch(0.16 0 0))}.ds-tab:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-tab,.ds-tabs{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Inspector pane",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Thin neutral glass panel divided into compact working sections.",
+      "html": "<section class=\"ds-pane\"><div class=\"ds-pane-title\">Writer settings</div><p class=\"ds-pane-note\">Choose a format and inspect the live preview.</p></section>",
+      "css": ".ds-pane{width:280px;padding:16px;border:0;border-radius:12px;background:var(--panel,oklch(0.975 0.004 265 / 44%));color:var(--foreground,oklch(0.16 0 0));backdrop-filter:var(--glass-blur,blur(26px) saturate(180%));box-shadow:inset 0 1px 0 var(--glass-rim,oklch(1 0 0 / 90%)),inset 0 0 0 1px var(--glass-inner,oklch(1 0 0 / 35%)),0 0 0 1px var(--glass-edge,oklch(0.38 0.03 265 / 10%)),0 1px 2px var(--glass-contact,oklch(0.25 0.03 265 / 6%)),0 12px 32px -14px var(--glass-shade,oklch(0.3 0.06 265 / 28%));font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;}.ds-pane-title{font-weight:500}.ds-pane-note{margin:8px 0 0;color:var(--muted-foreground,oklch(0.47 0 0));font-size:12px}@media(prefers-reduced-motion:reduce){.ds-pane,.ds-pane-note,.ds-pane-title{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Format select",
+      "kind": "input",
+      "refersTo": "select-trigger",
+      "description": "Base UI selection trigger rendered here as its compact button face.",
+      "html": "<button class=\"ds-select\" aria-haspopup=\"listbox\"><span>QR Code</span><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button>",
+      "css": ".ds-select{display:block;width:240px;border:1px solid var(--field-edge,oklch(0.3 0.02 265 / 14%));border-radius:var(--radius-md,0.7rem);background:var(--field,oklch(1 0 0 / 60%));color:var(--foreground,oklch(0.16 0 0));box-shadow:inset 0 1px 0 var(--field-rim,oklch(1 0 0));font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;transition:border-color 150ms ease-out;display:flex;align-items:center;justify-content:space-between;gap:6px;height:32px;padding:8px 8px 8px 10px;cursor:pointer}.ds-select:hover{border-color:var(--input,oklch(0.3 0.02 265 / 15%))}.ds-select:focus-visible{outline:none;border-color:var(--focus-line,oklch(0.2 0 0 / 50%))}.ds-select:active{background:var(--glass-state,oklch(0.3 0.02 265 / 9%))}.ds-select svg{color:var(--muted-foreground,oklch(0.47 0 0))}@media(prefers-reduced-motion:reduce){.ds-select{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Selected source item",
+      "kind": "chip",
+      "refersTo": "filmstrip-item",
+      "description": "Compact filmstrip item joins image selection and a separate removal tool.",
+      "html": "<div class=\"ds-source\"><button class=\"ds-source-pick\" aria-pressed=\"true\">wechat.webp <small>1</small></button><button class=\"ds-source-remove\" aria-label=\"Remove wechat.webp\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><path d=\"m18 6-12 12M6 6l12 12\"/></svg></button></div>",
+      "css": ".ds-source{display:inline-flex;align-items:center;border-radius:7px;background:var(--glass-state,oklch(0.3 0.02 265 / 9%));color:var(--foreground,oklch(0.16 0 0));box-shadow:inset 0 1px 0 var(--glass-state-rim,oklch(1 0 0 / 85%)),0 1px 3px var(--glass-contact,oklch(0.25 0.03 265 / 6%))}.ds-source-pick,.ds-source-remove{display:flex;align-items:center;border:0;background:transparent;color:inherit;cursor:pointer;font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;}.ds-source-pick{gap:6px;padding:7px 4px 7px 8px;font-size:12px}.ds-source-pick small{font-family:var(--font-mono,monospace);font-size:10px}.ds-source-remove{width:24px;height:28px;justify-content:center}.ds-source-pick:hover,.ds-source-remove:hover{background:var(--hover-faint,oklch(0.3 0.02 265 / 5.5%))}.ds-source-pick:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}.ds-source-remove:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-source,.ds-source-pick,.ds-source-remove{transition:none!important;animation:none!important}}"
+    },
+    {
+      "name": "Checkbox row",
+      "kind": "custom",
+      "refersTo": "checkbox-selected",
+      "description": "Small recessed box with neutral selected state and an enlarged label row.",
+      "html": "<label class=\"ds-check-row\"><input class=\"ds-check\" type=\"checkbox\" checked>Try harder</label>",
+      "css": ".ds-check-row{display:flex;align-items:center;gap:8px;min-height:32px;color:var(--foreground,oklch(0.16 0 0));font-family:var(--font-sans, 'Geist Variable', sans-serif);font-size:14px;font-weight:400;line-height:1.5;cursor:pointer}.ds-check{appearance:none;display:grid;place-items:center;width:16px;height:16px;margin:0;border:1px solid var(--input,oklch(0.3 0.02 265 / 15%));border-radius:4px;background:transparent;box-shadow:inset 0 1px 1.5px var(--well-shade,oklch(0.3 0.06 265 / 14%)),inset 0 -1px 0 var(--well-rim,oklch(1 0 0 / 85%));cursor:pointer}.ds-check:checked{background:var(--primary,oklch(0.2 0 0));color:var(--primary-foreground,oklch(0.985 0 0));border-color:var(--primary,oklch(0.2 0 0));box-shadow:inset 0 1px 0 var(--primary-rim,oklch(1 0 0 / 30%))}.ds-check:checked::after{content:\"\";width:8px;height:4px;border-left:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-1px) rotate(-45deg)}.ds-check-row:hover .ds-check{border-color:var(--focus-line,oklch(0.2 0 0 / 50%))}.ds-check:focus-visible{outline:2px solid var(--foreground,oklch(0.16 0 0));outline-offset:3px;}@media(prefers-reduced-motion:reduce){.ds-check,.ds-check-row{transition:none!important;animation:none!important}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Solid Glass + Flexoki",
+    "overview": "ZXing WASM Studio uses the Helianthus Solid Glass material: compact warm paper and ink panes, inset fields and an actual image or generated symbol as the visual center. Light and dark retain the same hierarchy. Local Geist interface text and Geist Mono technical data keep a dense workbench legible.\n\nThe finish lives at the edges: an upper rim, fine perimeter and contact shadow. Pane faces stay quiet so source artwork, editable content and results carry the attention. Controls remain compact and complete; hierarchy comes from alignment, section boundaries, weight and tone. The palette follows Flexoki by Steph Ango: paper and warm gray in light mode, charcoal and warm ink shades in dark mode, with red primary actions and focus, green success and explicit red errors.",
+    "keyCharacteristics": [
+      "Neutral glass with edge lighting, restrained translucency and a clear thickness hierarchy.",
+      "Compact controls paired with a bounded, prominent image or symbol preview.",
+      "Proportional interface text and monospaced technical values.",
+      "One consistent control language across decoding, camera input and encoding."
+    ],
+    "rules": [
+      {
+        "name": "The Semantic Color Rule",
+        "body": "Use Flexoki red for primary actions, focus and selection, green for success, and blue for detected geometry. Error text uses a separate red step and an explicit message. Source artwork retains its own colors.",
+        "section": "colors"
+      },
+      {
+        "name": "The Data Type Rule",
+        "body": "Use Geist Mono for bytes, dimensions, durations, HEX, JSON and source diagnostics. Keep instructions, payload text and control labels in Geist.",
+        "section": "typography"
+      },
+      {
+        "name": "The Edge Finish Rule",
+        "body": "Keep pane faces neutral. Express glass through the existing rim, hairline, blur and contact shadow, preserving panel, card and popover thickness.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do reuse the copied Solid Glass stylesheet and Base UI components for matching controls.",
+      "Do preserve the same visual hierarchy in light and dark themes.",
+      "Do keep field labels visible and technical values readable in their established type roles.",
+      "Do fit source artwork and generated symbols without stretching or cropping their contents.",
+      "Do retain keyboard focus, reduced motion and reduced transparency treatments."
+    ],
+    "donts": [
+      "Don't replace the neutral workbench with decorative gradients across pane faces.",
+      "Don't tint symbol paper to match the surrounding theme.",
+      "Don't use detection green as a general action or navigation accent.",
+      "Don't enlarge ordinary headings into a display typography system that the workbench does not use.",
+      "Don't remove the edge treatment or stack extra borders around glass panes."
+    ]
+  }
+}

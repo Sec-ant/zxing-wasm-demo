@@ -1,5 +1,4 @@
 import tailwindcss from "@tailwindcss/vite";
-import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
@@ -7,16 +6,19 @@ export default defineConfig({
   base: "/zxing-wasm-demo/",
   plugins: [
     tailwindcss(),
-    Icons({ compiler: "jsx", jsx: "react" }),
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: ["favicon.svg"],
+      workbox: {
+        globPatterns: ["**/*.{js,css,html,wasm,woff2,png,webp,svg,ico}"],
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      },
       manifest: {
-        name: "ZXing WASM Reader",
-        short_name: "ZXing Reader",
+        name: "ZXing WASM Studio",
+        short_name: "ZXing Studio",
         description:
-          "A browser workbench for decoding barcodes with zxing-wasm.",
-        theme_color: "#24837b",
+          "Read, generate and inspect barcodes locally in your browser.",
+        theme_color: "#fffcf0",
         background_color: "#fffcf0",
         display: "standalone",
         start_url: "/zxing-wasm-demo/",

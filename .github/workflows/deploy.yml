@@ -43,10 +43,16 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install Dependencies
-        run: pnpm i
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm -s build
+
+      - name: Install browser for tests
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Test production app
+        run: pnpm test
 
       - name: Stage GitHub Pages artifact
         if: github.event_name == 'push'

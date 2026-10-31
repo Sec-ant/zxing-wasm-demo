@@ -1,0 +1,1591 @@
+/*
+ * Solid Glass: a theme for shadcn/ui.
+ *
+ * Import it after Tailwind and shadcn's own stylesheet, in place of the
+ * colour variables `shadcn init` writes:
+ *
+ *   @import "tailwindcss";
+ *   @import "tw-animate-css";
+ *   @import "shadcn/tailwind.css";
+ *   @import "./solid-glass.css";
+ *
+ * Solid Glass stands between flat design and liquid glass. Every surface is a
+ * thick pane of smoky glass with very little see-through: from a distance it
+ * reads as solid, and only close up as glass. What makes it glass is at its
+ * edges — a line of light along the top, a hairline all round, a shadow
+ * gathered underneath. The face itself is neutral grey: it takes no colour
+ * from what is behind it, bends nothing and does not flow.
+ *
+ * Four rules keep it one material:
+ *
+ *   1. The finish is at the edge.   rim + hairline + shadow, never a gradient
+ *                                   across the face.
+ *   2. Heavy, not airy.             neutral grey; the blur softens what is
+ *                                   behind without boosting its colour.
+ *   3. Depth is thickness.          panel (thinnest) < card < popover
+ *                                   (thickest). Thicker is more opaque.
+ *   4. One state.                   hovered, chosen and held-open all wear
+ *                                   the same small pane of clear glass.
+ *
+ * The names are shadcn/ui's (--background, --card, --popover, --muted …), so
+ * every shadcn component takes the material by using the colour it already
+ * used: nothing in components/ui has to change. Dark is the material as
+ * designed; light is the same panes in daylight. Dark follows the `dark`
+ * class on <html>.
+ */
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans:
+    "Geist Variable", ui-sans-serif, system-ui, -apple-system, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono:
+    "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-panel: var(--panel);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
+  --color-link: var(--link);
+  --color-status-running: var(--status-running);
+  --color-status-done: var(--status-done);
+  --color-status-interrupted: var(--status-interrupted);
+  --color-success: var(--success);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* ---- The panes in daylight ------------------------------------------------ */
+
+:root {
+  --radius: 0.875rem;
+  /* What a control is rounded by: a step down from a pane. */
+  --radius-control: 0.7rem;
+
+  /* The page is opaque, a cool grey deep enough for a pane to stand out on;
+     the panes on it are smoked white glass, not paper. */
+  --background: oklch(0.925 0.007 265);
+  --foreground: oklch(0.16 0 0);
+
+  /* Thickness: panel < card < popover. */
+  --panel: oklch(0.975 0.004 265 / 44%);
+  --card: oklch(0.98 0.004 265 / 60%);
+  --card-foreground: oklch(0.16 0 0);
+  --popover: oklch(0.985 0.003 265 / 96%);
+  --popover-foreground: oklch(0.16 0 0);
+
+  --primary: oklch(0.2 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.3 0.02 265 / 9%);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.3 0.02 265 / 7%);
+  --muted-foreground: oklch(0.47 0 0);
+  --accent: oklch(0.3 0.02 265 / 9%);
+  --accent-foreground: oklch(0.2 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.3 0.02 265 / 13%);
+  --input: oklch(0.3 0.02 265 / 15%);
+  --ring: oklch(0.7 0 0);
+
+  /* The finish. Rim: the line of light on a pane's top edge. Inner: a faint
+     second line inside it. Edge: the hairline round the outside. Shade: the
+     shadow underneath. */
+  --glass-rim: oklch(1 0 0 / 90%);
+  --glass-inner: oklch(1 0 0 / 35%);
+  --glass-edge: oklch(0.38 0.03 265 / 10%);
+  /* The thickest pane, nearly white on a pale page, would lose its edge in
+     the light: it keeps it by a firmer hairline and a shade along its foot. */
+  --popover-edge: oklch(0.38 0.03 265 / 22%);
+  --popover-under: oklch(0.38 0.03 265 / 16%);
+  --glass-shade: oklch(0.3 0.06 265 / 28%);
+  --glass-contact: oklch(0.25 0.03 265 / 6%);
+  --glass-lift: oklch(0.25 0.03 265 / 14%);
+  /* Clear glass, for small things and for the one state. */
+  --glass-control: oklch(1 0 0 / 55%);
+  --glass-control-rim: oklch(1 0 0 / 80%);
+  /* The one state. On white panes a pane of clear glass would be white on
+     white, so here it is the smoked kind: a grey tint, still lit along its
+     top edge, with a hairline dark enough to find. */
+  --glass-state: oklch(0.3 0.02 265 / 9%);
+  --glass-state-rim: oklch(1 0 0 / 85%);
+  --glass-state-edge: oklch(0.3 0.02 265 / 13%);
+  --glass-state-armed: oklch(0.3 0.02 265 / 26%);
+  /* Under the pointer. The greys shadcn/ui hovers with are tuned for a dark
+     page, where 7% of white shows; on white panes the same step vanishes. */
+  --hover: oklch(0.3 0.02 265 / 10%);
+  --hover-faint: oklch(0.3 0.02 265 / 5.5%);
+  /* The primary button is a solid pane the colour of the ink: lit along its
+     top edge, shaded along its bottom one, a hairline round it. */
+  --primary-solid: 88%;
+  --primary-rim: oklch(1 0 0 / 30%);
+  --primary-under: oklch(0 0 0 / 45%);
+  --primary-inner: oklch(1 0 0 / 7%);
+  --primary-edge: oklch(0.2 0 0 / 30%);
+  /* A field is a pane of clear glass to type on: its fill, and the line of
+     light along its top edge. */
+  --field: oklch(1 0 0 / 60%);
+  --field-rim: oklch(1 0 0);
+  --field-edge: oklch(0.3 0.02 265 / 14%);
+  /* A track a knob runs in is a groove: shaded under its upper lip, lit along
+     its lower one. */
+  --well-shade: oklch(0.3 0.06 265 / 14%);
+  --well-rim: oklch(1 0 0 / 85%);
+  /* The line a field is drawn in while it is being typed into. */
+  --focus-line: oklch(0.2 0 0 / 50%);
+  /* A knob — a switch's thumb, a slider's — is the brightest pane there is. */
+  --knob: oklch(1 0 0);
+  --knob-shade: oklch(0.3 0.06 265 / 30%);
+  /* A mark in a chart is a pane standing on its edge. */
+  --mark-solid: 84%;
+  --mark-rim: oklch(1 0 0);
+  --mark-edge: oklch(0.3 0.02 265 / 22%);
+  /* The same hairline where it is a stroke in a chart: half of a stroke falls outside the shape. */
+  --mark-line: oklch(0.3 0.02 265 / 30%);
+  --glass-blur: blur(26px) saturate(180%);
+  --glass-blur-control: blur(14px);
+
+  /* Three sources of light under the glass, kept faint enough that the page
+     still reads as one even surface. Dark has none. */
+  --light-1: oklch(0.68 0.13 165 / 7%);
+  --light-2: oklch(0.75 0.08 240 / 11%);
+  --light-3: oklch(0.68 0.13 165 / 4%);
+
+  --brand: oklch(0.68 0.13 165);
+  --brand-foreground: oklch(0.99 0 0);
+  --brand-muted: oklch(0.68 0.13 165 / 12%);
+
+  /* Motion means running; hue means finished or stopped. */
+  --status-running: oklch(0.52 0 0);
+  --status-done: oklch(0.56 0.16 248);
+  --success: oklch(0.58 0.15 152);
+  --status-interrupted: oklch(0.66 0.16 58);
+
+  /* Links, a name in running text, and the few colours code is set in. */
+  --link: oklch(0.5 0.17 255);
+  --code-inline: oklch(0.53 0.17 22);
+  --syn-keyword: oklch(0.45 0.13 255);
+  --syn-string: oklch(0.5 0.12 160);
+  --syn-number: oklch(0.55 0.14 60);
+  --syn-name: oklch(0.47 0.15 310);
+
+  /* Charts are drawn in greys, like the rest: no hue of their own. The first is the one most
+     charts lead with and the second is what it is set against, so the first is a mid-tone that
+     still reads on a card and the widest step is between those two; the rest close up from there. */
+  --chart-1: oklch(0.7 0 0);
+  --chart-2: oklch(0.54 0 0);
+  --chart-3: oklch(0.44 0 0);
+  --chart-4: oklch(0.35 0 0);
+  --chart-5: oklch(0.27 0 0);
+
+  --sidebar: oklch(0.975 0.004 265 / 44%);
+  --sidebar-foreground: oklch(0.25 0 0);
+  --sidebar-primary: oklch(0.2 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.3 0.02 265 / 9%);
+  --sidebar-accent-foreground: oklch(0.16 0 0);
+  --sidebar-border: oklch(0.3 0.02 265 / 12%);
+  --sidebar-ring: oklch(0.7 0 0);
+}
+
+/* ---- Solid Glass ----------------------------------------------------------
+
+   An even, unlit page, and the glass turns smoky. There is no ambient light:
+   on a dark page it reads as a bright patch and a vignette, and uneven ground
+   behind long text is tiring to work on. Text is close to white. */
+
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.16 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  --panel: oklch(1 0 0 / 4.5%);
+  --card: oklch(0.31 0 0 / 46%);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.22 0 0 / 96%);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.94 0 0);
+  --primary-foreground: oklch(0.18 0 0);
+  --secondary: oklch(1 0 0 / 10%);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(1 0 0 / 7%);
+  --muted-foreground: oklch(0.72 0 0);
+  --accent: oklch(1 0 0 / 8%);
+  --accent-foreground: oklch(0.98 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 11%);
+  --input: oklch(1 0 0 / 13%);
+  --ring: oklch(0.52 0 0);
+
+  --glass-rim: oklch(1 0 0 / 16%);
+  --glass-inner: oklch(1 0 0 / 4%);
+  --glass-edge: oklch(1 0 0 / 6%);
+  --popover-edge: var(--glass-edge);
+  --popover-under: oklch(0 0 0 / 0%);
+  --glass-shade: oklch(0 0 0 / 60%);
+  --glass-contact: oklch(0 0 0 / 10%);
+  --glass-lift: oklch(0 0 0 / 22%);
+  --glass-control: oklch(1 0 0 / 7%);
+  --glass-control-rim: oklch(1 0 0 / 11%);
+  --glass-state: var(--glass-control);
+  --glass-state-rim: var(--glass-control-rim);
+  --glass-state-edge: var(--glass-edge);
+  --glass-state-armed: var(--glass-control-rim);
+  --hover: oklch(1 0 0 / 8%);
+  --hover-faint: oklch(1 0 0 / 4%);
+  --primary-solid: 86%;
+  --primary-rim: oklch(1 0 0);
+  --primary-under: oklch(0 0 0 / 22%);
+  --primary-inner: oklch(0 0 0 / 7%);
+  --primary-edge: oklch(1 0 0 / 26%);
+  --field: oklch(1 0 0 / 6%);
+  --field-rim: oklch(1 0 0 / 15%);
+  --field-edge: oklch(1 0 0 / 8%);
+  --well-shade: oklch(0 0 0 / 38%);
+  --well-rim: oklch(1 0 0 / 9%);
+  --focus-line: oklch(1 0 0 / 40%);
+  --knob: oklch(0.97 0 0);
+  --knob-shade: oklch(0 0 0 / 55%);
+  --mark-solid: 68%;
+  --mark-rim: oklch(1 0 0);
+  --mark-edge: oklch(1 0 0 / 22%);
+  --mark-line: oklch(1 0 0 / 46%);
+  /* Neutral grey, like the page: no tint of its own, and it blurs what is
+     behind it without boosting its colour. A pane that leans blue beside a
+     grey one reads as a second palette. */
+  --glass-blur: blur(26px);
+
+  --light-1: transparent;
+  --light-2: transparent;
+  --light-3: transparent;
+
+  --brand: oklch(0.78 0.13 166);
+  --brand-foreground: oklch(0.2 0.03 166);
+  --brand-muted: oklch(0.78 0.13 166 / 15%);
+
+  --status-running: oklch(0.72 0 0);
+  --status-done: oklch(0.68 0.15 250);
+  --success: oklch(0.74 0.16 152);
+  --status-interrupted: oklch(0.77 0.15 62);
+
+  --link: oklch(0.76 0.12 250);
+  --code-inline: oklch(0.73 0.13 20);
+  --syn-keyword: oklch(0.78 0.1 250);
+  --syn-string: oklch(0.8 0.11 160);
+  --syn-number: oklch(0.8 0.12 80);
+  --syn-name: oklch(0.78 0.11 305);
+
+  --chart-1: oklch(0.94 0 0);
+  --chart-2: oklch(0.83 0 0);
+  --chart-3: oklch(0.69 0 0);
+  --chart-4: oklch(0.56 0 0);
+  --chart-5: oklch(0.44 0 0);
+
+  --sidebar: oklch(0.11 0 0 / 50%);
+  --sidebar-foreground: oklch(0.9 0 0);
+  --sidebar-primary: oklch(0.95 0 0);
+  --sidebar-primary-foreground: oklch(0.18 0 0);
+  --sidebar-accent: oklch(1 0 0 / 8%);
+  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.48 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply font-sans;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    background-image:
+      radial-gradient(
+        62rem 42rem at 12% -6rem,
+        var(--light-1),
+        transparent 62%
+      ),
+      radial-gradient(52rem 38rem at 92% 4rem, var(--light-2), transparent 60%),
+      radial-gradient(64rem 46rem at 55% 110%, var(--light-3), transparent 62%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+}
+
+/* ---- The material ---------------------------------------------------------
+
+   Whatever is painted in a glass colour is glass. The rules are on the colour
+   utilities themselves, so a component gets the material by using the token
+   it already used. They are outside any layer on purpose: a layered utility
+   must not be able to switch the blur or the rim off. */
+
+.bg-card,
+.bg-popover,
+.bg-sidebar,
+.glass-panel {
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Thinnest: the panels a page is laid out in. A shade off the page, so a
+   column of them does not outshine what is being read. */
+.glass-panel {
+  background-color: var(--panel);
+}
+
+/* A pane: the rim on top, the hairline all round, the shadow below.
+
+   A pane gives up whatever border it was given. Its lines are drawn inside
+   its edge and its hairline outside, and a border between the two — even a
+   see-through one — shows as a second ring round the pane. */
+.glass-panel,
+.bg-card {
+  border-width: 0;
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 0 0 1px var(--glass-inner),
+    0 0 0 1px var(--glass-edge),
+    0 1px 2px var(--glass-contact),
+    0 12px 32px -14px var(--glass-shade);
+}
+
+/* Thickest: menus, popovers and dialogs, lifted further off the page. */
+.bg-popover {
+  border-width: 0;
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 -1px 0 var(--popover-under),
+    0 0 0 1px var(--popover-edge),
+    0 24px 60px -18px var(--glass-shade),
+    0 6px 16px -6px var(--glass-lift);
+}
+
+/* A sidebar is a pane standing on its edge: lit along the side that faces
+   the page. */
+[data-slot="sidebar-inner"] {
+  box-shadow:
+    inset -1px 0 0 var(--glass-edge),
+    inset 0 1px 0 var(--glass-inner);
+}
+
+/* Small things made of clear glass: a message bubble, a glass button. */
+.glass-control {
+  -webkit-backdrop-filter: var(--glass-blur-control);
+  backdrop-filter: var(--glass-blur-control);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 0 1px var(--glass-edge),
+    0 1px 2px var(--glass-contact);
+}
+
+/* The button that asks to be pressed is glass too, and the most solid there
+   is: a pane the colour of the ink, with nothing showing through. What makes
+   it glass is the same as everywhere else, at its edges — the line of light
+   along the top, a line of shade along the bottom where the pane turns away,
+   a hairline round it, and the shadow it stands on. The face stays flat,
+   and lets through just enough of what is behind it for the line of light to
+   stand brighter than the pane.
+
+   The hairline is the button's own border: shadcn's button keeps a
+   transparent one and stops its fill short of it, so a ring drawn outside
+   would stand off the fill with the page showing between.
+
+   Anything pressed that is painted in the primary colour gets it, so a stock
+   button needs no change; a badge that happens to be a link does not. */
+:is(button, a, [role="button"]).bg-primary:not([data-slot="badge"]),
+.glass-primary {
+  background-color: color-mix(
+    in oklch,
+    var(--primary) var(--primary-solid),
+    transparent
+  );
+  -webkit-backdrop-filter: var(--glass-blur-control);
+  backdrop-filter: var(--glass-blur-control);
+  /* The last is Tailwind's ring, so a focus ring is still drawn. */
+  box-shadow:
+    inset 0 1px 0 var(--primary-rim),
+    inset 0 -1px 0 var(--primary-under),
+    inset 0 0 0 1px var(--primary-inner),
+    0 1px 2px var(--glass-contact),
+    0 8px 18px -9px var(--glass-shade),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+/* Under the pointer the pane thins a little; it does not change colour. */
+:is(button, a, [role="button"]).bg-primary:not([data-slot="badge"]):hover,
+.glass-primary:hover {
+  background-color: color-mix(
+    in oklch,
+    var(--primary) calc(var(--primary-solid) - 10%),
+    transparent
+  );
+}
+:is(button, a, [role="button"]).bg-primary:not([data-slot="badge"]):not(
+    :focus-visible
+  ),
+.glass-primary:not(:focus-visible) {
+  /* The hairline is the ink's own colour, toned toward the edge's: a grey
+     one round ink of a colour would read as an outline drawn round it. Mixed
+     in oklab, which has no hue to turn: in oklch the grey's hue of 0 is
+     travelled toward, and green comes out brown. */
+  border-color: color-mix(in oklab, var(--primary) 55%, var(--primary-edge));
+}
+/* Pressed, it sits down on the page: the shadow under it goes. */
+:is(button, a, [role="button"]).bg-primary:not([data-slot="badge"]):active,
+.glass-primary:active {
+  box-shadow:
+    inset 0 1px 0 var(--primary-rim),
+    inset 0 -1px 0 var(--primary-under),
+    inset 0 0 0 1px var(--primary-inner),
+    0 1px 1px var(--glass-contact),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+
+/* Smaller things filled with the ink are the same solid pane, without the
+   shadow a button stands on, and with a fainter shade along the bottom: on
+   something twenty pixels high a full one reads as a bevel. The filled part
+   of a progress bar or a slider, a switch that is on, a box that is ticked.
+
+   A badge loses the border it reserves. The lines of light and shade are drawn
+   inside the border, and with one in the way they sit a pixel in from the
+   edge, which shows as a second edge. */
+[data-slot="badge"][data-variant="default"],
+[data-slot="progress-indicator"],
+[data-slot="slider-range"] {
+  border-width: 0;
+  background-color: color-mix(
+    in oklch,
+    var(--primary) var(--primary-solid),
+    transparent
+  );
+  box-shadow:
+    inset 0 1px 0 var(--primary-rim),
+    inset 0 -1px 0 color-mix(in oklch, var(--primary-under) 45%, transparent),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+/* A box to tick that was drawn by hand — a square that turns the colour of ink
+   when its row is chosen, as in a list of calendars — is a checkbox, and is
+   finished as one: the same corners, and (below) the same pane or groove. */
+[class*="data-[active=true]:bg-sidebar-primary"] {
+  border-radius: 4px;
+}
+
+/* A switch, a box and a radio have to keep their border — what is inside them
+   is placed by it, and without it a switch's knob sits off centre — so on
+   these the two lines are the border itself: its top the colour of the light,
+   its bottom the colour of the shade, over the pane's own fill. */
+[data-slot="switch"][data-checked],
+[data-slot="checkbox"][data-checked],
+[data-slot="radio-group-item"][data-checked],
+[data-slot="questionnaire-choice"][data-checked]
+  [data-slot="questionnaire-choice-indicator"],
+[class*="data-[active=true]:bg-sidebar-primary"][data-active="true"] {
+  border-color: transparent;
+  border-top-color: var(--primary-rim);
+  border-bottom-color: color-mix(
+    in oklch,
+    var(--primary-under) 45%,
+    transparent
+  );
+  background-color: color-mix(
+    in oklch,
+    var(--primary) var(--primary-solid),
+    transparent
+  );
+  background-clip: border-box;
+}
+
+/* A badge is a small pane, and each kind is its own glass: the ink's solid
+   pane above, and here clear glass (secondary), an empty frame of it
+   (outline), and glass tinted the colour of failure. None keeps the border
+   it reserved, for the reason above. */
+[data-slot="badge"] {
+  border-width: 0;
+}
+[data-slot="badge"][data-variant="secondary"] {
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--glass-edge);
+}
+[data-slot="badge"][data-variant="outline"] {
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--border);
+}
+[data-slot="badge"][data-variant="destructive"] {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, var(--destructive) 28%, transparent),
+    inset 0 0 0 1px color-mix(in oklch, var(--destructive) 16%, transparent);
+}
+
+/* ---- Every other pane -------------------------------------------------------
+
+   Nothing in Solid Glass is a flat fill. What follows goes through the rest of
+   what shadcn/ui paints with one — by the names its parts already carry — and
+   gives each the edge of the glass it is. */
+
+/* shadcn/ui rounds a control with `rounded-lg`, the full radius. At this
+   theme's radius that turns a button or a field 32 pixels high into a pill,
+   so a control that asks for it gets the control's radius instead — by
+   turning the variable down on that element, which leaves every corner
+   utility (a group's squared inner corners, a size's own radius, a
+   `rounded-full` passed in) working as written. */
+:is(
+  :is([data-slot="button"], .group\/button),
+  [data-slot="input"],
+  [data-slot="questionnaire-input"],
+  [data-slot="textarea"],
+  [data-slot="select-trigger"],
+  [data-slot="native-select"],
+  [data-slot="input-group"],
+  [data-slot="combobox-chips"],
+  [data-slot="toggle"],
+  [data-slot="toggle-group"],
+  [data-slot="toggle-group-item"],
+  [data-slot="button-group-text"],
+  [data-slot="input-otp-group"]
+).rounded-lg,
+[data-slot="button-group"] {
+  --radius: var(--radius-control);
+}
+
+/* A bare box — a border, a radius and nothing in it, the frame shadcn/ui's
+   examples and most people's own markup put round a row or a list — is the
+   thinnest pane: the panel's fill, a hairline, a faint line of light on top.
+   Anything that names a fill of its own (`bg-…`), a dashed outline, or a part
+   with a `data-slot` is left to say what it is. */
+:is(div, li, section):not([data-slot]).border[class*="rounded-"]:not(
+    [class*="bg-"]
+  ):not(.border-dashed),
+[data-slot="scroll-area"].border:not([class*="bg-"]),
+[data-slot="accordion"].border:not([class*="bg-"]),
+[data-slot="resizable-panel-group"].border:not([class*="bg-"]),
+[data-slot="calendar"].border {
+  border-color: var(--glass-edge);
+  background-color: var(--panel);
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 var(--glass-inner);
+}
+
+/* A box with a quiet fill and nothing else — the placeholder a layout is
+   sketched with, a well for a picture — is a pane too, the thinnest: its fill
+   stays as written and it gains the hairline and the faint line of light. */
+:is(div, li, section):not([data-slot]):is(
+    .bg-muted,
+    .bg-muted\/50
+  )[class*="rounded-"],
+:is(
+  [data-slot="aspect-ratio"],
+  [data-slot="attachment-media"],
+  [data-slot="avatar-fallback"],
+  [data-slot="avatar-group-count"]
+).bg-muted {
+  box-shadow:
+    inset 0 1px 0 var(--glass-inner),
+    inset 0 0 0 1px var(--glass-edge);
+}
+
+/* A small tile of ink — the square a logo sits on, in a sidebar's header or
+   above a form — is the primary button's pane at the size of an icon: lit
+   along the top, shaded along the bottom. Its corners are a share of its
+   size, so a tile of 24 pixels is not rounded off into a dot. */
+.bg-sidebar-primary,
+:is(div, span):not([data-slot]).bg-primary[class*="size-"] {
+  border-radius: 28%;
+  box-shadow:
+    inset 0 1px 0 var(--primary-rim),
+    inset 0 -1px 0 var(--primary-under),
+    0 1px 2px var(--glass-contact);
+}
+
+/* The words in the middle of a rule ("or continue with") are set on a patch
+   of the page's colour, to hide the rule behind them. A pane is see-through
+   and lies on who knows what, so no patch can match it. Here the words have no
+   patch: the rule is two rules instead, one to each side of them. */
+[data-slot="field-separator"]:has(> [data-slot="field-separator-content"]) {
+  overflow: hidden;
+}
+[data-slot="field-separator"]:has(> [data-slot="field-separator-content"])
+  > [data-slot="separator"] {
+  display: none;
+}
+[data-slot="field-separator-content"] {
+  background-color: transparent;
+}
+[data-slot="field-separator-content"]::before,
+[data-slot="field-separator-content"]::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 100vw;
+  height: 1px;
+  background-color: var(--border);
+}
+[data-slot="field-separator-content"]::before {
+  right: 100%;
+}
+[data-slot="field-separator-content"]::after {
+  left: 100%;
+}
+
+/* A button is known by `group/button`, the class every one carries, as well
+   as by its `data-slot`: a trigger that renders as a button (a dialog's, a
+   menu's, a tooltip's) puts its own name in `data-slot`, and a rule that
+   asked only for "button" would walk past it. */
+
+/* Buttons that do not ask to be pressed are clear glass. Outline keeps its
+   border — a group of buttons joins them by it — so the border is the
+   hairline, one colour all the way round, and the line of light is drawn just
+   inside it. (Lighting the border's own top side breaks at the corners, where
+   a white top meets a grey side.) Secondary is drawn the same way in a
+   fainter hairline: its border is see-through and its fill stops short of it,
+   so a line drawn inside left the page showing round it as a second edge. */
+:is([data-slot="button"], .group\/button):is(
+  [data-variant="outline"],
+  .bg-background
+),
+:is([data-slot="button"], .group\/button):is(
+  [data-variant="secondary"],
+  .bg-secondary
+) {
+  background-color: var(--glass-control);
+  -webkit-backdrop-filter: var(--glass-blur-control);
+  backdrop-filter: var(--glass-blur-control);
+}
+:is([data-slot="button"], .group\/button):is(
+  [data-variant="outline"],
+  .bg-background
+) {
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    0 1px 2px var(--glass-contact),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+:is([data-slot="button"], .group\/button):is(
+    [data-variant="outline"],
+    .bg-background
+  ):not(:focus-visible):not([aria-invalid="true"]) {
+  border-color: var(--border);
+}
+:is([data-slot="button"], .group\/button):is(
+  [data-variant="secondary"],
+  .bg-secondary
+) {
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    0 1px 2px var(--glass-contact),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+:is([data-slot="button"], .group\/button):is(
+    [data-variant="secondary"],
+    .bg-secondary
+  ):not(:focus-visible):not([aria-invalid="true"]) {
+  border-color: var(--glass-edge);
+}
+:is([data-slot="button"], .group\/button):is(
+    [data-variant="outline"],
+    [data-variant="secondary"],
+    .bg-background,
+    .bg-secondary
+  ):is(:hover, [aria-expanded="true"], [data-popup-open], [data-pressed]) {
+  background-color: color-mix(in oklch, var(--foreground) 12%, transparent);
+}
+/* Glass tinted the colour of failure. A button's hairline is its border, as
+   above; a bubble has none, and draws it inside. */
+:is([data-slot="button"], .group\/button):is(
+  [data-variant="destructive"],
+  .bg-destructive\/10
+) {
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, var(--destructive) 30%, transparent),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+:is([data-slot="button"], .group\/button):is(
+    [data-variant="destructive"],
+    .bg-destructive\/10
+  ):not(:focus-visible) {
+  border-color: color-mix(in oklch, var(--destructive) 16%, transparent);
+}
+[data-slot="bubble"][data-variant="destructive"]
+  > [data-slot="bubble-content"] {
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, var(--destructive) 30%, transparent),
+    inset 0 0 0 1px color-mix(in oklch, var(--destructive) 16%, transparent),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+
+/* What is said in a conversation sits in a small pane of clear glass, as in
+   the product this material comes from. The default bubble is that pane, not
+   a block of ink: a column of bright blocks down a dark page is the loudest
+   thing on it. The quieter kinds are thinner glass. */
+[data-slot="bubble-content"] {
+  border-width: 0;
+}
+[data-slot="bubble"]:not([data-variant="ghost"]):not(
+    [data-variant="destructive"]
+  )
+  > [data-slot="bubble-content"] {
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    0 1px 2px var(--glass-contact),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+[data-slot="bubble"][data-variant="default"] > [data-slot="bubble-content"] {
+  background-color: var(--secondary);
+  color: var(--foreground);
+  -webkit-backdrop-filter: var(--glass-blur-control);
+  backdrop-filter: var(--glass-blur-control);
+}
+[data-slot="bubble"][data-variant="default"]
+  > [data-slot="bubble-content"]:is(button, a):hover {
+  background-color: color-mix(in oklch, var(--foreground) 14%, transparent);
+}
+[data-slot="bubble"]:is([data-variant="muted"], [data-variant="outline"])
+  > [data-slot="bubble-content"] {
+  background-color: var(--panel);
+}
+/* What people answered a message with floats on its corner: a small pane of
+   the thickest glass, with its own edge. shadcn/ui cuts it out of the bubble
+   with a ring in the card's colour, which on glass is a dark notch. */
+[data-slot="bubble-reactions"] {
+  background-color: var(--popover);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 0 1px var(--glass-edge),
+    0 3px 8px -3px var(--glass-lift);
+}
+
+/* Small blocks that only hold something — a key, initials, a chip, an
+   attachment — are clear glass: the line of light and the hairline, inside
+   their own edge. */
+[data-slot="kbd"],
+[data-slot="combobox-chip"],
+[data-slot="attachment"],
+[data-slot="button-group-text"],
+[data-slot="questionnaire-choice-shortcut"],
+[data-slot="alert-dialog-media"] {
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--glass-edge);
+}
+
+/* A bar of menus is one pane of clear glass, with a control's corners. */
+[data-slot="menubar"] {
+  border-width: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--glass-control);
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    0 1px 2px var(--glass-contact);
+}
+
+/* An item with a frame round it is the thinnest pane; the block that holds an
+   empty state's icon is clear glass like any other small block. */
+[data-slot="item"]:is([data-variant="outline"], [data-variant="muted"]) {
+  border-color: var(--glass-edge);
+  background-color: var(--panel);
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 var(--glass-inner);
+}
+[data-slot="empty-icon"][data-variant="icon"],
+[data-slot="empty-media"][data-variant="icon"] {
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--glass-edge);
+}
+
+/* A choice drawn as a card — a radio or a switch with its label and a line
+   under it, one answer of several — is the thinnest pane, and the one that is
+   chosen wears the clear glass every chosen thing wears. */
+[data-slot="field-label"]:has(> [data-slot="field"]),
+[data-slot="questionnaire-choice"] {
+  border-color: var(--glass-edge);
+  background-color: var(--panel);
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 var(--glass-inner);
+}
+[data-slot="field-label"]:has(> [data-slot="field"]):has([data-checked]),
+[data-slot="questionnaire-choice"]:is([data-checked], :has([data-checked])) {
+  border-color: var(--glass-state-edge);
+  background-color: var(--glass-state);
+  box-shadow: inset 0 1px 0 var(--glass-state-rim);
+}
+
+/* A toggle with a frame is clear glass, like an outline button. */
+[data-slot="toggle"].border-input,
+:is(
+  [data-slot="toggle"],
+  [data-slot="toggle-group-item"]
+)[data-variant="outline"] {
+  background-color: var(--glass-control);
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+[data-slot="toggle"].border-input:is([data-pressed], [aria-pressed="true"]),
+:is(
+    [data-slot="toggle"],
+    [data-slot="toggle-group-item"]
+  )[data-variant="outline"]:is([data-pressed], [aria-pressed="true"]) {
+  background-color: color-mix(in oklch, var(--foreground) 14%, transparent);
+}
+
+/* A row of tabs is a tray, and the tab that is open a pane lying in it. Every
+   tab keeps its border, open or not, so none changes size: on the open one
+   the border is the hairline and the line of light lies just inside it. */
+[data-slot="tabs-list"][data-variant="default"] {
+  box-shadow:
+    inset 0 1px 2px var(--well-shade),
+    inset 0 -1px 0 var(--well-rim);
+}
+[data-slot="tabs-list"][data-variant="default"]
+  [data-slot="tabs-trigger"][data-active]:not([data-active="false"]) {
+  border-color: var(--glass-edge);
+  background-color: var(--glass-control);
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    0 1px 2px var(--glass-contact),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+
+/* A hint floats like any other popover, so it is the same thick glass, only
+   smaller: not a block of ink. It has no tail; a pane of glass has none. */
+[data-slot="tooltip-content"] {
+  background-color: var(--popover);
+  color: var(--popover-foreground);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 0 1px var(--glass-edge),
+    0 10px 24px -10px var(--glass-shade),
+    0 3px 8px -3px var(--glass-lift);
+}
+[data-slot="tooltip-content"] > .bg-foreground {
+  display: none;
+}
+
+/* A day that is picked in a calendar is the ink's solid pane, and stays one
+   under the pointer and under the keyboard. (shadcn/ui's ghost button, which
+   a day is, turns grey on hover and takes its text colour back; on a picked
+   day that left white text on a dark square with a line of light across it.) */
+[data-slot="calendar"]
+  :is(
+    [data-selected-single="true"],
+    [data-range-start="true"],
+    [data-range-end="true"]
+  ) {
+  background-color: color-mix(
+    in oklch,
+    var(--primary) var(--primary-solid),
+    transparent
+  );
+  color: var(--primary-foreground);
+  box-shadow:
+    inset 0 1px 0 var(--primary-rim),
+    inset 0 -1px 0 color-mix(in oklch, var(--primary-under) 45%, transparent),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+/* The days between the two ends of a range, and today, are clear glass. */
+[data-slot="calendar"] [data-range-middle="true"],
+[data-slot="calendar"]
+  [data-today="true"]
+  > :is(button, [data-slot="button"]):not([data-selected-single="true"]):not(
+    [data-range-start="true"]
+  ):not([data-range-end="true"]) {
+  box-shadow:
+    inset 0 1px 0 var(--glass-control-rim),
+    inset 0 0 0 1px var(--glass-edge),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+
+/* Where the keyboard is. shadcn/ui draws a ring three pixels wide in a grey
+   at half strength; on this page that is a thick smudge round the thing. Here
+   it is a crisp line two pixels wide, standing a pixel off what it is round
+   so it reads on a light pane and a dark one alike. It goes only where
+   shadcn/ui draws its ring: a part that asks for none, like the box inside an
+   input group, still gets none. Fields draw their own (see Fields). */
+:is(
+    [class*="focus-visible:ring-3"],
+    [class*="focus-visible:ring-[3px]"]
+  ):focus-visible:not([data-slot="input"]):not([data-slot="textarea"]):not(
+    [data-slot="select-trigger"]
+  ):not([data-slot="native-select"]):not([data-slot="sidebar-input"]):not(
+    [aria-invalid="true"]
+  ),
+[data-slot="calendar"]
+  [data-focused="true"]
+  > :is(button, [data-slot="button"]) {
+  --tw-ring-shadow: 0 0 0 1px var(--background), 0 0 0 3px var(--focus-line);
+}
+
+/* Some of shadcn/ui's menus are painted in a see-through popover colour.
+   Here what floats is the thickest glass, whichever component it belongs to. */
+[data-slot="select-content"],
+[data-slot="combobox-content"],
+[data-slot="context-menu-content"],
+[data-slot="context-menu-sub-content"],
+[data-slot="menubar-content"],
+[data-slot="menubar-sub-content"] {
+  border-color: transparent;
+  background-color: var(--popover);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 -1px 0 var(--popover-under),
+    0 0 0 1px var(--popover-edge),
+    0 24px 60px -18px var(--glass-shade),
+    0 6px 16px -6px var(--glass-lift);
+}
+/* shadcn/ui's see-through menus lay a second sheet under themselves that
+   blurs and brightens whatever is behind: a glow through the pane, which is
+   liquid glass's trick, not this material's. The pane's own fill is enough. */
+:is(
+  [data-slot="select-content"],
+  [data-slot="combobox-content"],
+  [data-slot="dropdown-menu-content"],
+  [data-slot="dropdown-menu-sub-content"],
+  [data-slot="context-menu-content"],
+  [data-slot="context-menu-sub-content"],
+  [data-slot="menubar-content"],
+  [data-slot="menubar-sub-content"]
+)::before {
+  content: none;
+}
+
+/* A knob: the thumb of a switch or a slider. The brightest pane, lit on top,
+   with a short shadow because it stands just proud of its track. */
+[data-slot="switch-thumb"],
+[data-slot="slider-thumb"] {
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 90%),
+    inset 0 -1px 0 oklch(0 0 0 / 14%),
+    0 1px 2px var(--knob-shade),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+
+/* ---- Fields --------------------------------------------------------------
+
+   A field is a pane of clear glass to type on, drawn exactly as a glass button
+   is: a faint fill, a line of light inside its top edge, a hairline inside the
+   rest. Both lines are shadows, so they run round the corners in one piece.
+   (A border with a brighter top side was tried first: the two colours meet
+   at each corner with a visible break, and the whole reads as a box drawn in
+   outline, not as glass.)
+
+   The hairline is the border it was given, one colour all the way round, so
+   it sits on the field's outer edge: drawn inside a border left see-through,
+   it showed the page as a second ring round the field. The border is also
+   where the brighter line appears while the field is being typed into. */
+
+[data-slot="input"],
+[data-slot="questionnaire-input"],
+[data-slot="textarea"],
+[data-slot="select-trigger"],
+[data-slot="native-select"],
+[data-slot="input-group"],
+[data-slot="combobox-chips"],
+[data-slot="sidebar-input"] {
+  background-color: var(--field);
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 var(--field-rim),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+:is(
+  [data-slot="input"],
+  [data-slot="questionnaire-input"],
+  [data-slot="textarea"],
+  [data-slot="select-trigger"],
+  [data-slot="native-select"],
+  [data-slot="input-group"],
+  [data-slot="combobox-chips"],
+  [data-slot="sidebar-input"]
+):not([aria-invalid="true"]) {
+  border-color: var(--field-edge);
+}
+/* The cells of a one-time code share their borders, so on them the border is
+   the hairline, one colour all round. */
+[data-slot="input-otp-slot"] {
+  border-color: var(--field-edge);
+  background-color: var(--field);
+}
+
+/* A field being typed into is drawn in a brighter line, and that is all.
+   shadcn/ui's ring three pixels wide round it is too much light for a page
+   this dark, and on one cell of a row of cells it is a frame round a frame. */
+:is(
+    [data-slot="input"],
+    [data-slot="questionnaire-input"],
+    [data-slot="textarea"],
+    [data-slot="select-trigger"],
+    [data-slot="native-select"],
+    [data-slot="sidebar-input"]
+  ):focus-visible:not([aria-invalid="true"]),
+[data-slot="input-group"]:has(
+    [data-slot="input-group-control"]:focus-visible
+  ):not(:has([aria-invalid="true"])),
+[data-slot="combobox-chips"]:focus-within {
+  --tw-ring-shadow: 0 0 #0000;
+  border-color: var(--focus-line);
+}
+/* The cell of a one-time code that the next digit goes in: lit, with its own
+   line drawn inside it, so it does not spill over the cells beside it. */
+[data-slot="input-otp-slot"][data-active="true"] {
+  background-color: color-mix(in oklch, var(--foreground) 14%, transparent);
+  box-shadow: inset 0 0 0 1px var(--focus-line);
+}
+
+/* ---- Grooves --------------------------------------------------------------
+
+   The track a knob runs in, and a box not yet ticked, are cut into the
+   surface, so the light falls the other way: a shade under the upper lip, a
+   line of light along the lower one. */
+
+[data-slot="progress-track"],
+[data-slot="slider-track"],
+[data-slot="switch"]:not([data-checked]),
+[data-slot="checkbox"]:not([data-checked]),
+[data-slot="radio-group-item"]:not([data-checked]),
+[data-slot="questionnaire-choice"]:not([data-checked])
+  [data-slot="questionnaire-choice-indicator"],
+[class*="data-[active=true]:bg-sidebar-primary"]:not([data-active="true"]) {
+  box-shadow:
+    inset 0 1px 1.5px var(--well-shade),
+    inset 0 -1px 0 var(--well-rim),
+    var(--tw-ring-shadow, 0 0 #0000);
+}
+
+/* The line between two panels that can be resized lights up under the pointer,
+   and fully while it is being dragged: the one moment its position matters. */
+[data-slot="resizable-handle"] {
+  transition:
+    background-color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+[data-slot="resizable-handle"] > div {
+  transition: background-color 150ms ease-out;
+}
+[data-slot="resizable-handle"][data-separator="hover"] {
+  background-color: color-mix(in oklch, var(--foreground) 40%, transparent);
+}
+[data-slot="resizable-handle"][data-separator="hover"] > div {
+  background-color: color-mix(in oklch, var(--foreground) 55%, transparent);
+}
+[data-slot="resizable-handle"][data-separator="active"] {
+  background-color: var(--foreground);
+  box-shadow: 0 0 10px 0 color-mix(in oklch, var(--foreground) 45%, transparent);
+}
+[data-slot="resizable-handle"][data-separator="active"] > div {
+  background-color: var(--foreground);
+}
+
+/* ---- Charts ---------------------------------------------------------------
+
+   A bar is a pane of glass standing on its edge: the series' own colour let
+   through a little, a hairline round it, and the line of light along its top.
+   An SVG shape has no inset shadow to draw that line with, so it is the bar's
+   own shape drawn again one pixel higher, behind it.
+
+   The bar itself is kept whole and the whole of it, line and all, is then let
+   through together. Thinning the fill instead put the white copy behind a
+   see-through face: it showed through all of it, and the bar came out a flat
+   pale block with no line to be seen. (A filter that drew the line inside the
+   bar was tried too: the bars vanished whenever an ancestor was zoomed, so
+   this stays with what every browser draws the same.) */
+
+[data-slot="chart"]
+  :is(
+    .recharts-bar-rectangle .recharts-rectangle,
+    .recharts-pie-sector .recharts-sector,
+    .recharts-radial-bar-sector
+  ) {
+  stroke: var(--mark-line);
+  stroke-width: 1px;
+  filter: drop-shadow(0 -1px 0 var(--mark-rim));
+  opacity: var(--mark-solid);
+}
+/* The same mark made of a box rather than drawn in a chart: a bar in a row of
+   them, a meter, anything filled with one of the chart's colours. It is the
+   same pane on its edge, so it gets the same three things, and here an inset
+   shadow can draw the line of light where it belongs. */
+.bg-chart-1 {
+  --mark: var(--chart-1);
+}
+.bg-chart-2 {
+  --mark: var(--chart-2);
+}
+.bg-chart-3 {
+  --mark: var(--chart-3);
+}
+.bg-chart-4 {
+  --mark: var(--chart-4);
+}
+.bg-chart-5 {
+  --mark: var(--chart-5);
+}
+:is(.bg-chart-1, .bg-chart-2, .bg-chart-3, .bg-chart-4, .bg-chart-5) {
+  background-color: color-mix(
+    in oklch,
+    var(--mark) var(--mark-solid),
+    transparent
+  );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, var(--mark-rim) 55%, transparent),
+    inset 0 0 0 1px var(--mark-edge);
+}
+/* A badge in a chart's colour has words on it, so its fill stays nearly
+   whole. It is a label, not a control, and is finished as the other badges
+   are: lit along the top, a faint shade along the bottom and a faint dark
+   hairline round it (a light fill has no use for a light one). It stands on
+   nothing: with the primary button's full bevel and a shadow under it, it
+   read as a button to press. */
+[data-slot="badge"]:is(
+  .bg-chart-1,
+  .bg-chart-2,
+  .bg-chart-3,
+  .bg-chart-4,
+  .bg-chart-5
+) {
+  background-color: color-mix(in oklch, var(--mark) 90%, transparent);
+  -webkit-backdrop-filter: var(--glass-blur-control);
+  backdrop-filter: var(--glass-blur-control);
+  box-shadow:
+    inset 0 1px 0 oklch(1 0 0 / 55%),
+    inset 0 -1px 0 oklch(0 0 0 / 10%),
+    inset 0 0 0 1px oklch(0 0 0 / 8%);
+}
+
+/* A tick in a disc of ink — the mark beside each line of a list of what is
+   included — is a checked box made round: the pane is the icon's own box,
+   rounded off, with the box's line of light, its shade along the bottom and a
+   hairline of the ink's own colour. The disc and the ring the icon draws are
+   put out, so the tick sits on the pane. */
+svg.fill-primary:has(> circle) {
+  border-radius: 9999px;
+  background-color: color-mix(
+    in oklch,
+    var(--primary) var(--primary-solid),
+    transparent
+  );
+  box-shadow:
+    inset 0 1px 0 var(--primary-rim),
+    inset 0 -1px 0 color-mix(in oklch, var(--primary-under) 45%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, var(--primary) 55%, var(--primary-edge)),
+    0 1px 2px var(--glass-contact);
+}
+svg.fill-primary:has(> circle) > circle {
+  fill: none;
+  stroke: none;
+}
+
+/* What a chart says under the pointer floats over it: the thickest glass, like
+   any other popover, and with a control's corners rather than a pill's. */
+.recharts-tooltip-wrapper > .bg-background {
+  /* No border: the hairline is outside the edge and the shade inside it, and
+     a see-through border between them doubled the line along the foot. */
+  border-width: 0;
+  border-radius: var(--radius-md);
+  background-color: var(--popover);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    inset 0 -1px 0 var(--popover-under),
+    0 0 0 1px var(--popover-edge),
+    0 24px 60px -18px var(--glass-shade),
+    0 6px 16px -6px var(--glass-lift);
+}
+
+/* The one state. What is chosen, held open, or under the pointer in a menu
+   is a small pane of clear glass rather than a flat grey fill: a faint tint,
+   a line of light along the top and a hairline round it. Nothing more — no
+   gradient and no shadow, or a row in a list starts to look like a raised
+   button. One look for all three, so "this one" reads the same in a sidebar,
+   in a menu and on a tab.
+
+   In a menu it is the row that wears it, and only the row: a checked row's
+   tick is marked highlighted along with it, and would otherwise get a pane of
+   its own inside the row's. */
+[data-slot="sidebar-menu-button"][data-active]:not([data-active="false"]),
+[data-slot="sidebar-menu-button"][aria-expanded="true"],
+[data-slot="sidebar-menu-sub-button"][data-active]:not([data-active="false"]),
+[role="menu"] [role^="menuitem"][data-highlighted],
+[role="option"][data-highlighted],
+[data-slot="command-item"][data-selected="true"],
+[data-slot="toggle"]:is([data-pressed], [aria-pressed="true"]),
+[data-slot="toggle-group-item"]:is([data-pressed], [aria-pressed="true"]),
+[data-slot="menubar-trigger"]:is([aria-expanded="true"], [data-popup-open]),
+[data-slot="navigation-menu-trigger"][data-popup-open],
+.glass-held[data-popup-open],
+.glass-held[aria-expanded="true"],
+.glass-chosen {
+  background-color: var(--glass-state);
+  box-shadow:
+    inset 0 1px 0 var(--glass-state-rim),
+    0 0 0 1px var(--glass-state-edge);
+}
+
+/* Where the thing in that state keeps a border of its own (a button does, and a
+   toggle: one pixel, clear, with the fill stopping inside it), the edge drawn
+   round the outside stood a pixel off the fill and read as a second outline.
+   There the border is the edge, and nothing is drawn outside it. */
+:is(
+    [data-slot="toggle"]:is([data-pressed], [aria-pressed="true"]),
+    [data-slot="toggle-group-item"]:is([data-pressed], [aria-pressed="true"]),
+    [data-slot="menubar-trigger"]:is([aria-expanded="true"], [data-popup-open]),
+    [data-slot="navigation-menu-trigger"][data-popup-open],
+    .glass-held[data-popup-open],
+    .glass-held[aria-expanded="true"],
+    .glass-chosen
+  ).border:not(.border-0):not(:focus-visible):not([aria-invalid="true"]) {
+  border-color: var(--glass-state-edge);
+  box-shadow: inset 0 1px 0 var(--glass-state-rim);
+}
+
+/* Under the pointer, where shadcn/ui paints a hover with its quiet greys: the
+   theme's own step, strong enough to see on a white pane as on a dark one. */
+/* Held open is the same step, pointer or not. (:where keeps these as weak as
+   the utilities they stand in for, so anything the theme says about a
+   particular part — a picked day in a calendar — still wins.) */
+:where(.aria-expanded\:bg-muted)[aria-expanded="true"],
+:where(.data-open\:bg-accent, .data-popup-open\:bg-accent):is(
+  [data-open]:not([data-open="false"]),
+  [data-popup-open],
+  [data-state="open"]
+) {
+  background-color: var(--hover);
+}
+@media (hover: hover) {
+  :where(.hover\:bg-muted, .hover\:bg-accent):hover {
+    background-color: var(--hover);
+  }
+  :where(.hover\:bg-muted\/50, .hover\:bg-accent\/50):hover {
+    background-color: var(--hover-faint);
+  }
+}
+
+/* The same pane lit a step brighter: a tag that Backspace has picked out and
+   will remove on the next press. A second coat of its own fill, the brighter
+   rim, and its hairline drawn in the rim's colour. */
+.glass-chosen.glass-armed {
+  background-image: linear-gradient(var(--glass-state), var(--glass-state));
+  box-shadow:
+    inset 0 1px 0 var(--glass-rim),
+    0 0 0 1px var(--glass-state-armed);
+}
+
+/* Without the blur, for a reader whose system asks for less transparency or a
+   part of the page marked data-glass="opaque". The panes turn opaque and keep
+   their rim and shadow, which is most of what they were. */
+[data-glass="opaque"]
+  :is(.bg-card, .bg-popover, .bg-sidebar, .glass-panel, .glass-control),
+[data-glass="opaque"]:is(
+  .bg-card,
+  .bg-popover,
+  .bg-sidebar,
+  .glass-panel,
+  .glass-control
+) {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --primary-solid: 100%;
+  }
+  .bg-card,
+  .bg-popover,
+  .bg-sidebar,
+  .glass-panel,
+  .glass-control {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  :root {
+    --panel: oklch(0.947 0.006 265);
+    --card: oklch(0.958 0.005 265);
+    --popover: oklch(0.98 0.003 265);
+    --sidebar: oklch(0.985 0 0);
+  }
+  .dark {
+    --panel: oklch(0.19 0 0);
+    --card: oklch(0.225 0 0);
+    --popover: oklch(0.22 0 0);
+    --sidebar: oklch(0.13 0 0);
+  }
+}
+
+/* ---- Motion ---------------------------------------------------------------
+
+   Motion means something is running. Nothing moves to decorate. */
+
+@keyframes sg-dot-flash {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes sg-status-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+/* Sweeps across a bar to say the number under it is still moving. Distance is
+   in multiples of the highlight's own width, which is a fraction of the bar. */
+@keyframes sg-sweep {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(386%);
+  }
+}
+
+/* Rises into place where it sits, rather than sliding in from an edge: a
+   slab floating over the page, not a drawer pulled out of the frame. */
+@keyframes sg-float-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes sg-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  /* Three dots flashing in turn; see DotLoader. */
+  .animate-dot-flash {
+    animation: sg-dot-flash 1.2s ease-in-out infinite;
+  }
+
+  /* A slow glint across the words that say what is being done. */
+  .status-shimmer {
+    background-image: linear-gradient(
+      100deg,
+      var(--muted-foreground) 35%,
+      var(--foreground) 50%,
+      var(--muted-foreground) 65%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sg-status-shimmer 2.4s linear infinite;
+  }
+
+  /* A standing glow so a bar reads as live even between sweeps, plus the
+     sweep itself. The highlight is a third of the bar wide — across the whole
+     width it washes out into a gradient nobody can see moving. */
+  .progress-glow {
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 10px 0 oklch(1 0 0 / 22%);
+  }
+
+  .progress-glow::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: -35%;
+    width: 35%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      oklch(1 0 0 / 90%),
+      transparent
+    );
+    animation: sg-sweep 1.6s ease-in-out infinite;
+  }
+
+  .animate-float-in {
+    animation: sg-float-in 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .animate-fade-in {
+    animation: sg-fade-in 240ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-dot-flash {
+      animation: none;
+      opacity: 1;
+    }
+
+    .status-shimmer {
+      animation: none;
+      color: inherit;
+      background-image: none;
+    }
+
+    .progress-glow::after {
+      animation: none;
+      opacity: 0;
+    }
+
+    .animate-float-in,
+    .animate-fade-in {
+      animation: none;
+    }
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 999px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* ---- Code -----------------------------------------------------------------
+
+   Code marked up by highlight.js, inside anything classed md-code. A few
+   colours, chosen to sit with the page's own in each theme; what is not
+   named stays the text's colour. */
+
+.md-code .hljs-comment,
+.md-code .hljs-quote,
+.md-code .hljs-meta {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+.md-code .hljs-keyword,
+.md-code .hljs-selector-tag,
+.md-code .hljs-literal,
+.md-code .hljs-type,
+.md-code .hljs-built_in,
+.md-code .hljs-tag,
+.md-code .hljs-name {
+  color: var(--syn-keyword);
+}
+.md-code .hljs-string,
+.md-code .hljs-regexp,
+.md-code .hljs-addition,
+.md-code .hljs-symbol,
+.md-code .hljs-bullet {
+  color: var(--syn-string);
+}
+.md-code .hljs-number,
+.md-code .hljs-deletion,
+.md-code .hljs-variable,
+.md-code .hljs-template-variable {
+  color: var(--syn-number);
+}
+.md-code .hljs-attr,
+.md-code .hljs-attribute,
+.md-code .hljs-property,
+.md-code .hljs-title,
+.md-code .hljs-section,
+.md-code .hljs-params {
+  color: var(--syn-name);
+}
+.md-code .hljs-emphasis {
+  font-style: italic;
+}
+.md-code .hljs-strong {
+  font-weight: 600;
+}
+
+/* A field the browser has filled in keeps the page's colours. Left alone,
+   Chrome paints it pale yellow with black text — a lit rectangle on a dark
+   pane. The fill cannot be turned off, only outlasted. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  caret-color: var(--foreground);
+  transition:
+    background-color 99999s ease-out 0s,
+    color 99999s ease-out 0s;
+}

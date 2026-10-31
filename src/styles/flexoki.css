@@ -1,0 +1,188 @@
+/* Flexoki by Steph Ango (MIT). Palette: https://stephango.com/flexoki
+   Semantic colors adapt the Helianthus material without changing its components. */
+@import "./flexoki-palette.css";
+
+:root {
+  --background: var(--flexoki-paper);
+  --foreground: var(--flexoki-black);
+  --panel: color-mix(in srgb, var(--flexoki-50) 88%, transparent);
+  --card: color-mix(in srgb, var(--flexoki-paper) 92%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: var(--flexoki-paper);
+  --popover-foreground: var(--foreground);
+  --primary: var(--flexoki-red-600);
+  --primary-foreground: var(--flexoki-paper);
+  --secondary: var(--flexoki-100);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--flexoki-100);
+  --muted-foreground: var(--flexoki-700);
+  --accent: var(--flexoki-red-50);
+  --accent-foreground: var(--flexoki-red-900);
+  --destructive: var(--flexoki-red-700);
+  --border: var(--flexoki-150);
+  --input: var(--flexoki-200);
+  --ring: var(--flexoki-red-600);
+  --canvas: var(--flexoki-50);
+
+  --glass-rim: var(--flexoki-paper);
+  --glass-inner: color-mix(in srgb, var(--flexoki-paper) 40%, transparent);
+  --glass-edge: color-mix(in srgb, var(--flexoki-600) 22%, transparent);
+  --popover-edge: var(--flexoki-200);
+  --popover-under: var(--flexoki-150);
+  --glass-shade: color-mix(in srgb, var(--flexoki-black) 18%, transparent);
+  --glass-contact: color-mix(in srgb, var(--flexoki-black) 5%, transparent);
+  --glass-lift: color-mix(in srgb, var(--flexoki-black) 12%, transparent);
+  --glass-control: color-mix(in srgb, var(--flexoki-paper) 86%, transparent);
+  --glass-control-rim: var(--flexoki-paper);
+  --glass-state: var(--flexoki-red-50);
+  --glass-state-rim: var(--flexoki-paper);
+  --glass-state-edge: var(--flexoki-red-200);
+  --glass-state-armed: var(--flexoki-red-100);
+  --hover: var(--flexoki-100);
+  --hover-faint: var(--flexoki-50);
+  --primary-solid: 96%;
+  --primary-rim: color-mix(in srgb, var(--flexoki-paper) 30%, transparent);
+  --primary-under: color-mix(in srgb, var(--flexoki-black) 45%, transparent);
+  --primary-inner: color-mix(in srgb, var(--flexoki-paper) 7%, transparent);
+  --primary-edge: var(--flexoki-red-800);
+  --field: var(--flexoki-paper);
+  --field-rim: var(--flexoki-paper);
+  --field-edge: var(--flexoki-200);
+  --well-shade: color-mix(in srgb, var(--flexoki-black) 12%, transparent);
+  --well-rim: var(--flexoki-paper);
+  --focus-line: var(--flexoki-red-600);
+  --knob: var(--flexoki-paper);
+  --knob-shade: color-mix(in srgb, var(--flexoki-black) 24%, transparent);
+  --mark-rim: var(--flexoki-paper);
+  --mark-edge: var(--flexoki-300);
+  --mark-line: var(--flexoki-600);
+  --glass-blur: blur(26px);
+  --light-1: transparent;
+  --light-2: transparent;
+  --light-3: transparent;
+
+  --brand: var(--flexoki-red-600);
+  --brand-foreground: var(--flexoki-paper);
+  --brand-muted: var(--flexoki-red-50);
+  --status-running: var(--flexoki-red-700);
+  --status-done: var(--flexoki-blue-600);
+  --status-interrupted: var(--flexoki-orange-600);
+  --success: var(--flexoki-green-700);
+  --link: var(--flexoki-blue-600);
+  --code-inline: var(--flexoki-red-600);
+  --syn-keyword: var(--flexoki-purple-600);
+  --syn-string: var(--flexoki-green-700);
+  --syn-number: var(--flexoki-orange-600);
+  --syn-name: var(--flexoki-blue-600);
+  --chart-1: var(--flexoki-red-600);
+  --chart-2: var(--flexoki-blue-600);
+  --chart-3: var(--flexoki-yellow-600);
+  --chart-4: var(--flexoki-magenta-600);
+  --chart-5: var(--flexoki-green-600);
+  --sidebar: var(--panel);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--accent);
+  --sidebar-accent-foreground: var(--accent-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* A two-tone stroke stays legible over arbitrary source images in either theme. */
+  --detection-edge: var(--flexoki-blue-950);
+  --detection-line: var(--flexoki-blue-300);
+  --detection-label: var(--flexoki-blue-100);
+}
+
+:root.dark {
+  --background: var(--flexoki-black);
+  --foreground: var(--flexoki-200);
+  --panel: color-mix(in srgb, var(--flexoki-950) 88%, transparent);
+  --card: color-mix(in srgb, var(--flexoki-950) 96%, transparent);
+  --popover: var(--flexoki-950);
+  --primary: var(--flexoki-red-300);
+  --primary-foreground: var(--flexoki-red-950);
+  --secondary: var(--flexoki-900);
+  --muted: var(--flexoki-900);
+  --muted-foreground: var(--flexoki-400);
+  --accent: var(--flexoki-red-900);
+  --accent-foreground: var(--flexoki-red-100);
+  --destructive: var(--flexoki-red-200);
+  --border: var(--flexoki-850);
+  --input: var(--flexoki-800);
+  --ring: var(--flexoki-red-300);
+  --canvas: var(--flexoki-black);
+  --glass-rim: color-mix(in srgb, var(--flexoki-paper) 14%, transparent);
+  --glass-inner: color-mix(in srgb, var(--flexoki-paper) 3%, transparent);
+  --glass-edge: var(--flexoki-850);
+  --popover-edge: var(--flexoki-800);
+  --popover-under: var(--flexoki-black);
+  --glass-shade: color-mix(in srgb, var(--flexoki-black) 70%, transparent);
+  --glass-contact: color-mix(in srgb, var(--flexoki-black) 30%, transparent);
+  --glass-lift: color-mix(in srgb, var(--flexoki-black) 50%, transparent);
+  --glass-control: var(--flexoki-900);
+  --glass-control-rim: var(--glass-rim);
+  --glass-state: var(--flexoki-red-950);
+  --glass-state-rim: var(--flexoki-red-850);
+  --glass-state-edge: var(--flexoki-red-800);
+  --glass-state-armed: var(--flexoki-red-900);
+  --hover: var(--flexoki-850);
+  --hover-faint: var(--flexoki-900);
+  --primary-rim: var(--flexoki-paper);
+  --primary-under: color-mix(in srgb, var(--flexoki-black) 30%, transparent);
+  --primary-inner: color-mix(in srgb, var(--flexoki-black) 7%, transparent);
+  --primary-edge: var(--flexoki-red-300);
+  --field: var(--flexoki-900);
+  --field-rim: var(--flexoki-800);
+  --field-edge: var(--flexoki-850);
+  --well-shade: color-mix(in srgb, var(--flexoki-black) 40%, transparent);
+  --well-rim: var(--flexoki-850);
+  --focus-line: var(--flexoki-red-300);
+  --knob: var(--flexoki-200);
+  --knob-shade: color-mix(in srgb, var(--flexoki-black) 55%, transparent);
+  --mark-rim: var(--flexoki-200);
+  --mark-edge: var(--flexoki-500);
+  --mark-line: var(--flexoki-400);
+  --brand: var(--flexoki-red-300);
+  --brand-foreground: var(--flexoki-red-950);
+  --brand-muted: var(--flexoki-red-950);
+  --status-running: var(--flexoki-red-400);
+  --status-done: var(--flexoki-blue-300);
+  --status-interrupted: var(--flexoki-orange-300);
+  --success: var(--flexoki-green-400);
+  --link: var(--flexoki-blue-300);
+  --code-inline: var(--flexoki-red-300);
+  --syn-keyword: var(--flexoki-purple-300);
+  --syn-string: var(--flexoki-green-400);
+  --syn-number: var(--flexoki-orange-300);
+  --syn-name: var(--flexoki-blue-300);
+  --chart-1: var(--flexoki-red-400);
+  --chart-2: var(--flexoki-blue-400);
+  --chart-3: var(--flexoki-yellow-400);
+  --chart-4: var(--flexoki-magenta-400);
+  --chart-5: var(--flexoki-green-400);
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root {
+    --panel: var(--flexoki-50);
+    --card: var(--flexoki-paper);
+    --popover: var(--flexoki-paper);
+  }
+  :root.dark {
+    --panel: var(--flexoki-950);
+    --card: var(--flexoki-950);
+    --popover: var(--flexoki-950);
+  }
+}
+
+:root [data-slot="tabs-trigger"][data-active],
+:root .result-row[aria-pressed="true"] .result-number,
+:root .result-row[aria-pressed="true"] .result-format {
+  color: var(--brand);
+}

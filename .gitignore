@@ -26,3 +26,7 @@ dist-ssr
 
 coverage
 *.tgz
+/test-results/
+/playwright-report/
+
+/vendor/

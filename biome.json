@@ -6,7 +6,8 @@
       "**",
       "!**/zxing-cpp",
       "!**/__snapshots__",
-      "!**/.changeset/pre.json"
+      "!**/.changeset/pre.json",
+      "!**/src/styles/solid-glass.css"
     ]
   },
   "formatter": {
@@ -32,6 +33,17 @@
         "useNumberNamespace": "error",
         "noInferrableTypes": "error",
         "noUselessElse": "error"
+      },
+      "a11y": {
+        "noLabelWithoutControl": {
+          "level": "error",
+          "options": {
+            "inputComponents": ["Input", "Textarea", "Checkbox"]
+          }
+        }
+      },
+      "complexity": {
+        "noImportantStyles": "off"
       }
     }
   },
@@ -93,5 +105,10 @@
         }
       }
     }
-  ]
+  ],
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  }
 }
