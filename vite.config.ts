@@ -4,6 +4,12 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   base: "/zxing-wasm-demo/",
+  build: {
+    rolldownOptions: {
+      // This app is entirely client-rendered, including the Base UI components.
+      checks: { moduleLevelDirective: false },
+    },
+  },
   plugins: [
     tailwindcss(),
     VitePWA({
