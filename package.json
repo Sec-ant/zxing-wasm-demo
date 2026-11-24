@@ -49,27 +49,27 @@
     "@fontsource-variable/geist-mono": "^5.3.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.65.0",
+    "lucide-react": "^1.79.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
-    "tailwind-merge": "^3.7.0",
-    "zxing-wasm": "3.1.6"
+    "tailwind-merge": "^3.7.1",
+    "zxing-wasm": "3.1.8"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.14.0",
-    "@biomejs/biome": "2.6.4",
-    "@playwright/test": "1.64.1",
-    "@tailwindcss/vite": "^4.3.3",
+    "@axe-core/playwright": "^4.14.1",
+    "@biomejs/biome": "2.6.9",
+    "@playwright/test": "1.65.1",
+    "@tailwindcss/vite": "^4.3.5",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "concurrently": "^10.0.6",
-    "lint-staged": "^17.6.0",
-    "prettier": "^3.9.10",
+    "concurrently": "^10.0.7",
+    "lint-staged": "^17.6.2",
+    "prettier": "^3.10.1",
     "simple-git-hooks": "^2.14.0",
-    "tailwindcss": "^4.3.3",
+    "tailwindcss": "^4.3.5",
     "typescript": "^7.0.2",
-    "vite": "^8.3.5",
+    "vite": "^8.3.8",
     "vite-plugin-pwa": "^2.0.0"
   },
-  "packageManager": "pnpm@12.16.1+sha512.091d1dee7927575661b25dab3c2ae31cafc1c54d6b71ed6a6600cf0c1cb10434a447eae14015f1b23e2e6bedeed79df94a932e2164d2832280dce3fb32f656d1"
+  "packageManager": "pnpm@12.23.0+sha512.02da94ffaf133f46074322afe552f90d40b5f71ae259aefbccdacc5085b1d617e98d65e0131f5748b9b67445978ee5055d7d59a473f1eef0d504854fefcd5975"
 }

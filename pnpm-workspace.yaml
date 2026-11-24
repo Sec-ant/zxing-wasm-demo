@@ -1,6 +1,22 @@
 allowBuilds:
   simple-git-hooks: true
 overrides:
-  "brace-expansion@2": 2.1.7
-  "brace-expansion@5": 5.0.12
+  "brace-expansion@2": 2.1.8
+  "brace-expansion@5": 5.1.0
   "fast-uri@3": 3.1.9
+  "workbox-build@7.4.1>glob": 14.0.6
+minimumReleaseAgeExclude:
+  - zxing-wasm@3.1.8
+  - "@axe-core/playwright@4.14.1"
+  - "@biomejs/biome@2.6.9"
+  - "@biomejs/cli-android-arm64@2.6.9"
+  - "@biomejs/cli-android-x64@2.6.9"
+  - "@biomejs/cli-darwin-arm64@2.6.9"
+  - "@biomejs/cli-darwin-x64@2.6.9"
+  - "@biomejs/cli-linux-arm64-musl@2.6.9"
+  - "@biomejs/cli-linux-arm64@2.6.9"
+  - "@biomejs/cli-linux-x64-musl@2.6.9"
+  - "@biomejs/cli-linux-x64@2.6.9"
+  - "@biomejs/cli-win32-arm64@2.6.9"
+  - "@biomejs/cli-win32-x64@2.6.9"
+  - lucide-react@1.79.0

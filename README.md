@@ -19,14 +19,14 @@ Images are limited to 32 MB each and 32 megapixels. A workspace holds up to 200 
 
 ## Local development
 
-Main uses the published npm package, pinned to `zxing-wasm@3.1.6` in the lockfile. Install and run without a sibling checkout or native toolchain:
+Main uses the published npm package, pinned to `zxing-wasm@3.1.8` in the lockfile. Install and run without a sibling checkout or native toolchain:
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-To try an experimental build from `../zxing-wasm`, build that library and run `pnpm sync:zxing` here. The helper writes a content-addressed package into the ignored `vendor/` directory. Restore the published dependency with `pnpm add --save-exact zxing-wasm@3.1.6` before committing to main. Experimental circular readers are not part of this published release.
+To try an experimental build from `../zxing-wasm`, build that library and run `pnpm sync:zxing` here. The helper writes a content-addressed package into the ignored `vendor/` directory. Restore the published dependency with `pnpm add --save-exact zxing-wasm@3.1.8` before committing to main. Experimental circular readers are not part of this published release.
 
 Sample PNGs are generated and roundtrip-checked with the installed library via `pnpm samples:generate` (requires the Playwright Chromium browser).
 
